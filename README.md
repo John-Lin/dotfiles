@@ -1,7 +1,7 @@
 linton.vim
 ==========
 
-Vim setting
+My Vim setting.		
 
 ##Requirement
     
@@ -19,11 +19,15 @@ Vim setting
 
    - replace `.vimrc` to `vimrc`
      
+     `$ cd `
+     
      `$ cp linton.vim/vimrc .vimrc`
 
    - Put the `colors` directory into your Vim directory (e.g. `~/.vim/colors`).
 	 
-	 `$ cp linton.vim/colors ~/.vim/`
+	 `$ cd `
+	 
+	 `$ cp -r linton.vim/colors ~/.vim/`
 
 3. Install Plugins:
    
