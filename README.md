@@ -9,6 +9,14 @@ My Vim setting.
    
    		$ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
+- Install cscope catges package [Optional]
+		
+		$ sudo apt-get install cscope exuberant-ctags -y
+
+- Install pycscope from pip [Optional]
+		
+		$ sudo pip install pycscope
+
 ##Usage
 
 * Clone my vim setting:
