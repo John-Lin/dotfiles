@@ -9,12 +9,16 @@ Vim setting
    
    `$ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim`
 
-2. Configure Plugins:
-   
-   You can add plugins in `.vimrc` or using my `.vimrc`.
-   
-   `$ ln -s .vim/bundle/linton.vim/vimrc .vimrc`
+2. Clone my vim setting:
+    `$ git clone https://github.com/John-Lin/linton.vim.git`
 
-3. Install Plugins:
+3. Configure Plugins:
+
+   - replace `.vimrc` to `vimrc`
+     `cp linton.vim/vimrc .vimrc`
+
+   - Put the `colors` directory into your Vim directory (e.g. `~/.vim/colors`).
+
+4. Install Plugins:
    
    Launch `vim` and run `:PluginInstall`
