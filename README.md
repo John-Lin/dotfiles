@@ -26,7 +26,7 @@ My Vim setting.
 	- Put the `colors` directory into your Vim directory (e.g. `~/.vim/colors`)
     			
     		$ cd 
-	 		$ cp -r linton.vim/colors ~/.vim/
+	 		$ cp -r linton.vim/colors ~/.vim
 	 		
 * Install Plugins:
     Launch `vim` and run `:PluginInstall`
