@@ -16,19 +16,19 @@ My Vim setting.
     `$ git clone https://github.com/John-Lin/linton.vim.git`
 
 2. Configure Plugins:
-
-   - replace `.vimrc` to `vimrc`
+    
+    - Replace `.vimrc` to `vimrc`
      
-     `$ cd `
+         `$ cd `
      
-     `$ cp linton.vim/vimrc .vimrc`
+         `$ cp linton.vim/vimrc .vimrc`
 
-   - Put the `colors` directory into your Vim directory (e.g. `~/.vim/colors`).
-	 
-	 `$ cd `
+    - Put the `colors` directory into your Vim directory (e.g. `~/.vim/colors`).
+         
+         `$ cd `
 	 
 	 `$ cp -r linton.vim/colors ~/.vim/`
 
+
 3. Install Plugins:
-   
-   Launch `vim` and run `:PluginInstall`
+    Launch `vim` and run `:PluginInstall`
