@@ -28,3 +28,11 @@ $ make config
 ```
 
 * Install plugins: Launch `vim` and it will try to install plugins.
+
+#### Update all plugins
+
+```sh
+$ make update
+```
+
+You can also run `:PluginInstall!` inside the vim to update the installed plugins.
