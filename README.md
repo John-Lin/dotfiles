@@ -1,31 +1,30 @@
 dotfiles
 ==========
 
-My dotfiles
+A dotfile same development environment
 
 - [vimrc](#vimrc)
 
 
 ## vimrc
-The `.vimrc` most work based on [fisadev/fisa-vim-config](https://github.com/fisadev/fisa-vim-config). It works on OSX and Ubuntu/Linux.
+The `.vimrc` most work based on [fisadev/fisa-vim-config](https://github.com/fisadev/fisa-vim-config). It works on OSX.
 
-Focus on `python`, `Node.js`, `Ruby` syntax, autocomplete...
+Focus on `python`, `Node.js`, `Ruby` syntax, autocomplete..
 
 #### Dependencies
 
-For OSX use `brew` and for Ubuntu use `apt-get` to install `ctags-exuberant`
+It will install `ctags-exuberant`, `pep8`, `flake8` and `pyflakes`.
 
 ```sh
-$ brew install ctags-exuberant
-$ pip pep8 flake8 pyflakes
+$ make install
 ```
 
 #### Installation
 
-* Replace configuration files:
+* Replace vim configuration files in home directory.
 
 ```sh
-$ cp dotfiles/vimrc .vimrc
+$ make config
 ```
 
-* Install plugins: Launch `vim` and it will try to install/\.
+* Install plugins: Launch `vim` and it will try to install plugins.
