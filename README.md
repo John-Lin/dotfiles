@@ -3,8 +3,12 @@ dotfiles
 
 A dotfile same development environment
 
+- [gitconfig](#gitconfig)
 - [vimrc](#vimrc)
 
+
+## gitconfig
+Replace your `.gitconfig` in home directory with this `gitconfig`
 
 ## vimrc
 The `.vimrc` most work based on [fisadev/fisa-vim-config](https://github.com/fisadev/fisa-vim-config). It works on OSX.
