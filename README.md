@@ -15,6 +15,10 @@ The `.vimrc` most work based on [fisadev/fisa-vim-config](https://github.com/fis
 
 Focus on `python`, `Node.js`, `Ruby` syntax, autocomplete..
 
+### Screenshot
+
+![vimrc](/screenshots/vim_preview.png?raw=true "vim")
+
 #### Dependencies
 
 It will install `ctags-exuberant`, `pep8`, `flake8` and `pyflakes`.
