@@ -58,7 +58,7 @@ Bundle 'motemen/git-vim'
 " Tab list panel
 Bundle 'kien/tabman.vim'
 " Airline
-Bundle 'Airline/vim-airline'
+Bundle 'vim-airline/vim-airline'
 " Airline Themes
 Bundle 'vim-airline/vim-airline-themes'
 " Terminal Vim with 256 colors colorscheme
