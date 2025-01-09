@@ -18,6 +18,8 @@ sync:
 clean:
 	rm -rf ~/.config/nvim/
 	rm -f ~/.tigrc
+	rm -f ~/.zshrc
+	rm -f ~/.p10k.zsh
 	rm -f ~/.config/ghostty/config
 
 .PHONY: all clean sync
