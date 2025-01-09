@@ -24,8 +24,6 @@ export PATH=$PATH:$GOROOT/bin
 
 # alias python
 alias python='python3'
-# alias for ghe
-alias ghe='GH_HOST=git.linecorp.com gh'
 # ctags
 alias ctags='/opt/homebrew/bin/ctags'
 
