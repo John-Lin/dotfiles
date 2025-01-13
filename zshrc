@@ -9,6 +9,15 @@ fi
 
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
+# alias ripgrep to grep
+# https://news.ycombinator.com/item?id=22281977
+alias grep="rg"
+# alias grep="rg -uuu"
+
+# alias bat to cat
+alias cat="bat"
+# alias cat="bat --paging=never"
+
 # vim to nvim
 alias vim="nvim"
 alias vi="nvim"
