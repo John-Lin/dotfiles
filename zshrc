@@ -45,7 +45,7 @@ export NTOKEN_FILE="$HOME/.config/zms/.ntoken"
 # krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-# z 
+# z
 . /opt/homebrew/etc/profile.d/z.sh
 
 # kubecolor
@@ -65,3 +65,11 @@ autoload -Uz compinit && compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# https://unix.stackexchange.com/questions/568907/why-do-i-lose-my-zsh-history
+HISTFILE=/Users/al02464443/.zsh_history
+HISTSIZE=500000
+SAVEHIST=500000
+setopt appendhistory
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
