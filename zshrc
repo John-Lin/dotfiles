@@ -67,7 +67,7 @@ autoload -Uz compinit && compinit
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # https://unix.stackexchange.com/questions/568907/why-do-i-lose-my-zsh-history
-HISTFILE=/Users/al02464443/.zsh_history
+HISTFILE=$HOME/.zsh_history
 HISTSIZE=500000
 SAVEHIST=500000
 setopt appendhistory
