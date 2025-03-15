@@ -41,17 +41,6 @@ nvim_lsp.lua_ls.setup({
 	},
 })
 
-nvim_lsp.ruff.setup({
-	capabilities = capabilities,
-	-- https://github.com/astral-sh/ruff-lsp?tab=readme-ov-file#example-neovim
-	on_attach = function(client, _)
-		if client.name == "ruff_lsp" then
-			-- Disable hover in favor of Pyright
-			client.server_capabilities.hoverProvider = false
-		end
-	end,
-})
-
 nvim_lsp.pyright.setup({
 	capabilities = {
 		textDocument = {
@@ -82,6 +71,17 @@ nvim_lsp.pyright.setup({
 			},
 		},
 	},
+})
+
+nvim_lsp.ruff.setup({
+	capabilities = capabilities,
+	-- https://github.com/astral-sh/ruff-lsp?tab=readme-ov-file#example-neovim
+	on_attach = function(client, _)
+		if client.name == "ruff_lsp" then
+			-- Disable hover in favor of Pyright
+			client.server_capabilities.hoverProvider = false
+		end
+	end,
 })
 
 nvim_lsp.terraformls.setup({
@@ -143,8 +143,8 @@ nvim_lsp.yamlls.setup({
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "open diagnostic float" })
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "open diagnostic location list" })
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
