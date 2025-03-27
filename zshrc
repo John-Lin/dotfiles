@@ -44,6 +44,8 @@ export NTOKEN_FILE="$HOME/.config/zms/.ntoken"
 
 # krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+# tfswitch for terraform
+export PATH="$PATH:$HOME/bin"
 
 # z
 . /opt/homebrew/etc/profile.d/z.sh
