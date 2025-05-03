@@ -77,7 +77,7 @@ nvim_lsp.ruff.setup({
 	capabilities = capabilities,
 	-- https://github.com/astral-sh/ruff-lsp?tab=readme-ov-file#example-neovim
 	on_attach = function(client, _)
-		if client.name == "ruff_lsp" then
+		if client.name == "ruff" then
 			-- Disable hover in favor of Pyright
 			client.server_capabilities.hoverProvider = false
 		end
