@@ -79,6 +79,14 @@ local function cnoremap(lhs, rhs)
 	vim.api.nvim_set_keymap("c", lhs, rhs, { noremap = true, silent = true })
 end
 
+-- markdown conceal level
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function()
+		vim.opt_local.conceallevel = 0
+	end,
+})
+
 -- set history size
 vim.o.history = 500
 -- Bash-like command mapping
