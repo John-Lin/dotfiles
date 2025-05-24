@@ -41,33 +41,30 @@ nvim_lsp.lua_ls.setup({
 	},
 })
 
-nvim_lsp.pyright.setup({
-	capabilities = {
-		textDocument = {
-			publishDiagnostics = {
-				tagSupport = {
-					valueSet = { 2 },
-				},
-			},
-		},
-	},
-	-- https://docs.astral.sh/ruff/editors/setup/#neovim
+nvim_lsp.basedpyright.setup({
+	capabilities = capabilities,
+	cmd = { "basedpyright-langserver", "--stdio" },
+	filetypes = { "python" },
 	settings = {
-		-- Using Ruff's import organizer
-		-- https://github.com/astral-sh/ruff-lsp/issues/384#issuecomment-2038623937
-		pyright = {
+		basedpyright = {
 			disableOrganizeImports = true,
 			disableTaggedHints = true,
-		},
-		python = {
-			pythonPath = ".venv/bin/python",
 			analysis = {
-				-- Ignore all files for analysis to exclusively use Ruff for linting
-				ignore = { "*" },
-			},
-			diagnosticSeverityOverrides = {
-				-- https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
-				reportUndefinedVariable = "none",
+				autoSearchPaths = true,
+				autoImportCompletions = true,
+				useLibraryCodeForTypes = true,
+				diagnosticMode = "openFilesOnly",
+				typeCheckingMode = "standard",
+				diagnosticSeverityOverrides = {
+					reportMissingModuleSource = "none",
+					reportMissingImports = "none",
+				},
+				inlayHints = {
+					variableTypes = true,
+					callArgumentNames = true,
+					functionReturnTypes = true,
+					genericTypes = false,
+				},
 			},
 		},
 	},

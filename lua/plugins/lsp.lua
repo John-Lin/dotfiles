@@ -8,7 +8,16 @@ return {
 		config = function()
 			require("mason").setup()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "helm_ls", "lua_ls", "gopls", "pyright", "terraformls", "zls", "yamlls", "ruff" },
+				ensure_installed = {
+					"helm_ls",
+					"lua_ls",
+					"gopls",
+					"basedpyright",
+					"terraformls",
+					"zls",
+					"yamlls",
+					"ruff",
+				},
 			})
 		end,
 	},
@@ -25,6 +34,7 @@ return {
 			local formatting = null_ls.builtins.formatting
 			local code_actions = null_ls.builtins.code_actions
 
+
 			null_ls.setup({
 				sources = {
 					formatting.shfmt,
@@ -36,8 +46,7 @@ return {
 					code_actions.impl,
 					-- for lua
 					formatting.stylua,
-					-- for python
-					formatting.black,
+					require("none-ls.formatting.ruff"),
 				},
 				-- configure format on save
 				on_attach = function(client, bufnr)
