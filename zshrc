@@ -78,3 +78,5 @@ setopt SHARE_HISTORY
 
 # Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
+
+alias claude="$HOME/.claude/local/claude"
