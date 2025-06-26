@@ -76,7 +76,5 @@ setopt appendhistory
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-# Add local bin to PATH
-export PATH="$HOME/.local/bin:$PATH"
-
-alias claude="$HOME/.claude/local/claude"
+# claude code
+export PATH="$PATH:$HOME/.claude/local"
