@@ -78,3 +78,5 @@ setopt SHARE_HISTORY
 
 # claude code
 export PATH="$PATH:$HOME/.claude/local"
+# claude-monitor
+export PATH="$HOME/.local/bin:$PATH"
