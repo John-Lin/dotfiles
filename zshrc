@@ -76,7 +76,10 @@ setopt appendhistory
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
-# claude code
-export PATH="$PATH:$HOME/.claude/local"
 # claude-monitor
 export PATH="$HOME/.local/bin:$PATH"
+
+# claude code
+export PATH="$PATH:$HOME/.claude/local"
+# To stop Claude getting confused about which directory it should be running commands in
+export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
