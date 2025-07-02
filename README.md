@@ -1,81 +1,147 @@
 # dotfiles
 
-Personal development environment configuration focused on Neovim, zsh, and modern development tools with AI integration.
+Modern development environment configuration focused on Neovim, zsh, and productivity tools with AI integration.
 
-## Features
+## Overview
 
-- **Neovim**: Modern Lua configuration with LSP, completion, and syntax highlighting
-- **Shell**: zsh with powerlevel10k theme and productivity aliases  
-- **Language Support**: Python, Go, Lua, Terraform, YAML, Helm, Zig
-- **Tools**: Integrated with ripgrep, bat, direnv, and Kubernetes tooling
-- **AI Integration**: Built-in Claude Code support for AI-assisted development
+A comprehensive dotfiles setup that provides a powerful development environment with:
+- **Modern Neovim** configuration with LSP, completion, and AI assistance
+- **Enhanced shell** experience with zsh and powerlevel10k
+- **Multi-language support** for Python, Go, Lua, Terraform, YAML, Helm, and Zig
+- **Developer tools** integration including ripgrep, bat, direnv, and Kubernetes tooling
 
-## Installation
+## Quick Start
+
+### Prerequisites
+- macOS or Linux
+- Git
+- Make
+
+### Installation
 
 ```bash
 # Clone the repository
-git clone <repo-url> ~/dotfiles
+git clone https://github.com/John-Lin/dotfiles ~/dotfiles
 cd ~/dotfiles
 
-# Install dotfiles (creates symlinks)
+# Install and symlink configurations
 make sync
+```
 
-# Remove installation (optional)
+### Removal
+```bash
+# Remove all symlinks and configurations
 make clean
 ```
 
-## What's Included
+## Configuration Files
 
-### Core Configuration
-- **Neovim** (`init.lua` + `lua/`) - Lua-based config with lazy.nvim plugin manager
-- **Shell** (`zshrc`, `p10k.zsh`) - zsh with powerlevel10k and development aliases
-- **Terminal** (`ghostty.config`) - Ghostty terminal emulator settings
-- **Git** (`tigrc`) - Enhanced git interface with tig
-- **Vim** (`vimrc`) - Fallback vim configuration
+| Component | Files | Description |
+|-----------|-------|-------------|
+| **Neovim** | `init.lua`, `lua/` | Lua-based configuration with lazy.nvim plugin manager |
+| **Shell** | `zshrc`, `p10k.zsh` | zsh with powerlevel10k theme and development aliases |
+| **Terminal** | `ghostty.config` | Ghostty terminal emulator settings |
+| **Git** | `tigrc` | Enhanced git interface configuration |
+| **Vim** | `vimrc` | Fallback vim configuration |
 
-### Development Tools
-- **Package Management**: lazy.nvim for plugins, Mason for LSP servers
-- **Completion**: nvim-cmp with LSP integration
-- **File Navigation**: Telescope fuzzy finder, NerdTree file explorer
-- **Version Control**: Git integration with fugitive and gitsigns
-- **AI Assistant**: Claude Code integration with `<leader>a` keybindings
+## Key Features
+
+### Plugin Management
+- **lazy.nvim** - Fast and flexible plugin manager
+- **Mason** - Automatic LSP server and tool installation
+- **nvim-cmp** - Intelligent completion engine
+
+### Navigation & Search
+- **Telescope** - Fuzzy finder for files, buffers, and more
+- **NerdTree** - File explorer with tree view
+- **ripgrep** - Ultra-fast text search
+
+### Development Experience
+- **LSP Integration** - Native language server protocol support
+- **Git Integration** - fugitive and gitsigns for version control
+- **AI Assistant** - Claude Code integration with dedicated keybindings
 
 ## Language Support
 
-Auto-configured LSP servers via Mason:
-- **Lua** - `lua_ls` with neodev integration
-- **Python** - `basedpyright` + `ruff` for type checking and linting
-- **Go** - `gopls` with formatting and analysis
-- **Terraform** - `terraformls` with auto-formatting
-- **YAML/Kubernetes** - `yamlls` with schema validation
-- **Helm** - `helm_ls` for chart development
-- **Zig** - `zls` (experimental support)
+| Language | LSP Server | Features |
+|----------|------------|----------|
+| **Lua** | `lua_ls` | Neodev integration, completion, diagnostics |
+| **Python** | `basedpyright` + `ruff` | Type checking, linting, formatting |
+| **Go** | `gopls` | Formatting, analysis, debugging |
+| **Terraform** | `terraformls` | Auto-formatting, validation |
+| **YAML** | `yamlls` | Schema validation, Kubernetes support |
+| **Helm** | `helm_ls` | Chart development and validation |
+| **Zig** | `zls` | Experimental support |
 
-## Key Bindings
+*All LSP servers are automatically installed and configured via Mason.*
 
-### Global
-- `<Space>` - Leader key
-- `<Leader>v` - Vertical split
-- `<Leader>s` - Horizontal split
-- `Ctrl+h/j/k/l` - Navigate between splits
+## Keybindings
 
-### LSP
-- `gd` - Go to definition
-- `K` - Show hover information
-- `<Leader>ca` - Code actions
-- `<Leader>rn` - Rename symbol
-- `<Leader>f` - Format document
+| Category | Binding | Action |
+|----------|---------|--------|
+| **Global** | `<Space>` | Leader key |
+| | `<Leader>v` | Vertical split |
+| | `<Leader>s` | Horizontal split |
+| | `Ctrl+h/j/k/l` | Navigate between splits |
+| **LSP** | `gd` | Go to definition |
+| | `K` | Show hover information |
+| | `<Leader>ca` | Code actions |
+| | `<Leader>rn` | Rename symbol |
+| | `<Leader>f` | Format document |
+| **Claude AI** | `<Leader>ac` | Toggle Claude |
+| | `<Leader>af` | Focus Claude |
+| | `<Leader>as` | Send selection to Claude |
+| | `<Leader>aa` | Accept AI diff |
+| | `<Leader>ad` | Deny AI diff |
 
-### Claude Code AI
-- `<Leader>ac` - Toggle Claude
-- `<Leader>af` - Focus Claude
-- `<Leader>as` - Send selection to Claude
-- `<Leader>aa` - Accept AI diff
-- `<Leader>ad` - Deny AI diff
+## Shell Configuration
 
-## Shell Aliases
+### Aliases
+| Alias | Command | Purpose |
+|-------|---------|---------|
+| `grep` | `rg` | Faster searching with ripgrep |
+| `cat` | `bat` | Syntax highlighted file viewing |
+| `vim`, `vi` | `nvim` | Use Neovim as default editor |
+| `python` | `python3` | Python 3 by default |
 
-- `grep` → `rg` (ripgrep for faster searching)
-- `cat` → `bat` (syntax highlighted file viewing)
-- `vim`/`vi` → `nvim` (Neovim as default editor)
-- `python` → `python3` (Python 3 by default)
+### Tools Integration
+- **direnv** - Automatic environment loading per project
+- **powerlevel10k** - Fast and customizable zsh theme
+- **Kubernetes** - kubectl, helm, and related tooling
+
+## Advanced Configuration
+
+### Ghostty Terminal Setup
+
+The configuration includes terminfo setup for Ghostty terminal. To use Ghostty features on remote servers:
+
+**Direct method:**
+```bash
+infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
+```
+
+**Manual method:**
+```bash
+infocmp -x xterm-ghostty > xterm-ghostty.terminfo
+scp xterm-ghostty.terminfo YOUR-SERVER:~/
+tic -x xterm-ghostty.terminfo
+```
+
+### Customization
+
+- **Neovim plugins**: Edit `lua/plugins/` files
+- **LSP settings**: Modify `lua/lsp_config.lua`
+- **Shell aliases**: Update `zshrc`
+- **Theme**: Configure powerlevel10k via `p10k configure`
+
+## Dependencies
+
+The setup automatically installs most dependencies, but you may need:
+- **Neovim** (0.8+)
+- **Node.js** (for some LSP servers)
+- **Python 3** (for Python LSP)
+- **Go** (for Go development)
+
+## License
+
+MIT License - feel free to use and modify as needed.
