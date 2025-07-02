@@ -7,6 +7,7 @@ sync:
 	# Create necessary directories
 	mkdir -p ~/.config/nvim
 	mkdir -p ~/.config/ghostty
+	mkdir -p ~/.claude
 
 	# Link Neovim configuration files
 	[ -f ~/.config/nvim/init.lua ] || ln -s $(PWD)/init.lua ~/.config/nvim/init.lua
@@ -21,6 +22,11 @@ sync:
 	[ -f ~/.p10k.zsh ] || ln -s $(PWD)/p10k.zsh ~/.p10k.zsh
 	[ -f ~/.config/ghostty/config ] || ln -s $(PWD)/ghostty.config ~/.config/ghostty/config
 
+	# Link Claude configuration file
+	[ -f ~/.claude/settings.json ] || ln -s $(PWD)/claude_settings.json ~/.claude/settings.json
+	# Link Claude global memory file
+	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
+
 # Remove all symlinks and configuration directories
 clean:
 	rm -rf ~/.config/nvim/
@@ -28,5 +34,7 @@ clean:
 	rm -f ~/.zshrc
 	rm -f ~/.p10k.zsh
 	rm -f ~/.config/ghostty/config
+	rm -f ~/.claude/settings.json
+	rm -f ~/.claude/CLAUDE.md
 
 .PHONY: all clean sync
