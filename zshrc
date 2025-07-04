@@ -83,3 +83,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:$HOME/.claude/local"
 # To stop Claude getting confused about which directory it should be running commands in
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
+
+# llm tools
+export EDITOR="nvim"
