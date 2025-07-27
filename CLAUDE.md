@@ -10,8 +10,14 @@ This is a personal dotfiles repository focused on Neovim, zsh, and modern develo
 
 ### Installation and Setup
 ```bash
-# Install/sync dotfiles by creating symlinks
+# Install all configurations at once
 make sync
+
+# Install specific configurations selectively
+make sync-ghostty   # Install Ghostty terminal configuration
+make sync-neovim    # Install Neovim configuration
+make sync-zsh       # Install Zsh shell configuration
+make sync-claude    # Install Claude Code configuration
 
 # Remove all symlinks and config directories
 make clean
@@ -43,6 +49,7 @@ make lint
 - **Go**: gopls with gofumpt formatting
 - **Terraform**: terraformls with auto-formatting on save
 - **YAML/Helm**: yamlls + helm_ls with schema validation
+- **C/C++**: clangd with clang-format for code completion and formatting
 - **Zig**: zls (experimental)
 
 **Key Dependencies:**

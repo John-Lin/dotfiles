@@ -26,8 +26,14 @@ A comprehensive dotfiles setup that provides a powerful development environment 
 git clone https://github.com/John-Lin/dotfiles ~/dotfiles
 cd ~/dotfiles
 
-# Install and symlink configurations
+# Install all configurations at once
 make sync
+
+# Or install specific configurations selectively
+make sync-ghostty   # Ghostty terminal configuration
+make sync-neovim    # Neovim editor configuration
+make sync-zsh       # Zsh shell configuration
+make sync-claude    # Claude Code AI assistant configuration
 ```
 
 ### Testing
@@ -83,6 +89,7 @@ make clean
 | **Terraform** | `terraformls` | Auto-formatting, validation |
 | **YAML** | `yamlls` | Schema validation, Kubernetes support |
 | **Helm** | `helm_ls` | Chart development and validation |
+| **C/C++** | `clangd` | Code completion, formatting with clang-format |
 | **Zig** | `zls` | Experimental support |
 
 *All LSP servers are automatically installed and configured via Mason.*
