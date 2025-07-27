@@ -45,7 +45,7 @@ test: check-syntax lint
 check-syntax:
 	@echo "🔍 Checking syntax..."
 	@echo "Checking Lua files..."
-	@for file in $$(find . -name "*.lua" -not -path "./.git/*"); do \
+	@for file in $$(find . -name "*.lua" -type f -not -path "./.git/*"); do \
 		echo "  Checking $$file"; \
 		luac -p "$$file" || { echo "❌ Syntax error in $$file"; exit 1; }; \
 	done
