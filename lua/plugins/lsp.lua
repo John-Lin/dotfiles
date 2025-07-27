@@ -53,7 +53,6 @@ return {
 					formatting.clang_format.with({
 						extra_args = { "--style=file", "--fallback-style=LLVM" },
 					}),
-					diagnostics.clang_check,
 				},
 				-- configure format on save
 				on_attach = function(client, bufnr)
