@@ -26,6 +26,8 @@ sync:
 	[ -f ~/.claude/settings.json ] || ln -s $(PWD)/claude_settings.json ~/.claude/settings.json
 	# Link Claude global memory file
 	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
+	# Link Claude commands directory
+	[ -d ~/.claude/commands ] || ln -s $(PWD)/commands ~/.claude/commands
 
 # Remove all symlinks and configuration directories
 clean:
@@ -36,6 +38,7 @@ clean:
 	rm -f ~/.config/ghostty/config
 	rm -f ~/.claude/settings.json
 	rm -f ~/.claude/CLAUDE.md
+	rm -rf ~/.claude/commands
 
 # Test commands
 test: check-syntax lint
