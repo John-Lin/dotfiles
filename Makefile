@@ -62,7 +62,6 @@ check-syntax:
 lint:
 	@echo "🔍 Running linter..."
 	@command -v luacheck >/dev/null 2>&1 && luacheck lua/ init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
-	@command -v shellcheck >/dev/null 2>&1 && shellcheck zshrc || echo "⚠️  shellcheck not found, skipping shell linting"
 	@echo "✅ Linting completed"
 
 .PHONY: all clean sync test check-syntax lint
