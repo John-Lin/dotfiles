@@ -3,11 +3,15 @@ return {
 		"github/copilot.vim",
 	},
 	{
-		"coder/claudecode.nvim",
+		"John-Lin/claudecode.nvim",
 		dependencies = {
 			"folke/snacks.nvim", -- optional
 		},
+		opts = {
+			show_terminal_on_at_mention = false,
+		},
 		config = true,
+		lazy = false,
 		keys = {
 			{ "<leader>a", nil, desc = "AI/Claude Code" },
 			{ "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
