@@ -28,6 +28,8 @@ sync:
 	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
 	# Link Claude commands directory
 	[ -d ~/.claude/commands ] || ln -s $(PWD)/commands ~/.claude/commands
+	# Link Claude sub agents directory
+	[ -d ~/.claude/agents ] || ln -s $(PWD)/agents ~/.claude/agents
 
 # Remove all symlinks and configuration directories
 clean:
@@ -39,6 +41,7 @@ clean:
 	rm -f ~/.claude/settings.json
 	rm -f ~/.claude/CLAUDE.md
 	rm -rf ~/.claude/commands
+	rm -rf ~/.claude/agents
 
 # Test commands
 test: check-syntax lint

@@ -83,12 +83,6 @@ nvim_lsp.ruff.setup({
 
 nvim_lsp.terraformls.setup({
 	capabilities = capabilities,
-	vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-		pattern = { "*.tf", "*.tfvars" },
-		callback = function()
-			vim.lsp.buf.format()
-		end,
-	}),
 })
 
 -- Setup go language server gopls
