@@ -85,6 +85,27 @@ nvim_lsp.terraformls.setup({
 	capabilities = capabilities,
 })
 
+-- Setup clangd for C/C++
+nvim_lsp.clangd.setup({
+	capabilities = capabilities,
+	cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu" },
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	root_dir = require("lspconfig").util.root_pattern(
+		".clangd",
+		".clang-tidy",
+		".clang-format",
+		"compile_commands.json",
+		"compile_flags.txt",
+		"configure.ac",
+		".git"
+	),
+	settings = {
+		clangd = {
+			checkUpdates = true,
+		},
+	},
+})
+
 -- Setup go language server gopls
 nvim_lsp.gopls.setup({
 	capabilities = capabilities,

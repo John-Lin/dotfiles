@@ -17,6 +17,7 @@ return {
 					"zls",
 					"yamlls",
 					"ruff",
+					"clangd", -- C/C++ language server
 				},
 			})
 		end,
@@ -33,6 +34,7 @@ return {
 			local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 			local formatting = null_ls.builtins.formatting
 			local code_actions = null_ls.builtins.code_actions
+			local diagnostics = null_ls.builtins.diagnostics
 
 
 			null_ls.setup({
@@ -47,6 +49,11 @@ return {
 					-- for lua
 					formatting.stylua,
 					require("none-ls.formatting.ruff"),
+					-- for C/C++
+					formatting.clang_format.with({
+						extra_args = { "--style=file", "--fallback-style=LLVM" },
+					}),
+					diagnostics.clang_check,
 				},
 				-- configure format on save
 				on_attach = function(client, bufnr)
