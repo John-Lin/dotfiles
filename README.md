@@ -1,5 +1,7 @@
 # dotfiles
 
+[![CI](https://github.com/John-Lin/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/John-Lin/dotfiles/actions/workflows/ci.yml)
+
 Modern development environment configuration focused on Neovim, zsh, and productivity tools with AI integration.
 
 ## Overview
@@ -28,6 +30,16 @@ cd ~/dotfiles
 make sync
 ```
 
+### Testing
+```bash
+# Run syntax checks and linting
+make test
+
+# Run individual checks
+make check-syntax
+make lint
+```
+
 ### Removal
 ```bash
 # Remove all symlinks and configurations
@@ -53,7 +65,7 @@ make clean
 
 ### Navigation & Search
 - **Telescope** - Fuzzy finder for files, buffers, and more
-- **NerdTree** - File explorer with tree view
+- **nvim-tree** - Modern file explorer with tree view
 - **ripgrep** - Ultra-fast text search
 
 ### Development Experience

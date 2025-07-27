@@ -17,6 +17,18 @@ make sync
 make clean
 ```
 
+### Testing and Quality Assurance
+```bash
+# Run all checks (syntax + linting)
+make test
+
+# Run syntax check for Lua and JSON files
+make check-syntax
+
+# Run linting (luacheck, shellcheck)
+make lint
+```
+
 ### Architecture
 
 **Configuration Structure:**
@@ -50,3 +62,13 @@ Each plugin is configured in its own file under `lua/plugins/`. The configuratio
 
 **Claude Code Integration:**
 The configuration includes claudecode.nvim plugin with keybindings under `<leader>a` prefix for AI assistance within Neovim.
+
+**CI/CD Pipeline:**
+- GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR
+- Automated syntax checking for all Lua and JSON files
+- Linting with luacheck and shellcheck
+- Build status badge available in README.md
+
+**File Tree Explorer:**
+- Uses nvim-tree (modern replacement for NerdTree)
+- Configured with Git integration and custom keybindings
