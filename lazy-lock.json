@@ -2,7 +2,7 @@
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
   "LuaSnip": { "branch": "master", "commit": "3d5bced1b9ae69fa3f9b1942e28af5dbc537f946" },
   "base16-nvim": { "branch": "master", "commit": "4d8b814fc483b8f9579379d96b59a3d20f36f6c9" },
-  "claudecode.nvim": { "branch": "main", "commit": "65de4fcc97e76b42f5aa2aae195d85357eeddc27" },
+  "claudecode.nvim": { "branch": "feat/show-terminal-on-at-mention", "commit": "e24d0dbea4e60aff2f9870eb9f029076b0c31691" },
   "cmp-buffer": { "branch": "main", "commit": "b74fab3656eea9de20a9b8116afa3cfc4ec09657" },
   "cmp-cmdline": { "branch": "main", "commit": "d126061b624e0af6c3a556428712dd4d4194ec6d" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "a8912b88ce488f411177fc8aed358b04dc246d7b" },

@@ -4,6 +4,7 @@ return {
 	},
 	{
 		"John-Lin/claudecode.nvim",
+		branch = "feat/show-terminal-on-at-mention",
 		dependencies = {
 			"folke/snacks.nvim", -- optional
 		},
