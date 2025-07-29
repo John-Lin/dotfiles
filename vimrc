@@ -512,7 +512,7 @@ endif
 if has('gui_macvim')
     set showtabline=2
     set imdisable
-    set transparency=0  " 透明度を指定
+    set transparency=0  " set transparency level
     set guioptions-=m
     set guioptions-=M
     set antialias
