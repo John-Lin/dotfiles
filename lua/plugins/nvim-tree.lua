@@ -1,7 +1,7 @@
 return {
 	{
 		"nvim-tree/nvim-tree.lua",
-		lazy = false, -- Load immediately so VimEnter autocmd works
+		lazy = vim.g.auto_open_nvim_tree ~= true, -- Only lazy load if auto-open is not explicitly enabled
 		dependencies = {
 			"nvim-tree/nvim-web-devicons", -- for file icons
 		},
@@ -64,16 +64,21 @@ return {
 			})
 
 			-- Auto open nvim-tree when starting nvim with no file arguments
-			vim.api.nvim_create_autocmd("VimEnter", {
-				callback = function()
-					if vim.fn.argc() == 0 then
-						-- Use vim.schedule to ensure nvim-tree is fully loaded
-						vim.schedule(function()
-							require("nvim-tree.api").tree.open()
-						end)
-					end
-				end,
-			})
+			-- Set vim.g.auto_open_nvim_tree = true to enable (also disables lazy loading)
+			-- Set vim.g.auto_open_nvim_tree = false to disable (enables lazy loading)
+			-- Default: disabled for better startup performance
+			if vim.g.auto_open_nvim_tree == true then
+				vim.api.nvim_create_autocmd("VimEnter", {
+					callback = function()
+						if vim.fn.argc() == 0 then
+							-- Use vim.schedule to ensure nvim-tree is fully loaded
+							vim.schedule(function()
+								require("nvim-tree.api").tree.open()
+							end)
+						end
+					end,
+				})
+			end
 		end,
 	},
 }
