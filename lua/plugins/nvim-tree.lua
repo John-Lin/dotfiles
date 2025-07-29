@@ -1,6 +1,7 @@
 return {
 	{
 		"nvim-tree/nvim-tree.lua",
+		lazy = false, -- Load immediately so VimEnter autocmd works
 		dependencies = {
 			"nvim-tree/nvim-web-devicons", -- for file icons
 		},
@@ -66,7 +67,10 @@ return {
 			vim.api.nvim_create_autocmd("VimEnter", {
 				callback = function()
 					if vim.fn.argc() == 0 then
-						require("nvim-tree.api").tree.open()
+						-- Use vim.schedule to ensure nvim-tree is fully loaded
+						vim.schedule(function()
+							require("nvim-tree.api").tree.open()
+						end)
 					end
 				end,
 			})
