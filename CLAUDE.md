@@ -68,7 +68,7 @@ make lint
 Each plugin is configured in its own file under `lua/plugins/`. The configuration uses lazy.nvim's declarative syntax with automatic loading based on file types and key mappings.
 
 **Claude Code Integration:**
-The configuration includes claudecode.nvim plugin with keybindings under `<leader>a` prefix for AI assistance within Neovim.
+The configuration includes claudecode.nvim plugin with keybindings under `<leader>a` prefix for AI assistance within Neovim. Currently using the feat/show-terminal-on-at-mention branch for enhanced terminal integration.
 
 **CI/CD Pipeline:**
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR
@@ -79,3 +79,26 @@ The configuration includes claudecode.nvim plugin with keybindings under `<leade
 **File Tree Explorer:**
 - Uses nvim-tree (modern replacement for NerdTree)
 - Configured with Git integration and custom keybindings
+- Configurable auto-open behavior with conditional lazy loading
+- Toggle with `<leader>t`, find current file with `<leader>l`
+- Auto-open controlled by `vim.g.auto_open_nvim_tree` variable in `init.lua`
+
+## Plugin-Specific Configuration
+
+### nvim-tree Configuration
+Control nvim-tree auto-open behavior via `vim.g.auto_open_nvim_tree`:
+- `true`: Enables auto-open on startup (disables lazy loading for immediate availability)
+- `false` or `nil`: Disables auto-open (enables lazy loading for faster startup) - Default
+- Configuration logic in `lua/plugins/nvim-tree.lua` uses conditional lazy loading
+- Uses `vim.schedule()` for safe VimEnter autocmd execution
+
+### Key Bindings Reference
+- `<leader>t`: Toggle nvim-tree
+- `<leader>l`: Find current file in nvim-tree
+- `<leader>a*`: Claude Code integration commands
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

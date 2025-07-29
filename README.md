@@ -71,7 +71,7 @@ make clean
 
 ### Navigation & Search
 - **Telescope** - Fuzzy finder for files, buffers, and more
-- **nvim-tree** - Modern file explorer with tree view
+- **nvim-tree** - Modern file explorer with configurable auto-open and lazy loading
 - **ripgrep** - Ultra-fast text search
 
 ### Development Experience
@@ -107,6 +107,8 @@ make clean
 | | `<Leader>ca` | Code actions |
 | | `<Leader>rn` | Rename symbol |
 | | `<Leader>f` | Format document |
+| **File Explorer** | `<Leader>t` | Toggle nvim-tree |
+| | `<Leader>l` | Find current file in tree |
 | **Claude AI** | `<Leader>ac` | Toggle Claude |
 | | `<Leader>af` | Focus Claude |
 | | `<Leader>as` | Send selection to Claude |
@@ -152,6 +154,18 @@ tic -x xterm-ghostty.terminfo
 - **LSP settings**: Modify `lua/lsp_config.lua`
 - **Shell aliases**: Update `zshrc`
 - **Theme**: Configure powerlevel10k via `p10k configure`
+
+#### nvim-tree Configuration
+
+Control nvim-tree behavior by setting in `init.lua`:
+
+```lua
+-- Enable auto-open (disables lazy loading for faster startup)
+vim.g.auto_open_nvim_tree = true
+
+-- Disable auto-open (enables lazy loading for faster startup)
+vim.g.auto_open_nvim_tree = false  -- Default
+```
 
 ## Dependencies
 
