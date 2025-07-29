@@ -6,6 +6,7 @@ return {
 	},
 	{
 		"nvim-neorg/neorg",
+		enabled = false, -- temporarily disabled
 		-- lazy load on file type
 		-- ft = "norg",
 		lazy = false,

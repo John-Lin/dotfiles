@@ -68,13 +68,13 @@ vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.copilot_tab_fallback = ""
 
--- 具體高亮組
+-- Specific highlight groups
 vim.api.nvim_set_hl(0, "@lsp.type.variable.lua", { link = "Normal" })
 vim.api.nvim_set_hl(0, "Identifier", { link = "Normal" })
 vim.api.nvim_set_hl(0, "TSVariable", { link = "Normal" })
 vim.api.nvim_set_hl(0, "@variable.builtin.vim", { link = "Normal" })
 
--- 設置命令行模式的鍵映射
+-- Command line mode key mappings
 local function cnoremap(lhs, rhs)
 	vim.api.nvim_set_keymap("c", lhs, rhs, { noremap = true, silent = true })
 end
@@ -90,16 +90,16 @@ vim.api.nvim_create_autocmd("FileType", {
 -- set history size
 vim.o.history = 500
 -- Bash-like command mapping
-cnoremap("<C-a>", "<Home>") -- Ctrl+A 跳到行首
-cnoremap("<C-e>", "<End>") -- Ctrl+E 跳到行尾
-cnoremap("<C-b>", "<Left>") -- Ctrl+B 向左移動一個字符
-cnoremap("<C-f>", "<Right>") -- Ctrl+F 向右移動一個字符
-cnoremap("<C-d>", "<Del>") -- Ctrl+D 刪除光標所在字符
-cnoremap("<C-_>", "<C-f>") -- Ctrl+_ 映射為 Ctrl+F
+cnoremap("<C-a>", "<Home>") -- Ctrl+A go to beginning of line
+cnoremap("<C-e>", "<End>") -- Ctrl+E go to end of line
+cnoremap("<C-b>", "<Left>") -- Ctrl+B move left one character
+cnoremap("<C-f>", "<Right>") -- Ctrl+F move right one character
+cnoremap("<C-d>", "<Del>") -- Ctrl+D delete character under cursor
+cnoremap("<C-_>", "<C-f>") -- Ctrl+_ maps to Ctrl+F
 
--- 歷史記錄導航
-cnoremap("<C-n>", "<Down>") -- Ctrl+N 下一條歷史記錄
-cnoremap("<C-p>", "<Up>") -- Ctrl+P 上一條歷史記錄
+-- History navigation
+cnoremap("<C-n>", "<Down>") -- Ctrl+N next history entry
+cnoremap("<C-p>", "<Up>") -- Ctrl+P previous history entry
 
--- 行首快捷映射
-cnoremap("<C-*>", "<C-a>") -- Ctrl+* 映射為 Ctrl+A
+-- Beginning of line shortcut mapping
+cnoremap("<C-*>", "<C-a>") -- Ctrl+* maps to Ctrl+A
