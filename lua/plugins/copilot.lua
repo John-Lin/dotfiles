@@ -3,15 +3,15 @@ return {
 		"github/copilot.vim",
 	},
 	{
-		"John-Lin/claudecode.nvim",
-		branch = "feat/show-terminal-on-at-mention",
-		dependencies = {
-			"folke/snacks.nvim", -- optional
-		},
-		opts = {
-			show_terminal_on_at_mention = false,
-		},
-		config = true,
+		"coder/claudecode.nvim",
+		config = function()
+			local none_terminal = require("providers.none_terminal")
+			require("claudecode").setup({
+				terminal = {
+					provider = none_terminal,
+				},
+			})
+		end,
 		lazy = false,
 		keys = {
 			{ "<leader>a", nil, desc = "AI/Claude Code" },
