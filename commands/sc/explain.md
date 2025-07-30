@@ -3,14 +3,14 @@ allowed-tools: [Read, Grep, Glob, Bash]
 description: "Provide clear explanations of code, concepts, or system behavior"
 ---
 
-# /explain - Code and Concept Explanation
+# /sc:explain - Code and Concept Explanation
 
 ## Purpose
 Deliver clear, comprehensive explanations of code functionality, concepts, or system behavior.
 
 ## Usage
 ```
-/explain [target] [--level basic|intermediate|advanced] [--format text|diagram|examples]
+/sc:explain [target] [--level basic|intermediate|advanced] [--format text|diagram|examples]
 ```
 
 ## Arguments

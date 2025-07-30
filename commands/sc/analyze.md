@@ -3,14 +3,14 @@ allowed-tools: [Read, Grep, Glob, Bash, TodoWrite]
 description: "Analyze code quality, security, performance, and architecture"
 ---
 
-# /analyze - Code Analysis
+# /sc:analyze - Code Analysis
 
 ## Purpose
 Execute comprehensive code analysis across quality, security, performance, and architecture domains.
 
 ## Usage
 ```
-/analyze [target] [--focus quality|security|performance|architecture] [--depth quick|deep]
+/sc:analyze [target] [--focus quality|security|performance|architecture] [--depth quick|deep]
 ```
 
 ## Arguments

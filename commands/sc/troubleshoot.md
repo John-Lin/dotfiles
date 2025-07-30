@@ -3,14 +3,14 @@ allowed-tools: [Read, Grep, Glob, Bash, TodoWrite]
 description: "Diagnose and resolve issues in code, builds, or system behavior"
 ---
 
-# /troubleshoot - Issue Diagnosis and Resolution
+# /sc:troubleshoot - Issue Diagnosis and Resolution
 
 ## Purpose
 Systematically diagnose and resolve issues in code, builds, deployments, or system behavior.
 
 ## Usage
 ```
-/troubleshoot [issue] [--type bug|build|performance|deployment] [--trace] [--fix]
+/sc:troubleshoot [issue] [--type bug|build|performance|deployment] [--trace] [--fix]
 ```
 
 ## Arguments

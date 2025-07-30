@@ -3,14 +3,14 @@ allowed-tools: [Read, Grep, Glob, Bash, Write]
 description: "Generate comprehensive project documentation and knowledge base"
 ---
 
-# /index - Project Documentation
+# /sc:index - Project Documentation
 
 ## Purpose
 Create and maintain comprehensive project documentation, indexes, and knowledge bases.
 
 ## Usage
 ```
-/index [target] [--type docs|api|structure|readme] [--format md|json|yaml]
+/sc:index [target] [--type docs|api|structure|readme] [--format md|json|yaml]
 ```
 
 ## Arguments
