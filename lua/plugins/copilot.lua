@@ -5,10 +5,10 @@ return {
 	{
 		"coder/claudecode.nvim",
 		config = function()
-			local none_terminal = require("providers.none_terminal")
+			local noop_terminal = require("providers.noop_terminal")
 			require("claudecode").setup({
 				terminal = {
-					provider = none_terminal,
+					provider = noop_terminal,
 				},
 			})
 		end,

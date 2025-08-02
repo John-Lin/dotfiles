@@ -61,6 +61,8 @@ make clean
 | **Terminal** | `ghostty.config` | Ghostty terminal emulator settings |
 | **Git** | `tigrc` | Enhanced git interface configuration |
 | **Vim** | `vimrc` | Fallback vim configuration |
+| **Claude Code** | `claude_settings.json`, `claude_md` | AI assistant configuration and custom commands |
+| **Commands** | `commands/sc/` | Custom slash commands for specialized workflows |
 
 ## Key Features
 
@@ -78,6 +80,8 @@ make clean
 - **LSP Integration** - Native language server protocol support
 - **Git Integration** - fugitive and gitsigns for version control
 - **AI Assistant** - Claude Code integration with dedicated keybindings
+- **Custom Commands** - Specialized slash commands for code analysis and documentation
+- **AI Agents** - Domain-specific AI assistants for various development tasks
 
 ## Language Support
 
@@ -154,6 +158,9 @@ tic -x xterm-ghostty.terminfo
 - **LSP settings**: Modify `lua/lsp_config.lua`
 - **Shell aliases**: Update `zshrc`
 - **Theme**: Configure powerlevel10k via `p10k configure`
+- **Claude Code**: Customize AI behavior via `claude_settings.json`
+- **AI Agents**: Add or modify agent prompts in `agents/`
+- **Slash Commands**: Create custom commands in `commands/`
 
 #### nvim-tree Configuration
 
@@ -166,6 +173,33 @@ vim.g.auto_open_nvim_tree = true
 -- Disable auto-open (enables lazy loading for faster startup)
 vim.g.auto_open_nvim_tree = false  -- Default
 ```
+
+## AI Integration
+
+### AI Agents
+
+The `agents/` directory contains specialized AI agent prompts for enhanced development workflows. These agents are integrated with Claude Code to provide expert assistance in specific domains:
+
+- **architect-review.md** - Architecture and design review specialist
+- **code-reviewer.md** - Code quality and best practices reviewer
+- **debugger.md** - Debugging and troubleshooting expert
+- **golang-pro.md** - Go language specialist
+- **prompt-engineer.md** - AI prompt optimization expert
+- **python-pro.md** - Python language specialist
+
+**Credits**: The AI agent prompts in the `agents/` directory are from [wshobson/agents](https://github.com/wshobson/agents), providing specialized AI assistants for various development tasks.
+
+### Slash Commands
+
+The `commands/sc/` directory contains custom slash commands for specialized workflows:
+
+- **analyze** - Deep code analysis and pattern detection
+- **document** - Generate comprehensive documentation
+- **explain** - Code explanation and learning tool
+- **index** - Project documentation and knowledge base generation
+- **troubleshoot** - Systematic debugging and issue resolution
+
+Use these commands in Claude Code with `/sc:<command>` (e.g., `/sc:analyze`, `/sc:document`).
 
 ## Dependencies
 

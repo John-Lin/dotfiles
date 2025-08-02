@@ -17,7 +17,7 @@ make sync
 make sync-ghostty   # Install Ghostty terminal configuration
 make sync-neovim    # Install Neovim configuration
 make sync-zsh       # Install Zsh shell configuration
-make sync-claude    # Install Claude Code configuration
+make sync-claude    # Install Claude Code configuration (includes AI agents and commands)
 
 # Remove all symlinks and config directories
 make clean
@@ -56,6 +56,7 @@ make lint
 - `lazy.nvim` for plugin management
 - `mason.nvim` for automatic LSP server installation
 - `cmp_nvim_lsp` for completion capabilities
+- `claudecode.nvim` for AI assistance integration
 - All LSP servers auto-installed via Mason
 
 **Shell Configuration:**
@@ -67,8 +68,28 @@ make lint
 **Plugin Architecture:**
 Each plugin is configured in its own file under `lua/plugins/`. The configuration uses lazy.nvim's declarative syntax with automatic loading based on file types and key mappings.
 
+**Terminal Provider Architecture:**
+The `lua/providers/noop_terminal.lua` implements a no-operation terminal provider that maintains API compatibility with claudecode.nvim while disabling terminal functionality. This allows for a cleaner integration without unwanted terminal windows.
+
 **Claude Code Integration:**
-The configuration includes claudecode.nvim plugin with keybindings under `<leader>a` prefix for AI assistance within Neovim. Currently using the feat/show-terminal-on-at-mention branch for enhanced terminal integration.
+The configuration includes claudecode.nvim plugin with keybindings under `<leader>a` prefix for AI assistance within Neovim. The setup uses a custom terminal provider (`lua/providers/noop_terminal.lua`) that disables terminal functionality while maintaining interface compatibility.
+
+**AI Agents:**
+Specialized AI agent prompts in `agents/` directory (from [wshobson/agents](https://github.com/wshobson/agents)):
+- `architect-review.md` - Architecture and design review
+- `code-reviewer.md` - Code quality review
+- `debugger.md` - Debugging assistance
+- `golang-pro.md` - Go language expertise
+- `prompt-engineer.md` - AI prompt optimization
+- `python-pro.md` - Python language expertise
+
+**Slash Commands:**
+Custom slash commands in `commands/sc/` for specialized workflows:
+- `/sc:analyze` - Deep code analysis
+- `/sc:document` - Documentation generation
+- `/sc:explain` - Code explanation
+- `/sc:index` - Project documentation indexing
+- `/sc:troubleshoot` - Systematic debugging
 
 **CI/CD Pipeline:**
 - GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR
@@ -96,6 +117,11 @@ Control nvim-tree auto-open behavior via `vim.g.auto_open_nvim_tree`:
 - `<leader>t`: Toggle nvim-tree
 - `<leader>l`: Find current file in nvim-tree
 - `<leader>a*`: Claude Code integration commands
+  - `<leader>ac`: Toggle Claude
+  - `<leader>af`: Focus Claude
+  - `<leader>as`: Send selection to Claude
+  - `<leader>aa`: Accept AI diff
+  - `<leader>ad`: Deny AI diff
 
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
