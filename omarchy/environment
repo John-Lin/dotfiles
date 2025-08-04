@@ -1,0 +1,7 @@
+#
+# This file is parsed by pam_env module
+#
+# Syntax: simple "KEY=VAL" pairs on separate lines
+#
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus
