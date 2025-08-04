@@ -2,9 +2,14 @@
 # Default target
 all: sync
 
-# Install all dotfiles (shortcut for sync-*)
-sync: sync-ghostty sync-neovim sync-zsh sync-claude
-	@echo "✅ All configurations synced!"
+# Install all dotfiles (removed automatic installation)
+sync:
+	@echo "⚠️  Please specify which configuration to install:"
+	@echo "  make sync-ghostty       - Install Ghostty configuration"
+	@echo "  make sync-ghostty-linux - Install Ghostty Linux configuration"
+	@echo "  make sync-neovim        - Install Neovim configuration"
+	@echo "  make sync-zsh           - Install Zsh configuration"
+	@echo "  make sync-claude        - Install Claude Code configuration"
 
 # Install Ghostty configuration
 sync-ghostty:
@@ -12,6 +17,13 @@ sync-ghostty:
 	mkdir -p ~/.config/ghostty
 	[ -f ~/.config/ghostty/config ] || ln -s $(PWD)/ghostty.config ~/.config/ghostty/config
 	@echo "✅ Ghostty configuration installed"
+
+# Install Ghostty configuration (Linux specific)
+sync-ghostty-linux:
+	@echo "🐧 Installing Ghostty configuration for Linux..."
+	mkdir -p ~/.config/ghostty
+	[ -f ~/.config/ghostty/config ] || ln -s $(PWD)/ghostty.config.linux ~/.config/ghostty/config
+	@echo "✅ Ghostty Linux configuration installed"
 
 # Install Neovim configuration
 sync-neovim:
@@ -40,8 +52,25 @@ sync-claude:
 	[ -d ~/.claude/agents ] || ln -s $(PWD)/agents ~/.claude/agents
 	@echo "✅ Claude Code configuration installed"
 
-# Remove all symlinks and configuration directories
+# Remove all symlinks and configuration directories (with confirmation)
 clean:
+	@echo "⚠️  WARNING: This will remove all dotfile configurations!"
+	@echo "  - ~/.config/nvim/"
+	@echo "  - ~/.config/ghostty/config"
+	@echo "  - ~/.tigrc, ~/.zshrc, ~/.p10k.zsh"
+	@echo "  - ~/.claude/"
+	@echo ""
+	@read -p "Are you sure? [y/N] " -n 1 -r; \
+	echo ""; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		$(MAKE) clean-force; \
+	else \
+		echo "❌ Clean cancelled"; \
+	fi
+
+# Force clean without confirmation (used by clean target)
+clean-force:
+	@echo "🧹 Removing all configurations..."
 	rm -rf ~/.config/nvim/
 	rm -f ~/.tigrc
 	rm -f ~/.zshrc
@@ -51,6 +80,29 @@ clean:
 	rm -f ~/.claude/CLAUDE.md
 	rm -rf ~/.claude/commands
 	rm -rf ~/.claude/agents
+	@echo "✅ All configurations removed"
+
+# Individual clean targets
+clean-ghostty:
+	@echo "🧹 Removing Ghostty configuration..."
+	rm -f ~/.config/ghostty/config
+	@echo "✅ Ghostty configuration removed"
+
+clean-neovim:
+	@echo "🧹 Removing Neovim configuration..."
+	rm -rf ~/.config/nvim/
+	@echo "✅ Neovim configuration removed"
+
+clean-zsh:
+	@echo "🧹 Removing Zsh configuration..."
+	rm -f ~/.tigrc ~/.zshrc ~/.p10k.zsh
+	@echo "✅ Zsh configuration removed"
+
+clean-claude:
+	@echo "🧹 Removing Claude Code configuration..."
+	rm -f ~/.claude/settings.json ~/.claude/CLAUDE.md
+	rm -rf ~/.claude/commands ~/.claude/agents
+	@echo "✅ Claude Code configuration removed"
 
 # Test commands
 test: check-syntax lint
@@ -79,4 +131,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck lua/ init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean sync sync-ghostty sync-neovim sync-zsh sync-claude test check-syntax lint
+.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-claude sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-claude test check-syntax lint
