@@ -1,51 +1,58 @@
+# Font configuration
 font-family = "Hurmit Nerd Font Mono"
 font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui-Regular"
-theme = Tomorrow Night
-# theme = GruvboxDarkHard
+font-size = 9
+adjust-cell-height=7%
+theme = tokyonight_night
 # background = 1C2021
 shell-integration-features = no-cursor,sudo,no-title
 
-font-size = 10
-# font-thicken = true
 adjust-underline-thickness = -50%
 cursor-style = block
 cursor-color = ff2600
 
+# Window settings
+window-decoration = server
 window-padding-balance = true
 window-save-state = always
 window-colorspace = "display-p3"
 
 gtk-titlebar = true 
 
-palette = 8=#969896
+# keybindings
+keybind = f11=toggle_fullscreen
 
 # split
-keybind = super+f>v=new_split:right
-keybind = super+f>s=new_split:down
+keybind = super+r>v=new_split:right
+keybind = super+r>s=new_split:down
 
-keybind = super+f>j=goto_split:bottom
-keybind = super+f>k=goto_split:top
-keybind = super+f>h=goto_split:left
-keybind = super+f>l=goto_split:right
+keybind = super+r>j=goto_split:bottom
+keybind = super+r>k=goto_split:top
+keybind = super+r>h=goto_split:left
+keybind = super+r>l=goto_split:right
 
-# keybindings
-keybind = super+f>r=reload_config
-keybind = super+f>x=close_surface
+keybind = super+r>r=reload_config
+keybind = super+r>x=close_surface
 
-keybind = super+f>n=new_window
+keybind = super+r>n=new_window
 
-keybind = super+f>z=toggle_split_zoom
+keybind = super+r>z=toggle_split_zoom
 
-keybind = super+f>e=equalize_splits
+keybind = super+r>e=equalize_splits
+
+# https://github.com/ghostty-org/ghostty/issues/4800
+app-notifications = no-clipboard-copy
 copy-on-select = clipboard
 
-confirm-close-surface = false
+# Window behavior
+confirm-close-surface=false
+resize-overlay = never
 
 # The opacity level (opposite of transparency) of an unfocused split.
 # Unfocused splits by default are slightly faded out to make it easier to see
 # which split is focused. To disable this feature, set this value to 1.
 unfocused-split-opacity = 0.6
 
-background-opacity = 0.99
+background-opacity = 0.98
 keybind = shift+enter=text:\n
 keybind = ctrl+enter=text:\n
