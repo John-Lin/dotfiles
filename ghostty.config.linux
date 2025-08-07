@@ -1,10 +1,10 @@
 # Font configuration
-font-family = "Hurmit Nerd Font Mono"
-font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui-Regular"
+font-family = "Google Sans Code"
+# font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui-Regular"
 font-size = 9
 adjust-cell-height=7%
+
 theme = tokyonight_night
-# background = 1C2021
 shell-integration-features = no-cursor,sudo,no-title
 
 adjust-underline-thickness = -50%
@@ -12,6 +12,8 @@ cursor-style = block
 cursor-color = ff2600
 
 # Window settings
+window-padding-x = 14
+window-padding-y = 14
 window-decoration = server
 window-padding-balance = true
 window-save-state = always
