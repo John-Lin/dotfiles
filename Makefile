@@ -55,9 +55,8 @@ sync-zsh:
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
 	mkdir -p ~/.claude
-	@echo "  Generating claude_settings.json for $(UNAME_S)..."
-	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude_settings.json.template > claude_settings.json
-	[ -f ~/.claude/settings.json ] || ln -s $(PWD)/claude_settings.json ~/.claude/settings.json
+	@echo "  Generating settings.json for $(UNAME_S)..."
+	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude_settings.json.template > ~/.claude/settings.json
 	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
 	[ -d ~/.claude/commands ] || ln -s $(PWD)/commands ~/.claude/commands
 	[ -d ~/.claude/agents ] || ln -s $(PWD)/agents ~/.claude/agents
@@ -128,7 +127,7 @@ check-syntax:
 		luac -p "$$file" || { echo "❌ Syntax error in $$file"; exit 1; }; \
 	done
 	@echo "Checking JSON files..."
-	@for file in lazy-lock.json claude_settings.json; do \
+	@for file in lazy-lock.json claude_settings.json.template; do \
 		if [ -f "$$file" ]; then \
 			echo "  Checking $$file"; \
 			python3 -m json.tool "$$file" >/dev/null || { echo "❌ Invalid JSON in $$file"; exit 1; }; \
