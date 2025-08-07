@@ -1,4 +1,13 @@
 
+# Detect OS
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+    SOUND_COMMAND := afplay /System/Library/Sounds/Glass.aiff
+else
+    SOUND_COMMAND := paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+endif
+
 # Default target
 all: sync
 
@@ -46,6 +55,8 @@ sync-zsh:
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
 	mkdir -p ~/.claude
+	@echo "  Generating claude_settings.json for $(UNAME_S)..."
+	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude_settings.json.template > claude_settings.json
 	[ -f ~/.claude/settings.json ] || ln -s $(PWD)/claude_settings.json ~/.claude/settings.json
 	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
 	[ -d ~/.claude/commands ] || ln -s $(PWD)/commands ~/.claude/commands
