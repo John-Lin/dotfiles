@@ -4,7 +4,7 @@ font-family = "Google Sans Code"
 font-size = 9
 adjust-cell-height=7%
 
-theme = tokyonight_night
+theme = GruvboxDarkHard
 shell-integration-features = no-cursor,sudo,no-title
 
 adjust-underline-thickness = -50%
