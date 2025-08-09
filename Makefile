@@ -19,6 +19,7 @@ sync:
 	@echo "  make sync-neovim        - Install Neovim configuration"
 	@echo "  make sync-zsh           - Install Zsh configuration"
 	@echo "  make sync-claude        - Install Claude Code configuration"
+	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
 sync-ghostty:
@@ -62,11 +63,19 @@ sync-claude:
 	[ -d ~/.claude/agents ] || ln -s $(PWD)/agents ~/.claude/agents
 	@echo "✅ Claude Code configuration installed"
 
+# Install Aerospace configuration
+sync-aerospace:
+	@echo "🚀 Installing Aerospace configuration..."
+	mkdir -p ~/.config/aerospace
+	[ -f ~/.config/aerospace/aerospace.toml ] || ln -s $(PWD)/aerospace/aerospace.toml ~/.config/aerospace/aerospace.toml
+	@echo "✅ Aerospace configuration installed"
+
 # Remove all symlinks and configuration directories (with confirmation)
 clean:
 	@echo "⚠️  WARNING: This will remove all dotfile configurations!"
 	@echo "  - ~/.config/nvim/"
 	@echo "  - ~/.config/ghostty/config"
+	@echo "  - ~/.config/aerospace/aerospace.toml"
 	@echo "  - ~/.tigrc, ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
 	@echo ""
@@ -86,6 +95,7 @@ clean-force:
 	rm -f ~/.zshrc
 	rm -f ~/.p10k.zsh
 	rm -f ~/.config/ghostty/config
+	rm -f ~/.config/aerospace/aerospace.toml
 	rm -f ~/.claude/settings.json
 	rm -f ~/.claude/CLAUDE.md
 	rm -rf ~/.claude/commands
@@ -114,6 +124,11 @@ clean-claude:
 	rm -rf ~/.claude/commands ~/.claude/agents
 	@echo "✅ Claude Code configuration removed"
 
+clean-aerospace:
+	@echo "🧹 Removing Aerospace configuration..."
+	rm -f ~/.config/aerospace/aerospace.toml
+	@echo "✅ Aerospace configuration removed"
+
 # Test commands
 test: check-syntax lint
 	@echo "✅ All checks passed!"
@@ -141,4 +156,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck lua/ init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-claude sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-claude test check-syntax lint
+.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-claude clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-claude sync-aerospace test check-syntax lint
