@@ -1,7 +1,9 @@
 # Font configuration
 font-family = "Google Sans Code"
 # font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui-Regular"
-font-size = 9
+# build-in display font size
+# font-size = 9 
+font-size = 13
 adjust-cell-height=7%
 
 theme = GruvboxDarkHard
