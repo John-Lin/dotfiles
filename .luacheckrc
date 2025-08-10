@@ -5,19 +5,19 @@ globals = {
 }
 
 -- Ignore warnings about setting vim global
-files["init.lua"] = {
+files["nvim/.config/nvim/init.lua"] = {
     globals = {"vim"},
 }
 
-files["lua/lsp_config.lua"] = {
+files["nvim/.config/nvim/lua/lsp_config.lua"] = {
     globals = {"vim"},
 }
 
-files["lua/lib.lua"] = {
+files["nvim/.config/nvim/lua/lib.lua"] = {
     globals = {"vim", "M"},
 }
 
-files["lua/plugins/*.lua"] = {
+files["nvim/.config/nvim/lua/plugins/*.lua"] = {
     globals = {"vim"},
 }
 

@@ -159,7 +159,7 @@ check-syntax:
 # Lint configuration files
 lint:
 	@echo "🔍 Running linter..."
-	@command -v luacheck >/dev/null 2>&1 && luacheck lua/ init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
+	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
 .PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-aerospace test check-syntax lint
