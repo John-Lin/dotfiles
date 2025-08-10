@@ -13,6 +13,24 @@ Modern development environment configuration with Neovim, zsh, and AI-powered de
 - **🛠️ Developer Tools** - ripgrep, bat, eza, direnv, Kubernetes tooling
 - **🪟 Window Management** - Aerospace tiling window manager (macOS)
 
+## 📋 Prerequisites
+
+**GNU Stow is required** for managing symbolic links:
+
+```bash
+# macOS
+brew install stow
+
+# Ubuntu/Debian
+sudo apt install stow
+
+# Arch Linux
+sudo pacman -S stow
+
+# CentOS/RHEL/Fedora
+sudo dnf install stow
+```
+
 ## 🚀 Quick Start
 
 ```bash
@@ -26,6 +44,7 @@ make sync
 # Or install specific components
 make sync-neovim        # Neovim configuration
 make sync-zsh           # Zsh shell configuration  
+make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
@@ -38,21 +57,37 @@ make sync-aerospace     # Aerospace window manager (macOS)
 
 ## 📁 Structure
 
+**Stow-managed packages** (each directory contains dotfiles in home directory structure):
+
 ```
 dotfiles/
-├── init.lua                    # Neovim main configuration
-├── lua/                       # Neovim plugins and LSP settings
-│   ├── plugins/               # Plugin configurations
-│   └── lsp_config.lua         # Language server settings
-├── zshrc                      # Zsh shell configuration
-├── ghostty.config             # Ghostty terminal settings (macOS)
-├── ghostty.config.linux       # Ghostty terminal settings (Linux)
-├── aerospace/                # Aerospace window manager config
-│   └── aerospace.toml        # Aerospace settings
-├── agents/                    # AI agent prompts
-├── commands/sc/               # Custom slash commands
-└── claude_settings.json.template # Claude Code configuration template
+├── nvim/                      # Neovim configuration
+│   └── .config/nvim/          # → ~/.config/nvim/
+│       ├── init.lua           # Main configuration
+│       ├── lua/               # Plugins and LSP settings
+│       └── lazy-lock.json     # Plugin lockfile
+├── zsh/                       # Zsh shell configuration  
+│   ├── .zshrc                 # → ~/.zshrc
+│   └── .p10k.zsh              # → ~/.p10k.zsh (powerlevel10k theme)
+├── tig/                       # Tig Git interface
+│   └── .tigrc                 # → ~/.tigrc
+├── ghostty/                   # Ghostty terminal (macOS)
+│   └── .config/ghostty/config # → ~/.config/ghostty/config
+├── ghostty-linux/             # Ghostty terminal (Linux)
+│   └── .config/ghostty/config # → ~/.config/ghostty/config
+├── claude/                    # Claude Code AI tools
+│   └── .claude/               # → ~/.claude/
+│       ├── CLAUDE.md          # Global instructions
+│       ├── agents/            # AI agent prompts
+│       └── commands/          # Custom slash commands
+└── aerospace/                 # Aerospace window manager (macOS)
+    └── .config/aerospace/     # → ~/.config/aerospace/
+        └── aerospace.toml     # Window management config
 ```
+
+**Configuration files:**
+- `Makefile` - Installation and management commands
+- `claude/claude_settings.json.template` - Claude Code settings template
 
 ## 🎯 Key Components
 
@@ -125,13 +160,13 @@ dotfiles/
 - Auto-open file tree: Set `vim.g.auto_open_nvim_tree = true` in `init.lua`
 
 ### Terminal
-- Ghostty: Edit `ghostty.config`
+- Ghostty: Edit `ghostty/.config/ghostty/config` or `ghostty-linux/.config/ghostty/config`
 - Theme: Run `p10k configure`
 
 ### AI
-- Claude settings: Auto-generated from `claude_settings.json.template`
-- Add agents: Create in `agents/`
-- Add commands: Create in `commands/sc/`
+- Claude settings: Auto-generated from `claude/claude_settings.json.template`
+- Add agents: Create in `claude/.claude/agents/`
+- Add commands: Create in `claude/.claude/commands/sc/`
 
 ### Remote Ghostty Setup
 ```bash
@@ -141,11 +176,16 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 
 ## 📋 Requirements
 
+**Essential:**
 - macOS or Linux
 - Git, Make
+- **GNU Stow** (for symlink management)
 - Neovim 0.8+
 - Node.js (for LSP servers)
-- Python 3, Go (optional)
+
+**Optional:**
+- Python 3, Go (language support)
+- ripgrep, bat, eza (enhanced shell tools)
 
 ## 📝 License
 
