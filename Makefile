@@ -61,9 +61,11 @@ sync-tig:
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
-	@echo "  Generating settings.json for $(UNAME_S)..."
-	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > claude/.claude/settings.json
+	@echo "  Installing configuration files with stow..."
 	stow -t ~ claude
+	@echo "  Generating settings.json for $(UNAME_S)..."
+	@mkdir -p ~/.claude
+	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > ~/.claude/settings.json
 	@echo "✅ Claude Code configuration installed"
 
 # Install Aerospace configuration
