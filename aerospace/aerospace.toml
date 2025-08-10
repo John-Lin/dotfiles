@@ -252,4 +252,4 @@ if.app-id = 'com.electron.logseq'
 run = 'move-node-to-workspace O'
 
 [workspace-to-monitor-force-assignment]
-1 = ['secondary', 'dell']
+2 = ['secondary', 'dell']
