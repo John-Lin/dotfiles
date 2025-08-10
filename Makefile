@@ -18,56 +18,59 @@ sync:
 	@echo "  make sync-ghostty-linux - Install Ghostty Linux configuration"
 	@echo "  make sync-neovim        - Install Neovim configuration"
 	@echo "  make sync-zsh           - Install Zsh configuration"
+	@echo "  make sync-tig           - Install Tig configuration"
 	@echo "  make sync-claude        - Install Claude Code configuration"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
 sync-ghostty:
 	@echo "🖥️  Installing Ghostty configuration..."
-	mkdir -p ~/.config/ghostty
-	[ -f ~/.config/ghostty/config ] || ln -s $(PWD)/ghostty.config ~/.config/ghostty/config
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ ghostty
 	@echo "✅ Ghostty configuration installed"
 
 # Install Ghostty configuration (Linux specific)
 sync-ghostty-linux:
 	@echo "🐧 Installing Ghostty configuration for Linux..."
-	mkdir -p ~/.config/ghostty
-	[ -f ~/.config/ghostty/config ] || ln -s $(PWD)/ghostty.config.linux ~/.config/ghostty/config
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ ghostty-linux
 	@echo "✅ Ghostty Linux configuration installed"
 
 # Install Neovim configuration
 sync-neovim:
 	@echo "📝 Installing Neovim configuration..."
-	mkdir -p ~/.config/nvim
-	[ -f ~/.config/nvim/init.lua ] || ln -s $(PWD)/init.lua ~/.config/nvim/init.lua
-	[ -f ~/.config/nvim/lazy-lock.json ] || ln -s $(PWD)/lazy-lock.json ~/.config/nvim/lazy-lock.json
-	[ -d ~/.config/nvim/lua ] || ln -s $(PWD)/lua ~/.config/nvim/lua
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ nvim
 	@echo "✅ Neovim configuration installed"
 
 # Install Zsh configuration
 sync-zsh:
 	@echo "🐚 Installing Zsh configuration..."
-	[ -f ~/.tigrc ] || ln -s $(PWD)/tigrc ~/.tigrc
-	[ -f ~/.zshrc ] || ln -s $(PWD)/zshrc ~/.zshrc
-	[ -f ~/.p10k.zsh ] || ln -s $(PWD)/p10k.zsh ~/.p10k.zsh
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ zsh
 	@echo "✅ Zsh configuration installed"
+
+# Install Tig configuration
+sync-tig:
+	@echo "🔍 Installing Tig configuration..."
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ tig
+	@echo "✅ Tig configuration installed"
 
 # Install Claude Code configuration
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
-	mkdir -p ~/.claude
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	@echo "  Generating settings.json for $(UNAME_S)..."
-	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude_settings.json.template > ~/.claude/settings.json
-	[ -f ~/.claude/CLAUDE.md ] || ln -s $(PWD)/claude_md ~/.claude/CLAUDE.md
-	[ -d ~/.claude/commands ] || ln -s $(PWD)/commands ~/.claude/commands
-	[ -d ~/.claude/agents ] || ln -s $(PWD)/agents ~/.claude/agents
+	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > claude/.claude/settings.json
+	stow -t ~ claude
 	@echo "✅ Claude Code configuration installed"
 
 # Install Aerospace configuration
 sync-aerospace:
 	@echo "🚀 Installing Aerospace configuration..."
-	mkdir -p ~/.config/aerospace
-	[ -f ~/.config/aerospace/aerospace.toml ] || ln -s $(PWD)/aerospace/aerospace.toml ~/.config/aerospace/aerospace.toml
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	stow -t ~ aerospace
 	@echo "✅ Aerospace configuration installed"
 
 # Remove all symlinks and configuration directories (with confirmation)
@@ -76,7 +79,8 @@ clean:
 	@echo "  - ~/.config/nvim/"
 	@echo "  - ~/.config/ghostty/config"
 	@echo "  - ~/.config/aerospace/aerospace.toml"
-	@echo "  - ~/.tigrc, ~/.zshrc, ~/.p10k.zsh"
+	@echo "  - ~/.tigrc"
+	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
@@ -90,43 +94,45 @@ clean:
 # Force clean without confirmation (used by clean target)
 clean-force:
 	@echo "🧹 Removing all configurations..."
-	rm -rf ~/.config/nvim/
-	rm -f ~/.tigrc
-	rm -f ~/.zshrc
-	rm -f ~/.p10k.zsh
-	rm -f ~/.config/ghostty/config
-	rm -f ~/.config/aerospace/aerospace.toml
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || rm -rf ~/.config/nvim/
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || rm -f ~/.tigrc
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
 	rm -f ~/.claude/settings.json
-	rm -f ~/.claude/CLAUDE.md
-	rm -rf ~/.claude/commands
-	rm -rf ~/.claude/agents
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ aerospace || rm -f ~/.config/aerospace/aerospace.toml
 	@echo "✅ All configurations removed"
 
 # Individual clean targets
 clean-ghostty:
 	@echo "🧹 Removing Ghostty configuration..."
-	rm -f ~/.config/ghostty/config
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
 	@echo "✅ Ghostty configuration removed"
+
+clean-tig:
+	@echo "🧹 Removing Tig configuration..."
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || rm -f ~/.tigrc
+	@echo "✅ Tig configuration removed"
 
 clean-neovim:
 	@echo "🧹 Removing Neovim configuration..."
-	rm -rf ~/.config/nvim/
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || rm -rf ~/.config/nvim/
 	@echo "✅ Neovim configuration removed"
 
 clean-zsh:
 	@echo "🧹 Removing Zsh configuration..."
-	rm -f ~/.tigrc ~/.zshrc ~/.p10k.zsh
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
 	@echo "✅ Zsh configuration removed"
 
 clean-claude:
 	@echo "🧹 Removing Claude Code configuration..."
-	rm -f ~/.claude/settings.json ~/.claude/CLAUDE.md
-	rm -rf ~/.claude/commands ~/.claude/agents
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
+	rm -f ~/.claude/settings.json
 	@echo "✅ Claude Code configuration removed"
 
 clean-aerospace:
 	@echo "🧹 Removing Aerospace configuration..."
-	rm -f ~/.config/aerospace/aerospace.toml
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ aerospace || rm -f ~/.config/aerospace/aerospace.toml
 	@echo "✅ Aerospace configuration removed"
 
 # Test commands
@@ -142,7 +148,7 @@ check-syntax:
 		luac -p "$$file" || { echo "❌ Syntax error in $$file"; exit 1; }; \
 	done
 	@echo "Checking JSON files..."
-	@for file in lazy-lock.json claude_settings.json.template; do \
+	@for file in lazy-lock.json claude/claude_settings.json.template; do \
 		if [ -f "$$file" ]; then \
 			echo "  Checking $$file"; \
 			python3 -m json.tool "$$file" >/dev/null || { echo "❌ Invalid JSON in $$file"; exit 1; }; \
@@ -156,4 +162,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck lua/ init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-claude clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-claude sync-aerospace test check-syntax lint
+.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-aerospace test check-syntax lint
