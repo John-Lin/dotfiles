@@ -3,3 +3,11 @@ alias vi='nvim'
 alias vimdiff='nvim -d'
 
 export EDITOR=nvim
+
+# npm
+# mkdir -p ~/.npm-global && npm config set prefix '~/.npm-global'
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH
