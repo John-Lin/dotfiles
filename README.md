@@ -7,7 +7,7 @@ Modern development environment configuration with Neovim, zsh, and AI-powered de
 ## ✨ Features
 
 - **🚀 Modern Neovim** - LSP, auto-completion, and AI assistance
-- **💻 Enhanced Shell** - zsh with Starship prompt  
+- **💻 Enhanced Shell** - zsh with powerlevel10k theme  
 - **🌍 Multi-language Support** - Python, Go, Lua, Terraform, YAML/Helm, C/C++, Zig
 - **🤖 AI Integration** - Claude Code with custom agents and slash commands
 - **🛠️ Developer Tools** - ripgrep, bat, eza, direnv, Kubernetes tooling
@@ -43,7 +43,7 @@ make sync
 
 # Or install specific components
 make sync-neovim        # Neovim configuration
-make sync-zsh           # Zsh and Starship configuration  
+make sync-zsh           # Zsh shell configuration  
 make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
@@ -67,9 +67,8 @@ dotfiles/
 │       ├── lua/               # Plugins and LSP settings
 │       └── lazy-lock.json     # Plugin lockfile
 ├── zsh/                       # Zsh shell configuration  
-│   └── .zshrc                 # → ~/.zshrc
-├── starship/                  # Starship prompt configuration
-│   └── .config/starship.toml  # → ~/.config/starship.toml
+│   ├── .zshrc                 # → ~/.zshrc
+│   └── .p10k.zsh              # → ~/.p10k.zsh (powerlevel10k theme)
 ├── tig/                       # Tig Git interface
 │   └── .tigrc                 # → ~/.tigrc
 ├── ghostty/                   # Ghostty terminal (macOS)
@@ -162,7 +161,7 @@ dotfiles/
 
 ### Terminal
 - Ghostty: Edit `ghostty/.config/ghostty/config` or `ghostty-linux/.config/ghostty/config`
-- Starship prompt: Edit `starship/.config/starship.toml` or see [starship.rs](https://starship.rs/config/)
+- Theme: Run `p10k configure`
 
 ### AI
 - Claude settings: Auto-generated from `claude/claude_settings.json.template`
@@ -187,7 +186,6 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 **Optional:**
 - Python 3, Go (language support)
 - ripgrep, bat, eza, zoxide, fzf (enhanced shell tools)
-- Starship (cross-shell prompt)
 
 ## 📝 License
 

@@ -1,4 +1,14 @@
-eval "$(starship init zsh)"
+# https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#how-do-i-initialize-direnv-when-using-instant-prompt
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
+
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # alias ripgrep to grep
 # https://news.ycombinator.com/item?id=22281977
@@ -50,20 +60,30 @@ alias ls='ls -G'
 # kubectl prompt
 autoload -U colors; colors
 source /opt/homebrew/etc/zsh-kubectl-prompt/kubectl.zsh
+# default kubectl prompt
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
 
 # enable git completion
 autoload -Uz compinit && compinit
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
+# History control for zsh
 # https://unix.stackexchange.com/questions/568907/why-do-i-lose-my-zsh-history
 HISTFILE=$HOME/.zsh_history
+
+# Append history lines to the history file instead of overwriting it
+setopt append_history
+# Ignore commands that start with a space in the history
+setopt hist_ignore_space
+# Ignore duplicate commands in the history
+setopt hist_ignore_all_dups
+# Number of history entries kept in memory
 HISTSIZE=500000
+# Number of history entries saved to the history file
 SAVEHIST=500000
-setopt appendhistory
-setopt INC_APPEND_HISTORY
-setopt SHARE_HISTORY
+# Write each command to the history file immediately after it is executed
+setopt inc_append_history
+# Share history between all running zsh sessions in real time
+setopt share_history
 
 # claude-monitor
 export PATH="$HOME/.local/bin:$PATH"
@@ -80,10 +100,6 @@ export EDITOR="nvim"
 # if command -v fzf &> /dev/null; then
 #   source <(fzf --zsh)
 # fi
-
-if command -v direnv &> /dev/null; then
-    eval "$(direnv hook zsh)"
-fi
 
 # zoxide init
 if command -v zoxide &> /dev/null; then
@@ -111,3 +127,6 @@ zd() {
 
 # z
 # . /opt/homebrew/etc/profile.d/z.sh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
