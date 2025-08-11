@@ -43,12 +43,13 @@ sync-neovim:
 	stow -t ~ nvim
 	@echo "✅ Neovim configuration installed"
 
-# Install Zsh configuration
+# Install Zsh and Starship configuration
 sync-zsh:
-	@echo "🐚 Installing Zsh configuration..."
+	@echo "🐚 Installing Zsh and Starship configuration..."
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ zsh
-	@echo "✅ Zsh configuration installed"
+	stow -t ~ starship
+	@echo "✅ Zsh and Starship configuration installed"
 
 # Install Tig configuration
 sync-tig:
@@ -82,7 +83,8 @@ clean:
 	@echo "  - ~/.config/ghostty/config"
 	@echo "  - ~/.config/aerospace/aerospace.toml"
 	@echo "  - ~/.tigrc"
-	@echo "  - ~/.zshrc, ~/.p10k.zsh"
+	@echo "  - ~/.zshrc"
+	@echo "  - ~/.config/starship.toml"
 	@echo "  - ~/.claude/"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
@@ -98,7 +100,8 @@ clean-force:
 	@echo "🧹 Removing all configurations..."
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || rm -rf ~/.config/nvim/
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || rm -f ~/.tigrc
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || rm -f ~/.zshrc
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ starship || rm -f ~/.config/starship.toml
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
 	rm -f ~/.claude/settings.json
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
@@ -122,9 +125,10 @@ clean-neovim:
 	@echo "✅ Neovim configuration removed"
 
 clean-zsh:
-	@echo "🧹 Removing Zsh configuration..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
-	@echo "✅ Zsh configuration removed"
+	@echo "🧹 Removing Zsh and Starship configuration..."
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || rm -f ~/.zshrc
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ starship || rm -f ~/.config/starship.toml
+	@echo "✅ Zsh and Starship configuration removed"
 
 clean-claude:
 	@echo "🧹 Removing Claude Code configuration..."
