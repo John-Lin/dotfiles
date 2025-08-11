@@ -1,0 +1,19 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[λ →](green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+error_symbol = '[λ ✗](red)'
+
+[line_break]
+disabled = false
+
+[direnv]
+disabled = false
+
+[kubernetes]
+style = 'dimmed blue'
+disabled = false

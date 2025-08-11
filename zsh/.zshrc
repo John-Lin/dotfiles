@@ -1,13 +1,4 @@
-(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
-
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+eval "$(starship init zsh)"
 
 # alias ripgrep to grep
 # https://news.ycombinator.com/item?id=22281977
@@ -59,8 +50,6 @@ alias ls='ls -G'
 # kubectl prompt
 autoload -U colors; colors
 source /opt/homebrew/etc/zsh-kubectl-prompt/kubectl.zsh
-# default kubectl prompt
-RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
 
 # enable git completion
 autoload -Uz compinit && compinit
@@ -87,11 +76,19 @@ export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
 # llm tools
 export EDITOR="nvim"
 
-# fzf
-source <(fzf --zsh)
+# # fzf init
+# if command -v fzf &> /dev/null; then
+#   source <(fzf --zsh)
+# fi
 
-# zoxide
-eval "$(zoxide init zsh)"
+if command -v direnv &> /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+# zoxide init
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
 
 # File system, fzf and eza aliases
 alias ls='eza -lh --group-directories-first --icons=auto'
