@@ -4,6 +4,19 @@
 # Inserts a blank line between shell prompts
 add_newline = true
 
+format = """
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$git_metrics\
+$direnv\
+$cmd_duration\
+$character\
+"""
+
 [character] # The name of the module we are configuring is 'character'
 success_symbol = '[λ →](green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
 error_symbol = '[λ ✗](red)'
