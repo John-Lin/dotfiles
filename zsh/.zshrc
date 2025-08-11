@@ -18,10 +18,13 @@ alias grep="rg"
 alias cat="bat"
 # alias cat="bat --paging=never"
 
-# vim to nvim
+# nvim editor quick access
+n() { if [ "$#" -eq 0 ]; then nvim .; else nvim "$@"; fi; }
+# alias for nvim
 alias vim="nvim"
 alias vi="nvim"
 alias vimdiff='nvim -d'
+
 # kubectl editor
 export KUBE_EDITOR="nvim"
 
@@ -46,9 +49,6 @@ export NTOKEN_FILE="$HOME/.config/zms/.ntoken"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # tfswitch for terraform
 export PATH="$PATH:$HOME/bin"
-
-# z
-. /opt/homebrew/etc/profile.d/z.sh
 
 # kubecolor
 alias kubectl="kubecolor"
@@ -87,15 +87,30 @@ export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
 # llm tools
 export EDITOR="nvim"
 
-# eza alias
-alias ls='eza'
-alias l='eza -lbF --git'
-alias ll='eza -lbGF --git'
-alias llm='eza -lbGd --git --sort=modified'
-alias la='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'
-alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale'
+# fzf
+source <(fzf --zsh)
 
-# specialty views
-alias lS='eza -1'
-alias lt='eza --tree --level=2'
-alias l.="eza -a | grep -E '^\.'"
+# zoxide
+eval "$(zoxide init zsh)"
+
+# File system, fzf and eza aliases
+alias ls='eza -lh --group-directories-first --icons=auto'
+alias lsa='ls -a'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='lt -a'
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+# zoxide required
+alias cd="zd"
+zd() {
+  if [ $# -eq 0 ]; then
+    builtin cd ~ && return
+  elif [ -d "$1" ]; then
+    builtin cd "$1"
+  else
+    z "$@" && printf " \U000F17A9 " && pwd || echo "Error: Directory not found"
+  fi
+}
+
+# z
+# . /opt/homebrew/etc/profile.d/z.sh
