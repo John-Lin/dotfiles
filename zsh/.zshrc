@@ -25,7 +25,6 @@ n() { if [ "$#" -eq 0 ]; then nvim .; else nvim "$@"; fi; }
 alias vim="nvim"
 alias vi="nvim"
 alias vimdiff='nvim -d'
-alias python=python3
 
 # kubectl editor
 export KUBE_EDITOR="nvim"
@@ -35,7 +34,7 @@ export GOPATH=$HOME/go
 export GOROOT="$(brew --prefix golang)/libexec"
 export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
-# alias python
+# alias python3
 alias python='python3'
 # ctags
 alias ctags='/opt/homebrew/bin/ctags'
