@@ -25,15 +25,15 @@ n() { if [ "$#" -eq 0 ]; then nvim .; else nvim "$@"; fi; }
 alias vim="nvim"
 alias vi="nvim"
 alias vimdiff='nvim -d'
+alias python=python3
 
 # kubectl editor
 export KUBE_EDITOR="nvim"
 
 # Homebrew install golang
 export GOPATH=$HOME/go
-export GOROOT=/opt/homebrew/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
+export GOROOT="$(brew --prefix golang)/libexec"
+export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
 # alias python
 alias python='python3'
@@ -84,9 +84,6 @@ SAVEHIST=500000
 setopt inc_append_history
 # Share history between all running zsh sessions in real time
 setopt share_history
-
-# claude-monitor
-export PATH="$HOME/.local/bin:$PATH"
 
 # claude code
 export PATH="$PATH:$HOME/.claude/local"
