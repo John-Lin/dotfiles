@@ -68,12 +68,15 @@ sync-claude:
 	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > ~/.claude/settings.json
 	@echo "✅ Claude Code configuration installed"
 
-# Install Aerospace configuration
+# Install Aerospace configuration (includes Borders)
 sync-aerospace:
 	@echo "🚀 Installing Aerospace configuration..."
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ aerospace
 	@echo "✅ Aerospace configuration installed"
+	@echo "🔳 Installing Borders configuration..."
+	stow -t ~ borders
+	@echo "✅ Borders configuration installed"
 
 # Remove all symlinks and configuration directories (with confirmation)
 clean:
@@ -81,6 +84,7 @@ clean:
 	@echo "  - ~/.config/nvim/"
 	@echo "  - ~/.config/ghostty/config"
 	@echo "  - ~/.config/aerospace/aerospace.toml"
+	@echo "  - ~/.config/borders/bordersrc"
 	@echo "  - ~/.tigrc"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
@@ -102,7 +106,7 @@ clean-force:
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
 	rm -f ~/.claude/settings.json
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ aerospace || rm -f ~/.config/aerospace/aerospace.toml
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
 	@echo "✅ All configurations removed"
 
 # Individual clean targets
@@ -134,8 +138,9 @@ clean-claude:
 
 clean-aerospace:
 	@echo "🧹 Removing Aerospace configuration..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ aerospace || rm -f ~/.config/aerospace/aerospace.toml
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
 	@echo "✅ Aerospace configuration removed"
+	@echo "✅ Borders configuration removed"
 
 # Test commands
 test: check-syntax lint
