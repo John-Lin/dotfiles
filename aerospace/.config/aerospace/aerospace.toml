@@ -17,7 +17,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # You can set 0 to disable the padding feature
 accordion-padding = 30
 
-# Possible values: tiles|accordion
+# Possible values: tiles|accordn
 default-root-container-layout = 'tiles'
 
 # Possible values: horizontal|vertical|auto
@@ -92,6 +92,25 @@ automatically-unhide-macos-hidden-apps = true
     # end tell'
     # '''
 
+    # Application binding
+    cmd-b = '''exec-and-forget osascript -e '
+    tell application "Arc"
+        make new window
+        activate
+    end tell'
+    '''
+    cmd-enter = '''exec-and-forget osascript -e '
+    tell application "Ghostty"
+       if it is running then
+           activate
+           tell application "System Events" to keystroke "n" using {command down}
+       else
+           activate
+       end if
+    end tell'
+    '''
+    cmd-o = '''exec-and-forget open -na Logseq'''
+
     cmd-h = [] # Disable "hide application"
     cmd-alt-h = [] # Disable "hide others"
 
@@ -135,7 +154,6 @@ automatically-unhide-macos-hidden-apps = true
     alt-t = 'workspace T'
     alt-u = 'workspace U'
     alt-x = 'workspace X'
-    alt-enter = 'workspace tty'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
     alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
@@ -157,7 +175,6 @@ automatically-unhide-macos-hidden-apps = true
     alt-shift-t = ['move-node-to-workspace T']
     alt-shift-u = ['move-node-to-workspace U']
     alt-shift-x = ['move-node-to-workspace X']
-    alt-shift-enter = ['move-node-to-workspace tty']
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
@@ -198,13 +215,6 @@ run = 'move-node-to-workspace A'
 if.app-id = 'com.anthropic.claudefordesktop'
 run = 'move-node-to-workspace A'
 
-# Terminal
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = [
-  "move-node-to-workspace tty",
-]
-
 # btop
 [[on-window-detected]]
 if.app-id = 'org.alacritty'
@@ -218,11 +228,6 @@ run = [
     'layout floating',
     'move-node-to-workspace F'
 ]
-
-# Deprecated
-# [[on-window-detected]]
-# if.app-id = 'company.thebrowser.Browser'
-# run = 'move-node-to-workspace B'
 
 # Browsers
 [[on-window-detected]]
@@ -247,11 +252,6 @@ run = 'move-node-to-workspace G'
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace M'
-
-# Logseq
-[[on-window-detected]]
-if.app-id = 'com.electron.logseq'
-run = 'move-node-to-workspace O'
 
 [workspace-to-monitor-force-assignment]
 2 = ['secondary', 'dell']
