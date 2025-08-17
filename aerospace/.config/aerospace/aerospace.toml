@@ -124,7 +124,12 @@ automatically-unhide-macos-hidden-apps = true
         tell application "System Events" to keystroke "n" using {command down}
     end tell'
     '''
-    cmd-o = '''exec-and-forget open -na Logseq'''
+    cmd-o = '''exec-and-forget osascript -e '
+    tell application "Logseq"
+        activate
+        reopen
+    end tell'
+    '''
     cmd-y = '''exec-and-forget osascript -e '
     tell application "Microsoft Edge"
         make new window
