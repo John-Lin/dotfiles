@@ -9,32 +9,32 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Set up Lua
       uses: leafo/gh-actions-lua@v10
       with:
         luaVersion: "5.4"
-        
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
-        
+
     - name: Install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y lua-check stow
-        
+
     - name: Run syntax check
       run: make check-syntax
-      
+
     - name: Run linter
       run: make lint
-      
+
     - name: Test stow functionality
       run: |
         # Test that stow commands don't fail

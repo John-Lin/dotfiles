@@ -92,24 +92,46 @@ automatically-unhide-macos-hidden-apps = true
     # end tell'
     # '''
 
-    # Application binding
+    cmd-shift-a = '''exec-and-forget osascript -e '
+    tell application "ChatGPT"
+        activate
+        reopen
+    end tell'
+    '''
+    cmd-shift-c = '''exec-and-forget osascript -e '
+    tell application "Claude"
+        activate
+        reopen
+    end tell'
+    '''
+
     cmd-b = '''exec-and-forget osascript -e '
-    tell application "Arc"
+    tell application "Microsoft Edge"
         make new window
         activate
     end tell'
     '''
+    # incognito mode
+    cmd-i = '''exec-and-forget osascript -e '
+    tell application "Microsoft Edge"
+        activate
+        tell application "System Events" to keystroke "n" using {shift down, command down}
+    end tell'
+    '''
     cmd-enter = '''exec-and-forget osascript -e '
     tell application "Ghostty"
-       if it is running then
-           activate
-           tell application "System Events" to keystroke "n" using {command down}
-       else
-           activate
-       end if
+        activate
+        tell application "System Events" to keystroke "n" using {command down}
     end tell'
     '''
     cmd-o = '''exec-and-forget open -na Logseq'''
+    cmd-y = '''exec-and-forget osascript -e '
+    tell application "Microsoft Edge"
+        make new window
+        open location "https://youtube.com"
+        activate
+    end tell'
+    '''
 
     cmd-h = [] # Disable "hide application"
     cmd-alt-h = [] # Disable "hide others"
@@ -206,14 +228,6 @@ automatically-unhide-macos-hidden-apps = true
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
-
-# AI Applications
-[[on-window-detected]]
-if.app-id = 'com.openai.chat'
-run = 'move-node-to-workspace A'
-[[on-window-detected]]
-if.app-id = 'com.anthropic.claudefordesktop'
-run = 'move-node-to-workspace A'
 
 # btop
 [[on-window-detected]]
