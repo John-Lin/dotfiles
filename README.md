@@ -11,7 +11,7 @@ Modern development environment configuration with Neovim, zsh, and AI-powered de
 - **🌍 Multi-language Support** - Python, Go, Lua, Terraform, YAML/Helm, C/C++, Zig
 - **🤖 AI Integration** - Claude Code with custom agents and slash commands
 - **🛠️ Developer Tools** - ripgrep, bat, eza, direnv, Kubernetes tooling
-- **🪟 Window Management** - Aerospace tiling window manager (macOS)
+- **🪟 Window Management** - Aerospace tiling window manager with Borders integration (macOS)
 
 ## 📋 Prerequisites
 
@@ -48,7 +48,7 @@ make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
-make sync-aerospace     # Aerospace window manager (macOS)
+make sync-aerospace     # Aerospace window manager + Borders (macOS)
 ```
 
 **Testing**: `make test` (runs syntax checks and linting)
@@ -80,9 +80,12 @@ dotfiles/
 │       ├── CLAUDE.md          # Global instructions
 │       ├── agents/            # AI agent prompts
 │       └── commands/          # Custom slash commands
-└── aerospace/                 # Aerospace window manager (macOS)
-    └── .config/aerospace/     # → ~/.config/aerospace/
-        └── aerospace.toml     # Window management config
+├── aerospace/                 # Aerospace window manager (macOS)
+│   └── .config/aerospace/     # → ~/.config/aerospace/
+│       └── aerospace.toml     # Window management config
+└── borders/                    # Window borders decoration (macOS)
+    └── .config/borders/        # → ~/.config/borders/
+        └── bordersrc           # Borders configuration
 ```
 
 **Configuration files:**
