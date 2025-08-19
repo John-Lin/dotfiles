@@ -218,3 +218,8 @@ automatically-unhide-macos-hidden-apps = true
 
 [workspace-to-monitor-force-assignment]
 2 = ['secondary', 'dell']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+check-further-callbacks = true
+run = ['layout floating']
