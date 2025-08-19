@@ -1,7 +1,7 @@
 font-family = "Hurmit Nerd Font Mono"
 font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui"
-theme = Tomorrow Night
-# theme = GruvboxDarkHard
+# theme = Tomorrow Night
+theme = GruvboxDarkHard
 # background = 1C2021
 shell-integration-features = no-cursor,sudo,no-title
 
@@ -48,6 +48,6 @@ copy-on-select = clipboard
 # which split is focused. To disable this feature, set this value to 1.
 unfocused-split-opacity = 0.6
 
-background-opacity = 0.98
+background-opacity = 0.96
 keybind = shift+enter=text:\n
 keybind = ctrl+enter=text:\n
