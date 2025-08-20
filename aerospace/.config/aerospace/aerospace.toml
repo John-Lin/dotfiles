@@ -105,37 +105,39 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
 
-    cmd-b = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        activate
-        reopen
-    end tell'
-    '''
+    cmd-b = 'exec-and-forget open -n -a Microsoft\ Edge'
+
     # incognito mode
     cmd-i = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        activate
-        tell application "System Events" to keystroke "n" using {shift down, command down}
-    end tell'
-    '''
-    cmd-enter = '''exec-and-forget osascript -e '
-    tell application "Ghostty"
-        activate
-        tell application "System Events" to keystroke "n" using {command down}
-    end tell'
-    '''
+    if application "Microsoft Edge" is running then
+        tell application "Microsoft Edge"
+            activate
+            tell application "System Events"
+                keystroke "n" using {shift down, command down}
+            end tell
+        end tell
+    else
+        tell application "Microsoft Edge" to activate
+    end if' '''
+    cmd-enter = 'exec-and-forget open -n -a Ghostty'
+    # cmd-enter = '''exec-and-forget osascript -e '
+    # if application "Ghostty" is running then
+    #     tell application "Ghostty"
+    #         tell application "System Events"
+    #             keystroke "n" using {command down}
+    #         end tell
+    #         activate
+    #     end tell
+    # else
+    #     tell application "Ghostty" to activate
+    # end if' '''
     cmd-o = '''exec-and-forget osascript -e '
     tell application "Logseq"
         activate
         reopen
     end tell'
     '''
-    cmd-y = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        open location "https://youtube.com"
-        activate
-    end tell'
-    '''
+    cmd-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
 
     cmd-h = [] # Disable "hide application"
     cmd-alt-h = [] # Disable "hide others"
