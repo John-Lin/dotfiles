@@ -121,8 +121,8 @@ zd() {
   fi
 }
 
-# z
-# . /opt/homebrew/etc/profile.d/z.sh
+# export PATH for local bin for uv tool installation
+export PATH="$HOME/.local/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
