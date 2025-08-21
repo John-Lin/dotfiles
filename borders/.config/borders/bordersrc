@@ -1,10 +1,12 @@
 #!/bin/bash
 
+# teal
+# active_color=0xff008080
 options=(
 	style=round
 	width=6.0
 	hidpi=on
-	active_color=0xff71cead
+	active_color=0xff20b2aa
 	inactive_color=0xff414550
 )
 
