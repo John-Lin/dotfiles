@@ -119,18 +119,10 @@ automatically-unhide-macos-hidden-apps = true
     else
         tell application "Microsoft Edge" to activate
     end if' '''
-    cmd-enter = 'exec-and-forget open -n -a Ghostty'
-    # cmd-enter = '''exec-and-forget osascript -e '
-    # if application "Ghostty" is running then
-    #     tell application "Ghostty"
-    #         tell application "System Events"
-    #             keystroke "n" using {command down}
-    #         end tell
-    #         activate
-    #     end tell
-    # else
-    #     tell application "Ghostty" to activate
-    # end if' '''
+
+    # new window in current workspace
+    # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
+    cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
     cmd-o = '''exec-and-forget osascript -e '
     tell application "Logseq"
         activate
@@ -223,5 +215,21 @@ automatically-unhide-macos-hidden-apps = true
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'net.pulsesecure.Pulse-Secure'
+check-further-callbacks = true
+run = ['layout floating']
+
+# Messageing apps should be floating
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
 check-further-callbacks = true
 run = ['layout floating']
