@@ -105,37 +105,31 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
 
-    cmd-b = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        activate
-        reopen
-    end tell'
-    '''
+    cmd-b = 'exec-and-forget open -n -a Microsoft\ Edge'
+
     # incognito mode
     cmd-i = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        activate
-        tell application "System Events" to keystroke "n" using {shift down, command down}
-    end tell'
-    '''
-    cmd-enter = '''exec-and-forget osascript -e '
-    tell application "Ghostty"
-        activate
-        tell application "System Events" to keystroke "n" using {command down}
-    end tell'
-    '''
+    if application "Microsoft Edge" is running then
+        tell application "Microsoft Edge"
+            activate
+            tell application "System Events"
+                keystroke "n" using {shift down, command down}
+            end tell
+        end tell
+    else
+        tell application "Microsoft Edge" to activate
+    end if' '''
+
+    # new window in current workspace
+    # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
+    cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
     cmd-o = '''exec-and-forget osascript -e '
     tell application "Logseq"
         activate
         reopen
     end tell'
     '''
-    cmd-y = '''exec-and-forget osascript -e '
-    tell application "Microsoft Edge"
-        open location "https://youtube.com"
-        activate
-    end tell'
-    '''
+    cmd-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
 
     cmd-h = [] # Disable "hide application"
     cmd-alt-h = [] # Disable "hide others"
@@ -221,5 +215,21 @@ automatically-unhide-macos-hidden-apps = true
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'net.pulsesecure.Pulse-Secure'
+check-further-callbacks = true
+run = ['layout floating']
+
+# Messageing apps should be floating
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
 check-further-callbacks = true
 run = ['layout floating']

@@ -41,6 +41,8 @@ keybind = cmd+f>n=new_window
 keybind = cmd+f>z=toggle_split_zoom
 
 keybind = cmd+f>e=equalize_splits
+keybind = cmd+f>q=toggle_quick_terminal
+
 copy-on-select = clipboard
 
 # The opacity level (opposite of transparency) of an unfocused split.
