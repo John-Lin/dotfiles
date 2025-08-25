@@ -123,6 +123,13 @@ automatically-unhide-macos-hidden-apps = true
     # new window in current workspace
     # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
     cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
+
+    cmd-m = '''exec-and-forget osascript -e '
+    tell application "Spotify"
+        activate
+        reopen
+    end tell'
+    '''
     cmd-o = '''exec-and-forget osascript -e '
     tell application "Logseq"
         activate
