@@ -1,0 +1,20 @@
+[general]
+live_config_reload = true
+
+[terminal.shell]
+program = "/opt/homebrew/bin/btop"
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+normal = { family = "Hurmit Nerd Font Mono", style = "Regular" }
+bold = { family = "Hurmit Nerd Font Mono", style = "Bold" }
+italic = { family = "Hurmit Nerd Font Mono", style = "Italic" }
+size = 15
+
+[window]
+padding.x = 14
+padding.y = 14
+decorations = "None"
+opacity = 0.98

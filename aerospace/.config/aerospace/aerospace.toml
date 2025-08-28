@@ -107,6 +107,13 @@ automatically-unhide-macos-hidden-apps = true
 
     cmd-b = 'exec-and-forget open -n -a Microsoft\ Edge'
 
+    cmd-g = '''exec-and-forget osascript -e '
+    tell application "Telegram"
+        activate
+        reopen
+    end tell'
+    '''
+
     # incognito mode
     cmd-i = '''exec-and-forget osascript -e '
     if application "Microsoft Edge" is running then

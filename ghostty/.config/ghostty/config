@@ -3,6 +3,7 @@ font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui"
 theme = Tomorrow Night
 # theme = GruvboxDarkHard
 # background = 1C2021
+shell-integration = zsh
 shell-integration-features = no-cursor,sudo,no-title
 
 font-size = 15

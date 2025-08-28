@@ -5,5 +5,6 @@
       "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": []
-  }
+  },
+  "outputStyle": "default"
 }
