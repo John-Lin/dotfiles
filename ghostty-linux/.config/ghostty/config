@@ -7,6 +7,7 @@ font-size = 12
 adjust-cell-height=7%
 
 theme = GruvboxDarkHard
+shell-integration = bash
 shell-integration-features = no-cursor,sudo,no-title
 
 adjust-underline-thickness = -50%
