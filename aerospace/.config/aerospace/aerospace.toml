@@ -144,6 +144,12 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
+    cmd-slash = '''exec-and-forget osascript -e '
+    tell application "1Password"
+        activate
+        reopen
+    end tell'
+    '''
 
     cmd-h = [] # Disable "hide application"
     cmd-alt-h = [] # Disable "hide others"
@@ -245,5 +251,10 @@ run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'ru.keepcoder.Telegram'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
 check-further-callbacks = true
 run = ['layout floating']
