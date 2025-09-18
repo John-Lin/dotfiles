@@ -33,7 +33,14 @@ sync-ghostty:
 sync-ghostty-linux:
 	@echo "🐧 Installing Ghostty configuration for Linux..."
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
-	stow -t ~ ghostty-linux
+	@if [ -f ~/.config/ghostty/config ]; then \
+		echo "  ~/.config/ghostty/config already exists, only installing custom.conf..."; \
+		mkdir -p ~/.config/ghostty; \
+		ln -sf $(PWD)/ghostty-linux/.config/ghostty/custom.conf ~/.config/ghostty/custom.conf; \
+	else \
+		echo "  ~/.config/ghostty/config does not exist, installing full configuration..."; \
+		stow -t ~ ghostty-linux; \
+	fi
 	@echo "✅ Ghostty Linux configuration installed"
 
 # Install Neovim configuration
@@ -106,6 +113,7 @@ clean-force:
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
 	rm -f ~/.claude/settings.json
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
+	@[ -L ~/.config/ghostty/custom.conf ] && rm -f ~/.config/ghostty/custom.conf || true
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
 	@echo "✅ All configurations removed"
 
@@ -113,6 +121,10 @@ clean-force:
 clean-ghostty:
 	@echo "🧹 Removing Ghostty configuration..."
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
+	@if [ -L ~/.config/ghostty/custom.conf ]; then \
+		echo "  Removing custom.conf symlink..."; \
+		rm -f ~/.config/ghostty/custom.conf; \
+	fi
 	@echo "✅ Ghostty configuration removed"
 
 clean-tig:
