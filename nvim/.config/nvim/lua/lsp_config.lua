@@ -136,6 +136,7 @@ vim.lsp.config('helm_ls', {
 
 -- setup yamlls
 vim.lsp.config('yamlls', {
+	capabilities = capabilities,
 	settings = {
 		yaml = {
 			schemas = {
