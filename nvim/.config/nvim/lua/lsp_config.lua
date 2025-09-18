@@ -1,5 +1,4 @@
 local safeRequire = require("lib").safeRequire
-local nvim_lsp = safeRequire("lspconfig")
 
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -7,7 +6,7 @@ require("neodev").setup({
 	-- add any options here, or leave empty to use the default settings
 })
 
-nvim_lsp.lua_ls.setup({
+vim.lsp.config('lua_ls', {
 	capabilities = capabilities,
 	settings = {
 		Lua = {
@@ -41,7 +40,7 @@ nvim_lsp.lua_ls.setup({
 	},
 })
 
-nvim_lsp.basedpyright.setup({
+vim.lsp.config('basedpyright', {
 	capabilities = capabilities,
 	cmd = { "basedpyright-langserver", "--stdio" },
 	filetypes = { "python" },
@@ -70,7 +69,7 @@ nvim_lsp.basedpyright.setup({
 	},
 })
 
-nvim_lsp.ruff.setup({
+vim.lsp.config('ruff', {
 	capabilities = capabilities,
 	-- https://github.com/astral-sh/ruff-lsp?tab=readme-ov-file#example-neovim
 	on_attach = function(client, _)
@@ -81,16 +80,16 @@ nvim_lsp.ruff.setup({
 	end,
 })
 
-nvim_lsp.terraformls.setup({
+vim.lsp.config('terraformls', {
 	capabilities = capabilities,
 })
 
 -- Setup clangd for C/C++
-nvim_lsp.clangd.setup({
+vim.lsp.config('clangd', {
 	capabilities = capabilities,
 	cmd = { "clangd", "--background-index", "--clang-tidy", "--header-insertion=iwyu" },
 	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-	root_dir = require("lspconfig").util.root_pattern(
+	root_markers = {
 		".clangd",
 		".clang-tidy",
 		".clang-format",
@@ -98,7 +97,7 @@ nvim_lsp.clangd.setup({
 		"compile_flags.txt",
 		"configure.ac",
 		".git"
-	),
+	},
 	settings = {
 		clangd = {
 			checkUpdates = true,
@@ -107,10 +106,10 @@ nvim_lsp.clangd.setup({
 })
 
 -- Setup go language server gopls
-nvim_lsp.gopls.setup({
+vim.lsp.config('gopls', {
 	capabilities = capabilities,
 	cmd = { "gopls" },
-	root_dir = require("lspconfig").util.root_pattern(".git", "go.mod", "."),
+	root_markers = { ".git", "go.mod", "." },
 	filetypes = { "go", "gomod", "gowork", "gotmpl" },
 	settings = {
 		gopls = {
@@ -126,7 +125,7 @@ nvim_lsp.gopls.setup({
 })
 
 -- setup helm-ls
-nvim_lsp.helm_ls.setup({
+vim.lsp.config('helm_ls', {
 	capabilities = capabilities,
 	settings = {
 		["helm-ls"] = {
@@ -138,7 +137,7 @@ nvim_lsp.helm_ls.setup({
 })
 
 -- setup yamlls
-nvim_lsp.yamlls.setup({
+vim.lsp.config('yamlls', {
 	settings = {
 		yaml = {
 			schemas = {
