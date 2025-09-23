@@ -1,56 +1,42 @@
-font-family = "Hurmit Nerd Font Mono"
-font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui"
 theme = Tomorrow Night
 # theme = GruvboxDarkHard
-# background = 1C2021
+# Override ANSI color 8 (bright black/gray) with a softer gray tone
+palette = 8=#969896
+
+# Font
+font-family = "Hurmit Nerd Font Mono"
+font-size = 15
+font-codepoint-map = "U+4E00-U+9FFF,U+3400-U+4DBF = Iansui"
+
+# Cursor styling
+cursor-style = "block"
+cursor-style-blink = false
+cursor-color = ff2600
+
+# Shell integration
 shell-integration = zsh
 shell-integration-features = no-cursor,sudo,no-title
 
-font-size = 15
-adjust-underline-thickness = -50%
-cursor-style = block
-cursor-color = ff2600
-
-# Window settings
+# Window
 window-padding-x = 14
 window-padding-y = 14
 window-padding-balance = true
 window-save-state = always
 window-colorspace = "display-p3"
 
+# Background opacity and blur
+background-opacity = 0.9
+background-blur = true
+
+# Misc
+copy-on-select = clipboard
+adjust-underline-thickness = -50%
 # To hide the titlebar without removing the native window borders or rounded corners
 macos-titlebar-style = hidden
-# Override ANSI color 8 (bright black/gray) with a softer gray tone
-palette = 8=#969896
-
-# split
-keybind = cmd+f>v=new_split:right
-keybind = cmd+f>s=new_split:down
-
-keybind = cmd+f>j=goto_split:bottom
-keybind = cmd+f>k=goto_split:top
-keybind = cmd+f>h=goto_split:left
-keybind = cmd+f>l=goto_split:right
-
-# keybindings
-keybind = cmd+f>r=reload_config
-keybind = cmd+f>x=close_surface
-
-keybind = cmd+f>n=new_window
-
-keybind = cmd+f>z=toggle_split_zoom
-
-keybind = cmd+f>e=equalize_splits
-keybind = cmd+f>q=toggle_quick_terminal
-
-copy-on-select = clipboard
-
 # The opacity level (opposite of transparency) of an unfocused split.
 # Unfocused splits by default are slightly faded out to make it easier to see
 # which split is focused. To disable this feature, set this value to 1.
 unfocused-split-opacity = 0.6
 
-background-opacity = 0.9
-background-blur = true
-keybind = shift+enter=text:\n
-keybind = ctrl+enter=text:\n
+# custom keybindings config
+config-file = ?"~/.config/ghostty/keybindings.conf"
