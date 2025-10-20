@@ -105,9 +105,9 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
 
-    cmd-b = 'exec-and-forget open -n -a Microsoft\ Edge'
+    cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
 
-    cmd-g = '''exec-and-forget osascript -e '
+    cmd-shift-g = '''exec-and-forget osascript -e '
     tell application "Telegram"
         activate
         reopen
@@ -115,7 +115,7 @@ automatically-unhide-macos-hidden-apps = true
     '''
 
     # incognito mode
-    cmd-i = '''exec-and-forget osascript -e '
+    cmd-shift-i = '''exec-and-forget osascript -e '
     if application "Microsoft Edge" is running then
         tell application "Microsoft Edge"
             activate
@@ -131,19 +131,19 @@ automatically-unhide-macos-hidden-apps = true
     # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
     cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
 
-    cmd-m = '''exec-and-forget osascript -e '
+    cmd-shift-m = '''exec-and-forget osascript -e '
     tell application "Spotify"
         activate
         reopen
     end tell'
     '''
-    cmd-o = '''exec-and-forget osascript -e '
+    cmd-shift-o = '''exec-and-forget osascript -e '
     tell application "Logseq"
         activate
         reopen
     end tell'
     '''
-    cmd-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
+    cmd-shift-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
     cmd-slash = '''exec-and-forget osascript -e '
     tell application "1Password"
         activate
