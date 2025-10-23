@@ -9,7 +9,7 @@
   "cmp-path": { "branch": "main", "commit": "c642487086dbd9a93160e1679a1327be111cbc25" },
   "conflict-marker.vim": { "branch": "master", "commit": "62742b2ffe7a433988759c67b5c5a22eff74a14b" },
   "copilot.vim": { "branch": "release", "commit": "da369d90cfd6c396b1d0ec259836a1c7222fb2ea" },
-  "lazy.nvim": { "branch": "main", "commit": "1ea3c4085785f460fb0e46d2fe1ee895f5f9e7c1" },
+  "lazy.nvim": { "branch": "main", "commit": "16e52715b70b4d0fc6af3563ccc0ed9df82ae23e" },
   "luarocks.nvim": { "branch": "main", "commit": "1db9093915eb16ba2473cfb8d343ace5ee04130a" },
   "mason-lspconfig.nvim": { "branch": "main", "commit": "2304ff65ecc8cb2afc2484de3e2ed9a407edf0b9" },
   "mason.nvim": { "branch": "main", "commit": "ad7146aa61dcaeb54fa900144d768f040090bff0" },
