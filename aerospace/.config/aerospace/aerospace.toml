@@ -144,7 +144,7 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-shift-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
-    cmd-slash = '''exec-and-forget osascript -e '
+    cmd-shift-slash = '''exec-and-forget osascript -e '
     tell application "1Password"
         activate
         reopen
