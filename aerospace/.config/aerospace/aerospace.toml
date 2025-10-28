@@ -106,6 +106,7 @@ automatically-unhide-macos-hidden-apps = true
     '''
 
     cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
+    cmd-shift-e = 'exec-and-forget open -n -a Proton\ Mail'
 
     cmd-shift-g = '''exec-and-forget osascript -e '
     tell application "Telegram"
@@ -131,6 +132,8 @@ automatically-unhide-macos-hidden-apps = true
     # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
     cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
 
+    # TODO
+    # Replace to YouTube Music
     cmd-shift-m = '''exec-and-forget osascript -e '
     tell application "Spotify"
         activate
@@ -143,7 +146,9 @@ automatically-unhide-macos-hidden-apps = true
         reopen
     end tell'
     '''
-    cmd-shift-y = 'exec-and-forget open -n -a Microsoft\ Edge -u https://youtube.com'
+    cmd-shift-x = 'exec-and-forget open -n -a X'
+    cmd-shift-y = 'exec-and-forget open -n -a YouTube'
+
     cmd-shift-slash = '''exec-and-forget osascript -e '
     tell application "1Password"
         activate
