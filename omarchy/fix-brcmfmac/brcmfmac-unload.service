@@ -1,0 +1,11 @@
+[Unit]
+Description=Unload brcmfmac before sleep
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'sleep 2; modprobe -r brcmfmac_wcc || true; modprobe -r brcmfmac || true'
+
+[Install]
+WantedBy=sleep.target

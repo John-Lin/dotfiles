@@ -1,0 +1,10 @@
+[Unit]
+Description=Load brcmfmac after resume
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/modprobe brcmfmac
+
+[Install]
+WantedBy=suspend.target

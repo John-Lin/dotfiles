@@ -19,18 +19,17 @@ chmod +x ~/.local/bin/brcmfmac-reload
 
 You can now run `brcmfmac-reload` from anywhere to manually fix the driver.
 
-### 2. Install the systemd service (Recommended)
+### 2. Install the systemd services (Recommended)
 
 Set up automatic driver handling during suspend/resume:
 
 ```bash
-sudo cp brcmfmac-reload.service /etc/systemd/system/
-sudo systemctl enable brcmfmac-reload.service
-sudo systemctl start brcmfmac-reload.service
+sudo cp brcmfmac-unload.service brcmfmac-load.service /etc/systemd/system/
+sudo systemctl enable brcmfmac-unload.service brcmfmac-load.service
 ```
 
-The service will:
-- Remove `brcmfmac_wcc` before suspend
+The services will:
+- Remove both `brcmfmac_wcc` and `brcmfmac` before suspend
 - Reload `brcmfmac` after resume
 
 ## Usage
@@ -49,10 +48,11 @@ Once the service is installed, it runs automatically during suspend/resume cycle
 
 ## Verification
 
-After installation, suspend and resume your system. Check the service status:
+After installation, suspend and resume your system. Check the services status:
 
 ```bash
-systemctl status brcmfmac-reload.service
+systemctl status brcmfmac-unload.service
+systemctl status brcmfmac-load.service
 ```
 
 Your WiFi should work normally without crashes.
