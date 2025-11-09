@@ -1,0 +1,10 @@
+[Unit]
+Before=sleep.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'sleep 2 && exec modprobe -r brcmfmac_wcc'
+ExecStop=/bin/modprobe brcmfmac
+
+[Install]
+WantedBy=sleep.target

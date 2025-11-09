@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo modprobe -r brcmfmac_wcc
+sudo modprobe brcmfmac
