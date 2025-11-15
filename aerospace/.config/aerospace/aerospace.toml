@@ -98,15 +98,15 @@ automatically-unhide-macos-hidden-apps = true
         reopen
     end tell'
     '''
+    cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
     cmd-shift-c = '''exec-and-forget osascript -e '
     tell application "Claude"
         activate
         reopen
     end tell'
     '''
-
-    cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
     cmd-shift-e = 'exec-and-forget open -n -a Proton\ Mail'
+    cmd-shift-f = 'exec-and-forget open ~/Documents'
 
     cmd-shift-g = '''exec-and-forget osascript -e '
     tell application "Telegram"
