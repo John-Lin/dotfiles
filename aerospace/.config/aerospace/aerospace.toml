@@ -3,7 +3,7 @@
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = ['layout tiles']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -106,7 +106,7 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-shift-e = 'exec-and-forget open -n -a Proton\ Mail'
-    cmd-shift-f = 'exec-and-forget open ~/Documents'
+    cmd-shift-f = 'exec-and-forget open ~'
 
     cmd-shift-g = '''exec-and-forget osascript -e '
     tell application "Telegram"
@@ -132,10 +132,8 @@ automatically-unhide-macos-hidden-apps = true
     # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
     cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
 
-    # TODO
-    # Replace to YouTube Music
     cmd-shift-m = '''exec-and-forget osascript -e '
-    tell application "Spotify"
+    tell application "Youtube Music"
         activate
         reopen
     end tell'
@@ -160,52 +158,54 @@ automatically-unhide-macos-hidden-apps = true
     cmd-alt-h = [] # Disable "hide others"
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-slash = 'layout tiles horizontal vertical'
-    alt-comma = 'layout accordion horizontal vertical'
+    # alt-slash = 'layout tiles horizontal vertical'
+    # alt-comma = 'layout accordion horizontal vertical'
+    cmd-t = 'layout accordion tiles'
+    # cmd-t = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-left = 'focus left'
-    alt-down = 'focus down'
-    alt-up = 'focus up'
-    alt-right = 'focus right'
+    cmd-left = 'focus left'
+    cmd-down = 'focus down'
+    cmd-up = 'focus up'
+    cmd-right = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-left = 'move left'
-    alt-shift-down = 'move down'
-    alt-shift-up = 'move up'
-    alt-shift-right = 'move right'
+    cmd-shift-left = 'move left'
+    cmd-shift-down = 'move down'
+    cmd-shift-up = 'move up'
+    cmd-shift-right = 'move right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-minus = 'resize smart +100'
-    alt-equal = 'resize smart -100'
+    cmd-equal = 'resize smart +100'
+    cmd-minus = 'resize smart -100'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
-    alt-7 = 'workspace 7'
-    alt-8 = 'workspace 8'
-    alt-9 = 'workspace 9'
-    alt-0 = 'workspace 0'
+    cmd-1 = 'workspace 1'
+    cmd-2 = 'workspace 2'
+    cmd-3 = 'workspace 3'
+    cmd-4 = 'workspace 4'
+    cmd-5 = 'workspace 5'
+    cmd-6 = 'workspace 6'
+    cmd-7 = 'workspace 7'
+    cmd-8 = 'workspace 8'
+    cmd-9 = 'workspace 9'
+    cmd-0 = 'workspace 0'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
-    alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
-    alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
-    alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
-    alt-shift-5 = ['move-node-to-workspace 5']
-    alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
-    alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
-    alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
-    alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-    alt-shift-0 = ['move-node-to-workspace 0']
-    alt-shift-f = 'fullscreen'
+    cmd-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
+    cmd-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
+    cmd-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
+    cmd-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
+    cmd-shift-5 = ['move-node-to-workspace 5']
+    cmd-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
+    cmd-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
+    cmd-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
+    cmd-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
+    cmd-shift-0 = ['move-node-to-workspace 0']
+    alt-cmd-f = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    alt-tab = 'workspace-back-and-forth'
+    cmd-tab = 'workspace-back-and-forth'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
@@ -220,7 +220,7 @@ automatically-unhide-macos-hidden-apps = true
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    t = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
@@ -238,10 +238,10 @@ automatically-unhide-macos-hidden-apps = true
 [workspace-to-monitor-force-assignment]
 0 = ['secondary']
 
-[[on-window-detected]]
-if.app-id = 'com.apple.finder'
-check-further-callbacks = true
-run = ['layout floating']
+# [[on-window-detected]]
+# if.app-id = 'com.apple.finder'
+# check-further-callbacks = true
+# run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'net.pulsesecure.Pulse-Secure'
