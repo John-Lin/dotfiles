@@ -106,7 +106,7 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-shift-e = 'exec-and-forget open -n -a Proton\ Mail'
-    cmd-shift-f = 'exec-and-forget open ~/Documents'
+    cmd-shift-f = 'exec-and-forget open ~'
 
     cmd-shift-g = '''exec-and-forget osascript -e '
     tell application "Telegram"
@@ -239,10 +239,10 @@ automatically-unhide-macos-hidden-apps = true
 [workspace-to-monitor-force-assignment]
 0 = ['secondary']
 
-[[on-window-detected]]
-if.app-id = 'com.apple.finder'
-check-further-callbacks = true
-run = ['layout floating']
+# [[on-window-detected]]
+# if.app-id = 'com.apple.finder'
+# check-further-callbacks = true
+# run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'net.pulsesecure.Pulse-Secure'
