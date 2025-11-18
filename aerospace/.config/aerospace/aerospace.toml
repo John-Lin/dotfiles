@@ -3,7 +3,7 @@
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = ['layout tiles']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -132,10 +132,8 @@ automatically-unhide-macos-hidden-apps = true
     # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
     cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
 
-    # TODO
-    # Replace to YouTube Music
     cmd-shift-m = '''exec-and-forget osascript -e '
-    tell application "Spotify"
+    tell application "Youtube Music"
         activate
         reopen
     end tell'
@@ -162,7 +160,8 @@ automatically-unhide-macos-hidden-apps = true
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     # alt-slash = 'layout tiles horizontal vertical'
     # alt-comma = 'layout accordion horizontal vertical'
-    cmd-t = 'layout floating tiling'
+    cmd-t = 'layout accordion tiles'
+    # cmd-t = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     cmd-left = 'focus left'
@@ -221,7 +220,7 @@ automatically-unhide-macos-hidden-apps = true
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    t = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
