@@ -268,3 +268,8 @@ run = ['layout floating']
 if.app-id = 'us.zoom.xos'
 check-further-callbacks = true
 run = ['move-node-to-workspace 0']
+
+[[on-window-detected]]
+if.app-id = 'org.localsend.localsendApp'
+check-further-callbacks = true
+run = ['layout floating']
