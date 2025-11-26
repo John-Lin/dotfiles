@@ -155,6 +155,18 @@ dotfiles/
 - `/sc:troubleshoot` - Debug issues
 - `/sc:index` - Project indexing
 
+### MCP Servers
+
+Add global MCP servers to Claude for enhanced capabilities:
+
+```bash
+# Context7 - Up-to-date library documentation
+claude mcp add -s user --transport http context7 https://mcp.context7.com/mcp
+
+# Sequential Thinking - Advanced reasoning
+claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking
+```
+
 ## ⚙️ Customization
 
 ### Neovim
