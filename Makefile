@@ -67,11 +67,12 @@ sync-tig:
 # Install Claude Code configuration
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
-	@echo "  Installing configuration files with stow..."
-	stow -t ~ claude
-	@echo "  Generating settings.json for $(UNAME_S)..."
 	@mkdir -p ~/.claude
+	@ln -sf $(PWD)/claude/.claude/CLAUDE.md ~/.claude/CLAUDE.md
+	@ln -sf $(PWD)/claude/.claude/agents ~/.claude/agents
+	@ln -sf $(PWD)/claude/.claude/commands ~/.claude/commands
+	@ln -sf $(PWD)/claude/.claude/skills ~/.claude/skills
+	@echo "  Generating settings.json for $(UNAME_S)..."
 	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > ~/.claude/settings.json
 	@echo "✅ Claude Code configuration installed"
 
@@ -110,8 +111,8 @@ clean-force:
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || rm -rf ~/.config/nvim/
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || rm -f ~/.tigrc
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
-	rm -f ~/.claude/settings.json
+	@rm -f ~/.claude/CLAUDE.md ~/.claude/settings.json
+	@rm -f ~/.claude/agents ~/.claude/commands ~/.claude/skills
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
 	@[ -L ~/.config/ghostty/custom.conf ] && rm -f ~/.config/ghostty/custom.conf || true
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
@@ -144,8 +145,11 @@ clean-zsh:
 
 clean-claude:
 	@echo "🧹 Removing Claude Code configuration..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ claude || { rm -f ~/.claude/CLAUDE.md; rm -rf ~/.claude/commands ~/.claude/agents; }
-	rm -f ~/.claude/settings.json
+	@rm -f ~/.claude/CLAUDE.md
+	@rm -f ~/.claude/agents
+	@rm -f ~/.claude/commands
+	@rm -f ~/.claude/skills
+	@rm -f ~/.claude/settings.json
 	@echo "✅ Claude Code configuration removed"
 
 clean-aerospace:
