@@ -76,10 +76,12 @@ dotfiles/
 ├── ghostty-linux/             # Ghostty terminal (Linux)
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
 ├── claude/                    # Claude Code AI tools
-│   └── .claude/               # → ~/.claude/
-│       ├── CLAUDE.md          # Global instructions
-│       ├── agents/            # AI agent prompts
-│       └── commands/          # Custom slash commands
+│   ├── .claude/               # Config files (direct symlinks to ~/.claude/)
+│   │   ├── CLAUDE.md          # → ~/.claude/CLAUDE.md (global instructions)
+│   │   ├── agents/            # → ~/.claude/agents/ (AI agent prompts)
+│   │   ├── commands/          # → ~/.claude/commands/ (custom slash commands)
+│   │   └── skills/            # → ~/.claude/skills/ (reusable skills)
+│   └── claude_settings.json.template  # Template for ~/.claude/settings.json
 ├── aerospace/                 # Aerospace window manager (macOS)
 │   └── .config/aerospace/     # → ~/.config/aerospace/
 │       └── aerospace.toml     # Window management config
@@ -155,7 +157,16 @@ dotfiles/
 - `/sc:troubleshoot` - Debug issues
 - `/sc:index` - Project indexing
 
-### MCP Servers
+### Claude Settings
+
+The `settings.json` file is auto-generated from `claude_settings.json.template` with OS-specific configuration:
+
+- **Stop Hook**: Plays system sound when Claude stops responding (macOS: Glass.aiff, Linux: complete.oga)
+- **Status Line**: Real-time token usage display via `ccusage` (requires bun)
+
+The installation process automatically detects your OS and generates the appropriate configuration.
+
+### MCP Servers (Optional)
 
 Add global MCP servers to Claude for enhanced capabilities:
 
@@ -201,6 +212,7 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 **Optional:**
 - Python 3, Go (language support)
 - ripgrep, bat, eza, zoxide, fzf (enhanced shell tools)
+- bun (for Claude Code status line)
 
 ## 📝 License
 
