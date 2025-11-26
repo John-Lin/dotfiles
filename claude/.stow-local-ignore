@@ -1,2 +1,15 @@
+# Template file (not synced, used to generate settings.json)
 claude_settings.json.template
-.claude/settings.json
+
+# Claude Code runtime state files (not synced)
+\.claude/settings\.json
+\.claude/history\.jsonl
+\.claude/debug
+\.claude/projects
+\.claude/statsig
+\.claude/todos
+\.claude/ide
+\.claude/plans
+\.claude/session-env
+\.claude/shell-snapshots
+\.claude/file-history
