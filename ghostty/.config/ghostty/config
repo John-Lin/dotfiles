@@ -41,5 +41,6 @@ unfocused-split-opacity = 0.6
 # don't ak when closing
 confirm-close-surface = false
 
+auto-update-channel = tip
 # custom keybindings config
 config-file = ?"~/.config/ghostty/keybindings.conf"
