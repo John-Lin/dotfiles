@@ -235,8 +235,8 @@ automatically-unhide-macos-hidden-apps = true
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
 
-[workspace-to-monitor-force-assignment]
-0 = ['secondary']
+# [workspace-to-monitor-force-assignment]
+# 0 = ['secondary']
 
 # [[on-window-detected]]
 # if.app-id = 'com.apple.finder'
