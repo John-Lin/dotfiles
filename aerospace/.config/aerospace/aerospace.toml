@@ -99,6 +99,8 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
+    # experimenting with helium browser
+    cmd-shift-h = 'exec-and-forget open -n -a Helium'
     cmd-shift-c = '''exec-and-forget osascript -e '
     tell application "Claude"
         activate
