@@ -7,7 +7,7 @@ Modern development environment configuration with Neovim, zsh, and AI-powered de
 ## ✨ Features
 
 - **🚀 Modern Neovim** - LSP, auto-completion, and AI assistance
-- **💻 Enhanced Shell** - zsh with powerlevel10k theme and Starship prompt
+- **💻 Enhanced Shell** - zsh with powerlevel10k theme
 - **🌍 Multi-language Support** - Python, Go, Lua, Terraform, YAML/Helm, C/C++
 - **🤖 AI Integration** - Claude Code and OpenCode with custom agents and slash commands
 - **🛠️ Developer Tools** - ripgrep, bat, eza, direnv, Kubernetes tooling
@@ -50,7 +50,6 @@ make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
-make sync-starship      # Starship prompt
 ```
 
 **Testing**: `make test` (runs syntax checks and linting)
@@ -71,8 +70,6 @@ dotfiles/
 ├── zsh/                       # Zsh shell configuration  
 │   ├── .zshrc                 # → ~/.zshrc
 │   └── .p10k.zsh              # → ~/.p10k.zsh (powerlevel10k theme)
-├── starship/                  # Starship prompt
-│   └── .config/starship.toml  # → ~/.config/starship.toml
 ├── tig/                       # Tig Git interface
 │   └── .tigrc                 # → ~/.tigrc
 ├── ghostty/                   # Ghostty terminal (macOS)
@@ -230,7 +227,6 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 ### Terminal
 - Ghostty: Edit `ghostty/.config/ghostty/config` or `ghostty-linux/.config/ghostty/config`
 - Alacritty: Edit `alacritty/alacritty.toml`
-- Starship: Edit `starship/.config/starship.toml`
 - Theme: Run `p10k configure`
 
 ### AI
@@ -267,7 +263,6 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 - Python 3, Go (language support)
 - ripgrep, bat, eza, zoxide, fzf (enhanced shell tools)
 - bun (for Claude Code status line)
-- starship (cross-shell prompt)
 - alacritty (GPU-accelerated terminal)
 
 ## 📝 License
