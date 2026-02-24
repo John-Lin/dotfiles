@@ -81,7 +81,7 @@ vim.lsp.config('ruff', {
 -- Setup ty for Python type checking
 vim.lsp.config('ty', {
 	capabilities = capabilities,
-	cmd = { "ty", "lsp" },
+	cmd = { "ty", "server" },
 	filetypes = { "python" },
 	root_markers = { ".git", "pyproject.toml", "setup.py", "setup.cfg", ".ty.toml" },
 })
