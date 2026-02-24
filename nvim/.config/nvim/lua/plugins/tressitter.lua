@@ -15,7 +15,6 @@ return {
 				"go",
 				"gomod",
 				"gosum",
-				"norg",
 				"terraform",
 				"json",
 				"vrl",
