@@ -38,9 +38,6 @@ Plug 'towolf/vim-helm'
 " Go
 Plug 'fatih/vim-go'
 
-" zig
-Plug 'ziglang/zig.vim'
-
 Plug 'hashivim/vim-terraform'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -62,8 +59,6 @@ Plug 'folke/tokyonight.nvim'
 " Initialize plugin system
 call plug#end()
 
-" zig
-let g:zig_fmt_autosave = 0
 " ===== copilot =====
 let g:copilot_filetypes = {
       \ '*': v:true,
