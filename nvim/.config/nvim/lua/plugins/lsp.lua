@@ -54,7 +54,9 @@ return {
                         extra_args = { "--style=file", "--fallback-style=LLVM" },
                     }),
                 },
-                -- configure format on save
+                -- NOTE: Auto-format on save is disabled. Use <leader>f for manual formatting.
+                -- To re-enable auto-format, uncomment the block below:
+                --[[
                 on_attach = function(client, bufnr)
                     if client.supports_method("textDocument/formatting") then
                         vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
@@ -67,6 +69,8 @@ return {
                         })
                     end
                 end,
+                --]]
+                on_attach = nil  -- No auto-format on attach
             })
         end,
     },

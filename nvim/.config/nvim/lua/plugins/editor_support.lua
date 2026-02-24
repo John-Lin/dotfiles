@@ -16,11 +16,32 @@ return {
 			vim.o.timeout = true
 			vim.o.timeoutlen = 300
 		end,
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		},
+		config = function()
+			local wk = require("which-key")
+			wk.setup({
+				preset = "helix",
+				win = {
+					border = "rounded",
+					padding = { 2, 2, 2, 2 },
+				},
+			})
+			wk.add({
+				{ "<leader>a", group = "AI" },
+				{ "<leader>w", group = "Workspace" },
+				{ "<leader>f", desc = "Format buffer" },
+				{ "<leader>t", desc = "Toggle tree" },
+				{ "<leader>l", desc = "Locate file in tree" },
+				{ "<leader>p", desc = "Find files" },
+				{ "<leader>P", desc = "Grep files" },
+				{ "<leader>e", desc = "Diagnostic float" },
+				{ "<leader>q", desc = "Diagnostic list" },
+				{ "<leader>k", desc = "Signature help" },
+				{ "<leader>D", desc = "Type definition" },
+				{ "<leader>rn", desc = "Rename" },
+				{ "<leader>ca", desc = "Code action" },
+				{ "<leader>gr", desc = "References" },
+			})
+		end,
 	},
 	{
 		"numToStr/Comment.nvim",
