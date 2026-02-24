@@ -10,3 +10,7 @@ claude/.claude/shell-snapshots/
 claude/.claude/file-history/
 claude/.claude/settings.json
 claude/.claude/history.jsonl
+
+# Local-only zsh configuration (machine-specific)
+*.local
+zsh/.zshrc.local

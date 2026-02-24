@@ -126,3 +126,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Source local-only configuration (not tracked in git)
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
