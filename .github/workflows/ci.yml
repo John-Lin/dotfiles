@@ -19,6 +19,9 @@ jobs:
       with:
         luaVersion: "5.4"
 
+    - name: Set up LuaRocks
+      uses: leafo/gh-actions-luarocks@v4
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -27,7 +30,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y lua-check stow
+        sudo apt-get install -y stow
+        # Install luacheck via luarocks (requires Lua setup first)
+        luarocks install luacheck
 
     - name: Run syntax check
       run: make check-syntax
@@ -35,8 +40,16 @@ jobs:
     - name: Run linter
       run: make lint
 
-    - name: Test stow functionality
+    - name: Test Neovim stow functionality
       run: |
-        # Test that stow commands don't fail
-        make sync-tig || echo "stow command failed but this is expected in CI"
-        make clean-tig || echo "stow clean command failed but this is expected in CI"
+        # Test that stow commands work for Neovim
+        make sync-neovim
+        make clean-neovim
+
+    - name: Check Lua formatting
+      run: |
+        # Download and run stylua for format checking
+        wget -q https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip
+        unzip -q stylua-linux-x86_64.zip
+        chmod +x stylua
+        ./stylua --check nvim/.config/nvim/
