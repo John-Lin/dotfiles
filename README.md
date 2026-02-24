@@ -7,11 +7,12 @@ Modern development environment configuration with Neovim, zsh, and AI-powered de
 ## ✨ Features
 
 - **🚀 Modern Neovim** - LSP, auto-completion, and AI assistance
-- **💻 Enhanced Shell** - zsh with powerlevel10k theme  
-- **🌍 Multi-language Support** - Python, Go, Lua, Terraform, YAML/Helm, C/C++, Zig
-- **🤖 AI Integration** - Claude Code with custom agents and slash commands
+- **💻 Enhanced Shell** - zsh with powerlevel10k theme and Starship prompt
+- **🌍 Multi-language Support** - Python, Go, Lua, Terraform, YAML/Helm, C/C++
+- **🤖 AI Integration** - Claude Code and OpenCode with custom agents and slash commands
 - **🛠️ Developer Tools** - ripgrep, bat, eza, direnv, Kubernetes tooling
-- **🪟 Window Management** - Aerospace tiling window manager with Borders integration (macOS)
+- **🖥️ Terminal Options** - Ghostty (macOS/Linux), Alacritty
+- **🪟 Window Management** - Aerospace tiling window manager with Borders integration (macOS), Hyprland (Linux)
 
 ## 📋 Prerequisites
 
@@ -38,10 +39,10 @@ sudo dnf install stow
 git clone https://github.com/John-Lin/dotfiles ~/dotfiles
 cd ~/dotfiles
 
-# Install everything
+# Install specific components (make sync now shows available options)
 make sync
 
-# Or install specific components
+# Install individual components
 make sync-neovim        # Neovim configuration
 make sync-zsh           # Zsh shell configuration  
 make sync-tig           # Tig Git interface
@@ -49,6 +50,7 @@ make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
+make sync-starship      # Starship prompt
 ```
 
 **Testing**: `make test` (runs syntax checks and linting)
@@ -69,12 +71,16 @@ dotfiles/
 ├── zsh/                       # Zsh shell configuration  
 │   ├── .zshrc                 # → ~/.zshrc
 │   └── .p10k.zsh              # → ~/.p10k.zsh (powerlevel10k theme)
+├── starship/                  # Starship prompt
+│   └── .config/starship.toml  # → ~/.config/starship.toml
 ├── tig/                       # Tig Git interface
 │   └── .tigrc                 # → ~/.tigrc
 ├── ghostty/                   # Ghostty terminal (macOS)
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
 ├── ghostty-linux/             # Ghostty terminal (Linux)
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
+├── alacritty/                 # Alacritty terminal
+│   └── alacritty.toml         # → ~/alacritty.toml
 ├── claude/                    # Claude Code AI tools
 │   ├── .claude/               # Config files (direct symlinks to ~/.claude/)
 │   │   ├── CLAUDE.md          # → ~/.claude/CLAUDE.md (global instructions)
@@ -85,9 +91,13 @@ dotfiles/
 ├── aerospace/                 # Aerospace window manager (macOS)
 │   └── .config/aerospace/     # → ~/.config/aerospace/
 │       └── aerospace.toml     # Window management config
-└── borders/                    # Window borders decoration (macOS)
-    └── .config/borders/        # → ~/.config/borders/
-        └── bordersrc           # Borders configuration
+├── borders/                   # Window borders decoration (macOS)
+│   └── .config/borders/       # → ~/.config/borders/
+│       └── bordersrc          # Borders configuration
+└── omarchy/                   # Hyprland desktop environment (Linux)
+    ├── hypr/                  # Hyprland configuration
+    ├── fix-brcmfmac/          # WiFi fix for brcmfmac
+    └── pre-install.sh         # Setup script
 ```
 
 **Configuration files:**
@@ -102,7 +112,15 @@ dotfiles/
 - **nvim-tree** - File explorer  
 - **Mason** - LSP installer
 - **nvim-cmp** - Auto-completion
-- **claudecode.nvim** - AI assistance
+- **claudecode.nvim** - Claude AI assistance
+- **opencode.nvim** - OpenCode AI assistance
+- **copilot.vim** - GitHub Copilot integration
+- **nvim-treesitter** - Syntax highlighting and parsing
+- **none-ls.nvim** - Null-ls replacement for formatting/linting
+- **snacks.nvim** - Collection of QoL plugins
+- **neorg** - Neovim organizer
+- **Comment.nvim** - Smart commenting
+- **vim-fugitive** - Git integration
 
 ### Language Support
 
@@ -114,7 +132,6 @@ dotfiles/
 | Terraform | `terraformls` | Auto-formatting |
 | YAML/Helm | `yamlls` + `helm_ls` | Schema validation |
 | C/C++ | `clangd` | clang-format |
-| Zig | `zls` | Experimental |
 
 ## ⌨️ Key Bindings
 
@@ -124,6 +141,18 @@ dotfiles/
 - `<Leader>f` - Format code
 - `gd` - Go to definition
 - `K` - Show hover docs
+
+### LSP & Diagnostics
+- `[d` / `]d` - Previous/Next diagnostic
+- `<Leader>e` - Open diagnostic float
+- `<Leader>q` - Open diagnostic location list
+- `gD` - Go to declaration
+- `gi` - Go to implementation
+- `<C-k>` - Signature help
+- `<Leader>rn` - Rename symbol
+- `<Leader>ca` - Code action
+- `<Leader>gr` - Show references
+- `<Leader>D` - Type definition
 
 ### Claude AI (`<Leader>a` prefix)
 - `ac` - Toggle Claude
@@ -137,8 +166,15 @@ dotfiles/
 | `grep` | `rg` | ripgrep (faster search) |
 | `cat` | `bat` | syntax highlighting |
 | `vim`/`vi` | `nvim` | Neovim |
-| `ls`/`ll`/`la` | `eza` | modern ls replacement |
+| `vimdiff` | `nvim -d` | Neovim diff mode |
+| `ls` | `eza` | modern ls replacement |
+| `lsa` | `ls -a` | list all files including hidden |
+| `lt` | `eza --tree` | tree view with git info |
+| `lta` | `lt -a` | tree view with all files |
+| `ff` | `fzf --preview 'bat ...'` | fzf with preview |
+| `cd` | `zd` | zoxide smart cd |
 | `python` | `python3` | Python 3 |
+| `kubectl` | `kubecolor` | colored kubectl output |
 
 ## 🤖 AI Integration
 
@@ -149,6 +185,12 @@ dotfiles/
 - `golang-pro` - Go specialist
 - `python-pro` - Python specialist
 - `prompt-engineer` - Prompt optimization
+- `terraform-specialist` - Terraform/OpenTofu specialist
+- `c-pro` - C/C++ specialist
+
+### Skills (Reusable capabilities)
+- `things-mac` - Integration with Things 3 task manager on macOS
+- `uv-package-manager` - UV Python package management operations
 
 ### Slash Commands (`/sc:<command>`)
 - `/sc:analyze` - Deep code analysis
@@ -187,12 +229,24 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 
 ### Terminal
 - Ghostty: Edit `ghostty/.config/ghostty/config` or `ghostty-linux/.config/ghostty/config`
+- Alacritty: Edit `alacritty/alacritty.toml`
+- Starship: Edit `starship/.config/starship.toml`
 - Theme: Run `p10k configure`
 
 ### AI
 - Claude settings: Auto-generated from `claude/claude_settings.json.template`
 - Add agents: Create in `claude/.claude/agents/`
 - Add commands: Create in `claude/.claude/commands/sc/`
+- Add skills: Create in `claude/.claude/skills/`
+
+### Window Management
+- Aerospace: Edit `aerospace/.config/aerospace/aerospace.toml`
+- Borders: Edit `borders/.config/borders/bordersrc`
+
+### Linux Desktop (Omarchy/Hyprland)
+- Hyprland: Edit `omarchy/hypr/` configuration files
+- Monitor setup: Copy appropriate `monitors.conf.*` to `monitors.conf`
+- WiFi fix: See `omarchy/fix-brcmfmac/` for brcmfmac issues
 
 ### Remote Ghostty Setup
 ```bash
@@ -213,6 +267,8 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 - Python 3, Go (language support)
 - ripgrep, bat, eza, zoxide, fzf (enhanced shell tools)
 - bun (for Claude Code status line)
+- starship (cross-shell prompt)
+- alacritty (GPU-accelerated terminal)
 
 ## 📝 License
 
