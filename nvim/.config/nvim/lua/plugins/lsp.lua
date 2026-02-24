@@ -16,6 +16,7 @@ return {
                     "terraformls",
                     "yamlls",
                     "ruff",
+                    "ty", -- Python type checker
                     "clangd", -- C/C++ language server
                 },
             })
