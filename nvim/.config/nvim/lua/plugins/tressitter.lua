@@ -19,7 +19,6 @@ return {
 				"terraform",
 				"json",
 				"vrl",
-				"zig",
 				"yaml",
 				"make",
 				"gitignore",

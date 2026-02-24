@@ -14,10 +14,8 @@ return {
                     "gopls",
                     "basedpyright",
                     "terraformls",
-                    "zls",
                     "yamlls",
                     "ruff",
-                    "ty",
                     "clangd", -- C/C++ language server
                 },
             })
