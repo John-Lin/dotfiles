@@ -36,8 +36,8 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Plugin configuration: disable nvim-tree auto-open for lazy loading
-vim.g.auto_open_nvim_tree = false
+-- Plugin configuration: enable nvim-tree auto-open (disables lazy loading for immediate startup)
+vim.g.auto_open_nvim_tree = true
 vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
 vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
 vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
