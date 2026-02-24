@@ -1,8 +1,5 @@
 -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require('neodev').setup({
-  -- add any options here, or leave empty to use the default settings
-})
 
 vim.lsp.config('lua_ls', {
   capabilities = capabilities,
@@ -14,14 +11,13 @@ vim.lsp.config('lua_ls', {
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = { 'vim', 'hs' },
+        globals = { 'vim' },
       },
       workspace = {
         checkThirdParty = false,
         -- Make the server aware of Neovim runtime files
         library = {
           vim.api.nvim_get_runtime_file('', true),
-          '/Applications/Hammerspoon.app/Contents/Resources/extensions/hs/',
           vim.fn.expand('~/lualib/share/lua/5.4'),
           vim.fn.expand('~/lualib/lib/luarocks/rocks-5.4'),
           '/opt/homebrew/opt/openresty/lualib',
