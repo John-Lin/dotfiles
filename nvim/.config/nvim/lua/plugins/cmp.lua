@@ -7,8 +7,8 @@ return {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
-			"hrsh7th/nvim-cmp",
 			"L3MON4D3/LuaSnip",
+			"windwp/nvim-autopairs", -- Required for cmp-autopairs integration
 		},
 		config = function()
 			-- nvim cmp
@@ -107,22 +107,15 @@ return {
 				},
 			})
 
-			-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-			cmp.setup.cmdline(":", {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = cmp.config.sources({
-					{ name = "path" },
-				}, {
-					{ name = "cmdline" },
-				}),
-			})
-		end,
-	},
-	{
-		"windwp/nvim-autopairs",
-		event = "VeryLazy",
-		config = function()
-			require("nvim-autopairs").setup({})
-		end,
+		-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+		cmp.setup.cmdline(":", {
+			mapping = cmp.mapping.preset.cmdline(),
+			sources = cmp.config.sources({
+				{ name = "path" },
+			}, {
+				{ name = "cmdline" },
+			}),
+		})
+	end,
 	},
 }
