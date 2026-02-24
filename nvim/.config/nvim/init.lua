@@ -13,7 +13,7 @@ vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 vim.opt.undodir = vim.fn.stdpath("cache") .. "/nvim/undodir"
 vim.opt.undofile = true
 
--- smaller updatetime for gitgutter
+-- smaller updatetime for gitsigns
 vim.opt.updatetime = 100
 -- always show signcolumns
 vim.opt.signcolumn = "yes"
@@ -70,6 +70,13 @@ require("lazy").setup("plugins")
 vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.copilot_tab_fallback = ""
+
+-- Copilot keybindings (separate from nvim-cmp)
+vim.keymap.set("i", "<C-j>", 'copilot#Accept("<CR>")', {
+	silent = true,
+	expr = true,
+	replace_keycodes = false,
+})
 
 -- Specific highlight groups
 vim.api.nvim_set_hl(0, "@lsp.type.variable.lua", { link = "Normal" })

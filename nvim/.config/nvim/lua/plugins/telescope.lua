@@ -9,6 +9,6 @@ return {
 			{ "<Leader>mru", ":Telescope oldfiles<CR>", desc = "oldfiles" },
 		},
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.8",
+		tag = "v0.2.1",
 	},
 }
