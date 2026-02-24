@@ -19,6 +19,9 @@ jobs:
       with:
         luaVersion: "5.4"
 
+    - name: Set up LuaRocks
+      uses: leafo/gh-actions-luarocks@v4
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
