@@ -10,7 +10,7 @@ vim.o.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
 vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 
 -- Undo persistence
-vim.opt.undodir = vim.fn.stdpath('cache') .. '/nvim/undodir'
+vim.opt.undodir = vim.fn.stdpath('cache') .. '/undodir'
 vim.opt.undofile = true
 
 -- smaller updatetime for gitsigns
@@ -38,6 +38,12 @@ vim.g.maplocalleader = '\\'
 
 -- Plugin configuration: enable nvim-tree auto-open (disables lazy loading for immediate startup)
 vim.g.auto_open_nvim_tree = true
+
+-- https://www.reddit.com/r/neovim/comments/sk70rk/using_github_copilot_in_neovim_tab_map_has_been/
+vim.g.copilot_no_tab_map = true
+vim.g.copilot_assume_mapped = true
+vim.g.copilot_tab_fallback = ''
+
 vim.keymap.set('n', '<C-l>', '<C-w>l', opts)
 vim.keymap.set('n', '<C-h>', '<C-w>h', opts)
 vim.keymap.set('n', '<C-j>', '<C-w>j', opts)
@@ -65,11 +71,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require('lazy').setup('plugins')
-
--- https://www.reddit.com/r/neovim/comments/sk70rk/using_github_copilot_in_neovim_tab_map_has_been/
-vim.g.copilot_no_tab_map = true
-vim.g.copilot_assume_mapped = true
-vim.g.copilot_tab_fallback = ''
 
 -- Copilot keybindings (separate from nvim-cmp)
 vim.keymap.set('i', '<C-j>', 'copilot#Accept("<CR>")', {
