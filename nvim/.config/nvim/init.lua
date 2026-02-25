@@ -43,6 +43,7 @@ vim.g.auto_open_nvim_tree = true
 vim.g.copilot_no_tab_map = true
 vim.g.copilot_assume_mapped = true
 vim.g.copilot_tab_fallback = ''
+
 vim.keymap.set('n', '<C-l>', '<C-w>l', opts)
 vim.keymap.set('n', '<C-h>', '<C-w>h', opts)
 vim.keymap.set('n', '<C-j>', '<C-w>j', opts)
