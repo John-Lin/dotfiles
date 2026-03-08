@@ -1,5 +1,5 @@
-theme = Tomorrow Night
-# theme = GruvboxDarkHard
+# theme = Tomorrow Night
+theme = Everforest Dark Hard
 # Override ANSI color 8 (bright black/gray) with a softer gray tone
 palette = 8=#969896
 
