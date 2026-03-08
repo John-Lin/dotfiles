@@ -44,7 +44,7 @@ make sync
 
 # Install individual components
 make sync-neovim        # Neovim configuration
-make sync-zsh           # Zsh shell configuration  
+make sync-zsh           # Zsh shell configuration
 make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
@@ -67,7 +67,7 @@ dotfiles/
 │       ├── init.lua           # Main configuration
 │       ├── lua/               # Plugins and LSP settings
 │       └── lazy-lock.json     # Plugin lockfile
-├── zsh/                       # Zsh shell configuration  
+├── zsh/                       # Zsh shell configuration
 │   ├── .zshrc                 # → ~/.zshrc
 │   └── .p10k.zsh              # → ~/.p10k.zsh (powerlevel10k theme)
 ├── tig/                       # Tig Git interface
@@ -106,7 +106,7 @@ dotfiles/
 ### Neovim Plugins
 - **lazy.nvim** - Plugin management
 - **Telescope** - Fuzzy finder
-- **nvim-tree** - File explorer  
+- **nvim-tree** - File explorer
 - **Mason** - LSP installer
 - **nvim-cmp** - Auto-completion
 - **claudecode.nvim** - Claude AI assistance
