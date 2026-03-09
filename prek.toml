@@ -8,7 +8,7 @@ hooks = [
 ]
 [[repos]]
 repo = "https://github.com/Calinou/pre-commit-luacheck"
-rev ="v1.0.0"
+rev = "v1.0.0"
 hooks = [
   { id = "luacheck" },
 ]
