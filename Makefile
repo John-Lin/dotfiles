@@ -68,7 +68,16 @@ sync-tig:
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
 	@mkdir -p ~/.claude
-	@ln -sf $(PWD)/claude/.claude/CLAUDE.md ~/.claude/CLAUDE.md
+	@rm -f ~/.claude/CLAUDE.md
+	@if [ -f $(PWD)/claude/.claude/CLAUDE.personal.md ]; then \
+		echo "  Merging base + personal → CLAUDE.md"; \
+		{ cat $(PWD)/claude/.claude/CLAUDE.base.md; echo ""; cat $(PWD)/claude/.claude/CLAUDE.personal.md; } > ~/.claude/CLAUDE.md; \
+	else \
+		echo "  No CLAUDE.personal.md found, using base only"; \
+		echo "  💡 Copy CLAUDE.personal.md.example → CLAUDE.personal.md to customize"; \
+		cp $(PWD)/claude/.claude/CLAUDE.base.md ~/.claude/CLAUDE.md; \
+	fi
+	@rm -f ~/.claude/agents ~/.claude/commands ~/.claude/skills
 	@ln -sf $(PWD)/claude/.claude/agents ~/.claude/agents
 	@ln -sf $(PWD)/claude/.claude/commands ~/.claude/commands
 	@ln -sf $(PWD)/claude/.claude/skills ~/.claude/skills
