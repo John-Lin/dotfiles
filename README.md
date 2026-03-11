@@ -80,7 +80,9 @@ dotfiles/
 │   └── alacritty.toml         # → ~/alacritty.toml
 ├── claude/                    # Claude Code AI tools
 │   ├── .claude/               # Config files (direct symlinks to ~/.claude/)
-│   │   ├── CLAUDE.md          # → ~/.claude/CLAUDE.md (global instructions)
+│   │   ├── CLAUDE.base.md     # Generic engineering principles (tracked)
+│   │   ├── CLAUDE.personal.md.example  # Personal config template (tracked)
+│   │   ├── CLAUDE.personal.md # Your personal config (gitignored)
 │   │   ├── agents/            # → ~/.claude/agents/ (AI agent prompts)
 │   │   ├── commands/          # → ~/.claude/commands/ (custom slash commands)
 │   │   └── skills/            # → ~/.claude/skills/ (reusable skills)
@@ -231,6 +233,8 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 
 ### AI
 - Claude settings: Auto-generated from `claude/claude_settings.json.template`
+- Personalize Claude: `cp claude/.claude/CLAUDE.personal.md.example claude/.claude/CLAUDE.personal.md` and edit
+- `make sync-claude` merges `CLAUDE.base.md` + `CLAUDE.personal.md` → `~/.claude/CLAUDE.md`
 - Add agents: Create in `claude/.claude/agents/`
 - Add commands: Create in `claude/.claude/commands/sc/`
 - Add skills: Create in `claude/.claude/skills/`

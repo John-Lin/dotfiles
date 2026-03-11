@@ -14,3 +14,6 @@ claude/.claude/history.jsonl
 # Local-only zsh configuration (machine-specific)
 *.local
 zsh/.zshrc.local
+
+# Personal Claude configuration (user-specific)
+claude/.claude/CLAUDE.personal.md
