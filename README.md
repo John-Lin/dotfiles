@@ -147,7 +147,7 @@ dotfiles/
 - `<Leader>q` - Open diagnostic location list
 - `gD` - Go to declaration
 - `gi` - Go to implementation
-- `<C-k>` - Signature help
+- `<Leader>k` - Signature help
 - `<Leader>rn` - Rename symbol
 - `<Leader>ca` - Code action
 - `<Leader>gr` - Show references

@@ -180,7 +180,7 @@ check-syntax:
 		luac -p "$$file" || { echo "❌ Syntax error in $$file"; exit 1; }; \
 	done
 	@echo "Checking JSON files..."
-	@for file in lazy-lock.json claude/claude_settings.json.template; do \
+	@for file in nvim/.config/nvim/lazy-lock.json claude/claude_settings.json.template; do \
 		if [ -f "$$file" ]; then \
 			echo "  Checking $$file"; \
 			python3 -m json.tool "$$file" >/dev/null || { echo "❌ Invalid JSON in $$file"; exit 1; }; \
