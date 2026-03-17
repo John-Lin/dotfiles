@@ -64,9 +64,8 @@ return {
       })
 
       -- Auto open nvim-tree when starting nvim with no file arguments
-      -- Set vim.g.auto_open_nvim_tree = true to enable (also disables lazy loading)
-      -- Set vim.g.auto_open_nvim_tree = false to disable (enables lazy loading)
-      -- Default: disabled for better startup performance
+      -- Default in this config: enabled (vim.g.auto_open_nvim_tree = true)
+      -- Set vim.g.auto_open_nvim_tree = false to disable and re-enable lazy loading
       if vim.g.auto_open_nvim_tree == true then
         vim.api.nvim_create_autocmd('VimEnter', {
           callback = function()

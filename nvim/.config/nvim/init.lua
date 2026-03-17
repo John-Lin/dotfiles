@@ -36,7 +36,7 @@ local opts = { noremap = true, silent = true }
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
--- Plugin configuration: enable nvim-tree auto-open (disables lazy loading for immediate startup)
+-- Plugin configuration: default to nvim-tree auto-open (disables lazy loading)
 vim.g.auto_open_nvim_tree = true
 
 -- https://www.reddit.com/r/neovim/comments/sk70rk/using_github_copilot_in_neovim_tab_map_has_been/
