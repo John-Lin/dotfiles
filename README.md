@@ -49,6 +49,7 @@ make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
+make sync-opencode      # OpenCode subagents
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 ```
 
@@ -87,6 +88,8 @@ dotfiles/
 │   │   ├── commands/          # → ~/.claude/commands/ (custom slash commands)
 │   │   └── skills/            # → ~/.claude/skills/ (reusable skills)
 │   └── claude_settings.json.template  # Template for ~/.claude/settings.json
+├── opencode/                  # OpenCode AI tools
+│   └── agents/                # → ~/.config/opencode/agents/ (subagent prompts)
 ├── aerospace/                 # Aerospace window manager (macOS)
 │   └── .config/aerospace/     # → ~/.config/aerospace/
 │       └── aerospace.toml     # Window management config
@@ -187,6 +190,10 @@ dotfiles/
 - `terraform-specialist` - Terraform/OpenTofu specialist
 - `c-pro` - C/C++ specialist
 
+### OpenCode Subagents
+- `make sync-opencode` symlinks `opencode/agents/` to `~/.config/opencode/agents`
+- Add/edit OpenCode subagents in `opencode/agents/`
+
 ### Skills (Reusable capabilities)
 - `things-mac` - Integration with Things 3 task manager on macOS
 - `uv-package-manager` - UV Python package management operations
@@ -238,6 +245,7 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 - Add agents: Create in `claude/.claude/agents/`
 - Add commands: Create in `claude/.claude/commands/sc/`
 - Add skills: Create in `claude/.claude/skills/`
+- `make sync-opencode` symlinks `opencode/agents/` → `~/.config/opencode/agents`
 
 ### Window Management
 - Aerospace: Edit `aerospace/.config/aerospace/aerospace.toml`

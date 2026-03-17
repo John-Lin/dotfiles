@@ -20,6 +20,7 @@ sync:
 	@echo "  make sync-zsh           - Install Zsh configuration"
 	@echo "  make sync-tig           - Install Tig configuration"
 	@echo "  make sync-claude        - Install Claude Code configuration"
+	@echo "  make sync-opencode      - Install OpenCode agents configuration"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
@@ -85,6 +86,14 @@ sync-claude:
 	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > ~/.claude/settings.json
 	@echo "✅ Claude Code configuration installed"
 
+# Install OpenCode agents configuration
+sync-opencode:
+	@echo "🤖 Installing OpenCode agents configuration..."
+	@mkdir -p ~/.config/opencode
+	@rm -rf ~/.config/opencode/agents
+	@ln -sf $(PWD)/opencode/agents ~/.config/opencode/agents
+	@echo "✅ OpenCode agents configuration installed"
+
 # Install Aerospace configuration (includes Borders)
 sync-aerospace:
 	@echo "🚀 Installing Aerospace configuration..."
@@ -105,6 +114,7 @@ clean:
 	@echo "  - ~/.tigrc"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
+	@echo "  - ~/.config/opencode/agents"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
 	echo ""; \
@@ -122,6 +132,7 @@ clean-force:
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
 	@rm -f ~/.claude/CLAUDE.md ~/.claude/settings.json
 	@rm -f ~/.claude/agents ~/.claude/commands ~/.claude/skills
+	@rm -rf ~/.config/opencode/agents
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
 	@[ -L ~/.config/ghostty/custom.conf ] && rm -f ~/.config/ghostty/custom.conf || true
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
@@ -161,6 +172,11 @@ clean-claude:
 	@rm -f ~/.claude/settings.json
 	@echo "✅ Claude Code configuration removed"
 
+clean-opencode:
+	@echo "🧹 Removing OpenCode agents configuration..."
+	@rm -rf ~/.config/opencode/agents
+	@echo "✅ OpenCode agents configuration removed"
+
 clean-aerospace:
 	@echo "🧹 Removing Aerospace configuration..."
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
@@ -194,4 +210,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-aerospace test check-syntax lint
+.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-opencode sync-aerospace test check-syntax lint
