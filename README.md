@@ -59,7 +59,7 @@ make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 ## 📁 Structure
 
-**Stow-managed packages** (each directory contains dotfiles in home directory structure):
+**Repository directories** (most are stow-managed packages; some are manual/utility configs):
 
 ```
 dotfiles/
@@ -77,7 +77,7 @@ dotfiles/
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
 ├── ghostty-linux/             # Ghostty terminal (Linux)
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
-├── alacritty/                 # Alacritty terminal
+├── alacritty/                 # Alacritty terminal (manual setup)
 │   └── alacritty.toml         # → ~/alacritty.toml
 ├── claude/                    # Claude Code AI tools
 │   ├── .claude/               # Config files (direct symlinks to ~/.claude/)
@@ -96,7 +96,7 @@ dotfiles/
 ├── borders/                   # Window borders decoration (macOS)
 │   └── .config/borders/       # → ~/.config/borders/
 │       └── bordersrc          # Borders configuration
-└── omarchy/                   # Hyprland desktop environment (Linux)
+└── omarchy/                   # Hyprland desktop environment (manual setup)
     ├── hypr/                  # Hyprland configuration
     ├── fix-brcmfmac/          # WiFi fix for brcmfmac
     └── pre-install.sh         # Setup script
@@ -110,6 +110,7 @@ dotfiles/
 
 ### Neovim Plugins
 - **lazy.nvim** - Plugin management
+- **lazydev.nvim** - Lua development support for Neovim runtime
 - **Telescope** - Fuzzy finder
 - **nvim-tree** - File explorer
 - **Mason** - LSP installer
@@ -120,7 +121,6 @@ dotfiles/
 - **nvim-treesitter** - Syntax highlighting and parsing
 - **none-ls.nvim** - Null-ls replacement for formatting/linting
 - **snacks.nvim** - Collection of QoL plugins
-- **neorg** - Neovim organizer
 - **Comment.nvim** - Smart commenting
 - **vim-fugitive** - Git integration
 
@@ -128,9 +128,9 @@ dotfiles/
 
 | Language | LSP Server | Tools |
 |----------|------------|-------|
-| Python | `basedpyright` + `ruff` | Type checking, formatting |
+| Python | `basedpyright` + `ruff` + `ty` | Type checking, formatting |
 | Go | `gopls` | gofumpt formatting |
-| Lua | `lua_ls` | Neodev integration |
+| Lua | `lua_ls` | lazydev integration |
 | Terraform | `terraformls` | Auto-formatting |
 | YAML/Helm | `yamlls` + `helm_ls` | Schema validation |
 | C/C++ | `clangd` | clang-format |
@@ -197,6 +197,9 @@ dotfiles/
 ### Skills (Reusable capabilities)
 - `things-mac` - Integration with Things 3 task manager on macOS
 - `uv-package-manager` - UV Python package management operations
+- `test-driven-development` - Test-driven development workflow for features and fixes
+- `gh-cli` - GitHub CLI workflow and references
+- `find-docs` - Context7-powered documentation lookup
 
 ### Slash Commands (`/sc:<command>`)
 - `/sc:analyze` - Deep code analysis
