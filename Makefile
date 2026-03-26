@@ -1,13 +1,3 @@
-
-# Detect OS
-UNAME_S := $(shell uname -s)
-
-ifeq ($(UNAME_S),Darwin)
-    SOUND_COMMAND := afplay /System/Library/Sounds/Glass.aiff
-else
-    SOUND_COMMAND := paplay /usr/share/sounds/freedesktop/stereo/complete.oga
-endif
-
 # Default target
 all: sync
 
@@ -82,8 +72,14 @@ sync-claude:
 	@ln -sf $(PWD)/claude/.claude/agents ~/.claude/agents
 	@ln -sf $(PWD)/claude/.claude/commands ~/.claude/commands
 	@ln -sf $(PWD)/claude/.claude/skills ~/.claude/skills
-	@echo "  Generating settings.json for $(UNAME_S)..."
-	@sed 's|__SOUND_COMMAND__|$(SOUND_COMMAND)|g' claude/claude_settings.json.template > ~/.claude/settings.json
+	@command -v jq >/dev/null 2>&1 || { echo "❌ jq is not installed. Please install it first."; exit 1; }
+	@echo "  Generating settings.json..."
+	@if [ -f $(PWD)/claude/claude_settings.personal.json ]; then \
+		echo "  Merging template + personal settings.json"; \
+		jq -s '.[0] * .[1]' claude/claude_settings.json.template "$(PWD)/claude/claude_settings.personal.json" > "$${HOME}/.claude/settings.json"; \
+	else \
+		cp claude/claude_settings.json.template "$${HOME}/.claude/settings.json"; \
+	fi
 	@echo "✅ Claude Code configuration installed"
 
 # Install OpenCode agents configuration
