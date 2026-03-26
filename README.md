@@ -49,6 +49,7 @@ make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
+make sync-ccstatusline  # ccstatusline config
 make sync-opencode      # OpenCode subagents
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 ```
@@ -88,6 +89,9 @@ dotfiles/
 │   │   ├── commands/          # → ~/.claude/commands/ (custom slash commands)
 │   │   └── skills/            # → ~/.claude/skills/ (reusable skills)
 │   └── claude_settings.json.template  # Template for ~/.claude/settings.json
+├── ccstatusline/              # ccstatusline configuration
+│   └── .config/ccstatusline/  # → ~/.config/ccstatusline/
+│       └── settings.json      # ccstatusline widgets/theme settings
 ├── opencode/                  # OpenCode AI tools
 │   └── agents/                # → ~/.config/opencode/agents/ (subagent prompts)
 ├── aerospace/                 # Aerospace window manager (macOS)
@@ -210,12 +214,12 @@ dotfiles/
 
 ### Claude Settings
 
-The `settings.json` file is auto-generated from `claude_settings.json.template` with OS-specific configuration:
+The `settings.json` file is auto-generated from `claude_settings.json.template` with personal overrides:
 
 - **Stop Hook**: Plays system sound when Claude stops responding (macOS: Glass.aiff, Linux: complete.oga)
-- **Status Line**: Real-time token usage display via `ccusage` (requires bun)
+- **Status Line**: Configurable command-based status line (for example `ccusage` or `ccstatusline`, requires bun)
 
-The installation process automatically detects your OS and generates the appropriate configuration.
+ccstatusline itself is configured separately via `~/.config/ccstatusline/settings.json`.
 
 ### MCP Servers (Optional)
 
@@ -245,6 +249,7 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 - Claude settings: Auto-generated from `claude/claude_settings.json.template`
 - Personalize Claude: `cp claude/.claude/CLAUDE.personal.md.example claude/.claude/CLAUDE.personal.md` and edit
 - `make sync-claude` merges `CLAUDE.base.md` + `CLAUDE.personal.md` → `~/.claude/CLAUDE.md`
+- `make sync-ccstatusline` symlinks `ccstatusline/.config/ccstatusline/settings.json` → `~/.config/ccstatusline/settings.json`
 - Add agents: Create in `claude/.claude/agents/`
 - Add commands: Create in `claude/.claude/commands/sc/`
 - Add skills: Create in `claude/.claude/skills/`
@@ -271,6 +276,7 @@ infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
 - macOS or Linux
 - Git, Make
 - **GNU Stow** (for symlink management)
+- `jq` (for merging Claude settings)
 - Neovim 0.8+
 - Node.js (for LSP servers)
 

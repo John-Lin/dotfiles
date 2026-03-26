@@ -1,6 +1,10 @@
 # Default target
 all: sync
 
+# Shared prerequisite
+require-stow:
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+
 # Install all dotfiles (removed automatic installation)
 sync:
 	@echo "⚠️  Please specify which configuration to install:"
@@ -15,16 +19,14 @@ sync:
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
-sync-ghostty:
+sync-ghostty: require-stow
 	@echo "🖥️  Installing Ghostty configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ ghostty
 	@echo "✅ Ghostty configuration installed"
 
 # Install Ghostty configuration (Linux specific)
-sync-ghostty-linux:
+sync-ghostty-linux: require-stow
 	@echo "🐧 Installing Ghostty configuration for Linux..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	@if [ -f ~/.config/ghostty/config ]; then \
 		echo "  ~/.config/ghostty/config already exists, only installing custom.conf..."; \
 		mkdir -p ~/.config/ghostty; \
@@ -36,23 +38,20 @@ sync-ghostty-linux:
 	@echo "✅ Ghostty Linux configuration installed"
 
 # Install Neovim configuration
-sync-neovim:
+sync-neovim: require-stow
 	@echo "📝 Installing Neovim configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ nvim
 	@echo "✅ Neovim configuration installed"
 
 # Install Zsh configuration
-sync-zsh:
+sync-zsh: require-stow
 	@echo "🐚 Installing Zsh configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ zsh
 	@echo "✅ Zsh configuration installed"
 
 # Install Tig configuration
-sync-tig:
+sync-tig: require-stow
 	@echo "🔍 Installing Tig configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ tig
 	@echo "✅ Tig configuration installed"
 
@@ -84,9 +83,8 @@ sync-claude:
 	@echo "✅ Claude Code configuration installed"
 
 # Install ccstatusline configuration
-sync-ccstatusline:
+sync-ccstatusline: require-stow
 	@echo "📊 Installing ccstatusline configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	@mkdir -p ~/.config/ccstatusline
 	@if [ -f ~/.config/ccstatusline/settings.json ] && [ ! -L ~/.config/ccstatusline/settings.json ]; then \
 		backup_file="$$HOME/.config/ccstatusline/settings.json.bak.$$(date +%Y%m%d%H%M%S)"; \
@@ -105,9 +103,8 @@ sync-opencode:
 	@echo "✅ OpenCode agents configuration installed"
 
 # Install Aerospace configuration (includes Borders)
-sync-aerospace:
+sync-aerospace: require-stow
 	@echo "🚀 Installing Aerospace configuration..."
-	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
 	stow -t ~ aerospace
 	@echo "✅ Aerospace configuration installed"
 	@echo "🔳 Installing Borders configuration..."
@@ -220,4 +217,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-ccstatusline sync-opencode sync-aerospace test check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-ccstatusline sync-opencode sync-aerospace test check-syntax lint
