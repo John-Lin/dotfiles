@@ -10,6 +10,7 @@ sync:
 	@echo "  make sync-zsh           - Install Zsh configuration"
 	@echo "  make sync-tig           - Install Tig configuration"
 	@echo "  make sync-claude        - Install Claude Code configuration"
+	@echo "  make sync-ccstatusline  - Install ccstatusline configuration"
 	@echo "  make sync-opencode      - Install OpenCode agents configuration"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
@@ -81,6 +82,19 @@ sync-claude:
 		cp claude/claude_settings.json.template "$${HOME}/.claude/settings.json"; \
 	fi
 	@echo "✅ Claude Code configuration installed"
+
+# Install ccstatusline configuration
+sync-ccstatusline:
+	@echo "📊 Installing ccstatusline configuration..."
+	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
+	@mkdir -p ~/.config/ccstatusline
+	@if [ -f ~/.config/ccstatusline/settings.json ] && [ ! -L ~/.config/ccstatusline/settings.json ]; then \
+		backup_file="$$HOME/.config/ccstatusline/settings.json.bak.$$(date +%Y%m%d%H%M%S)"; \
+		echo "  Backing up existing settings.json → $$backup_file"; \
+		mv ~/.config/ccstatusline/settings.json "$$backup_file"; \
+	fi
+	stow -t ~ ccstatusline
+	@echo "✅ ccstatusline configuration installed"
 
 # Install OpenCode agents configuration
 sync-opencode:
@@ -206,4 +220,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-opencode sync-aerospace test check-syntax lint
+.PHONY: all clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-ccstatusline sync-opencode sync-aerospace test check-syntax lint
