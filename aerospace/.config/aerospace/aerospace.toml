@@ -1,9 +1,3 @@
-# Config version for compatibility
-config-version = 2
-
-# Auto-reload config when saved
-auto-reload-config = true
-
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = ['layout tiles', 'workspace 1']
