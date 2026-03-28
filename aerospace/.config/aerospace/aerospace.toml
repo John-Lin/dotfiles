@@ -1,9 +1,12 @@
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
+# Config version for compatibility
+config-version = 2
+
+# Auto-reload config when saved
+auto-reload-config = true
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = ['layout tiles']
+after-startup-command = ['layout tiles', 'workspace 1']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -254,7 +257,7 @@ if.app-id = 'com.cisco.secureclient.gui'
 check-further-callbacks = true
 run = ['layout floating']
 
-# Messageing apps should be floating
+# Messaging apps should be floating
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
 check-further-callbacks = true
