@@ -130,9 +130,13 @@ automatically-unhide-macos-hidden-apps = true
         tell application "Microsoft Edge" to activate
     end if' '''
 
-    # new window in current workspace
-    # https://github.com/ghostty-org/ghostty/discussions/3563#discussioncomment-13928056
-    cmd-enter = 'exec-and-forget ~/.config/aerospace/new_ghostty.sh'
+    # open new Ghostty window in current workspace (uses Ghostty 1.3 native AppleScript)
+    cmd-enter = '''exec-and-forget CUR_WS=$(aerospace list-workspaces --focused) &&
+        osascript -e 'tell application "Ghostty"
+            new window
+            activate
+        end tell' &&
+        aerospace move-node-to-workspace --focus-follows-window "$CUR_WS"'''
 
     cmd-shift-m = '''exec-and-forget osascript -e '
     tell application "Youtube Music"
