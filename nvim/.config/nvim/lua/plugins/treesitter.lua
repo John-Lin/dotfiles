@@ -26,7 +26,8 @@ return {
       }
       local treesitter = require('nvim-treesitter')
       local installed = treesitter.get_installed()
-      local to_install = vim.iter(enabled)
+      local to_install = vim
+        .iter(enabled)
         :filter(function(parser)
           return not vim.tbl_contains(installed, parser)
         end)
