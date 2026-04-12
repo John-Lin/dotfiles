@@ -3,8 +3,8 @@ all: sync
 
 REPO_ROOT := $(abspath $(CURDIR))
 
-# Auto-detect lycorp environment by file presence
-OPENCODE_ENV := $(if $(wildcard $(REPO_ROOT)/jsonnet/opencode_lycorp.libsonnet),lycorp,personal)
+# Auto-detect work environment by file presence
+OPENCODE_ENV := $(if $(wildcard $(REPO_ROOT)/jsonnet/opencode_work.libsonnet),work,personal)
 
 define ensure_safe_symlink
 target="$(1)"; source="$(2)"; force_hint="$(3)"; \
@@ -329,7 +329,7 @@ check-syntax:
 	done
 	@echo "Checking Jsonnet files..."
 	@if command -v jsonnet >/dev/null 2>&1; then \
-		for file in $$(find ./jsonnet -name "*.jsonnet" -o -name "*.libsonnet" 2>/dev/null | grep -v '_lycorp'); do \
+		for file in $$(find ./jsonnet -name "*.jsonnet" -o -name "*.libsonnet" 2>/dev/null | grep -v '_work'); do \
 			echo "  Checking $$file"; \
 			jsonnet --tla-str env=personal "$$file" >/dev/null 2>&1 || jsonnet "$$file" >/dev/null 2>&1 || { echo "❌ Syntax error in $$file"; exit 1; }; \
 		done; \

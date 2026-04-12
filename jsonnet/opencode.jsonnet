@@ -3,21 +3,21 @@
 //
 // Usage:
 //   Personal only:  jsonnet opencode.jsonnet
-//   With LY Corp:   jsonnet --tla-str env=lycorp opencode.jsonnet
+//   With work:      jsonnet --tla-str env=work opencode.jsonnet
 function(env='personal')
-  local isLycorp = env == 'lycorp';
+  local isWork = env == 'work';
 
   local personal = import 'opencode_personal.libsonnet';
-  local corporate = import 'opencode_lycorp.libsonnet';
+  local work = import 'opencode_work.libsonnet';
 
   {
     '$schema': 'https://opencode.ai/config.json',
     theme: 'system',
-    plugin: if isLycorp then ['@devtheops/opencode-plugin-otel'] else [],
+    plugin: if isWork then ['@devtheops/opencode-plugin-otel'] else [],
     enabled_providers: personal.enabled_providers
-                       + (if isLycorp then corporate.enabled_providers else []),
+                       + (if isWork then work.enabled_providers else []),
     provider: personal.provider
-              + (if isLycorp then corporate.provider else {}),
+              + (if isWork then work.provider else {}),
     mcp: personal.mcp
-         + (if isLycorp then corporate.mcp else {}),
+         + (if isWork then work.mcp else {}),
   }
