@@ -195,9 +195,9 @@ sync-opencode:
 		echo "   Move it away manually or run make sync-opencode-force"; \
 		exit 1; \
 	fi; \
-	mv "$$tmp_opencode" "$${HOME}/.config/opencode/opencode.json"
-	@$(call ensure_safe_symlink,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents,sync-opencode-force)
-	@ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
+	$(call ensure_safe_symlink,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents,sync-opencode-force); \
+	mv "$$tmp_opencode" "$${HOME}/.config/opencode/opencode.json"; \
+	ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
 	@echo "✅ OpenCode configuration installed (env=$(OPENCODE_ENV))"
 
 sync-opencode-force:

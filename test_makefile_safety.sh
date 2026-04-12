@@ -94,6 +94,11 @@ test_sync_opencode_preserves_existing_directory() {
 	assert_dir_exists "$home_dir/.config/opencode/agents"
 	assert_file_exists "$home_dir/.config/opencode/agents/local.txt"
 	assert_contains "$home_dir/.config/opencode/agents/local.txt" 'keep me'
+	# Verify no partial install: opencode.json must not be written
+	if [ -e "$home_dir/.config/opencode/opencode.json" ]; then
+		printf 'Partial install: opencode.json was written despite agents conflict\n' >&2
+		exit 1
+	fi
 }
 
 test_sync_opencode_preserves_existing_config_json() {
