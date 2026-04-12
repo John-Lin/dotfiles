@@ -10,6 +10,9 @@ fi
 
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
+# Keep PATH entries unique across repeated reloads.
+typeset -U path PATH
+
 # alias ripgrep to grep
 # https://news.ycombinator.com/item?id=22281977
 alias grep="rg"
@@ -32,7 +35,7 @@ export KUBE_EDITOR="nvim"
 # Homebrew install golang
 export GOPATH=$HOME/go
 export GOROOT="$(brew --prefix golang)/libexec"
-export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+path+=("${GOPATH}/bin" "${GOROOT}/bin")
 
 # alias python3
 alias python='python3'
@@ -46,15 +49,12 @@ export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
 export NTOKEN_FILE="$HOME/.config/zms/.ntoken"
 
 # krew
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+path=("${KREW_ROOT:-$HOME/.krew}/bin" $path)
 # tfswitch for terraform
-export PATH="$PATH:$HOME/bin"
+path+=("$HOME/bin")
 
 # kubecolor
 alias kubectl="kubecolor"
-
-# ls with color
-alias ls='ls -G'
 
 # kubectl prompt
 autoload -U colors; colors
@@ -85,7 +85,7 @@ setopt inc_append_history
 setopt share_history
 
 # claude code
-export PATH="$PATH:$HOME/.claude/local"
+path+=("$HOME/.claude/local")
 # To stop Claude getting confused about which directory it should be running commands in
 export CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1
 
@@ -100,6 +100,18 @@ export EDITOR="nvim"
 # zoxide init
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
+
+  # zoxide required
+  alias cd="zd"
+  zd() {
+    if [ $# -eq 0 ]; then
+      builtin cd ~ && return
+    elif [ -d "$1" ]; then
+      builtin cd "$1"
+    else
+      z "$@" && printf " \U000F17A9 " && pwd || echo "Error: Directory not found"
+    fi
+  }
 fi
 
 # File system, fzf and eza aliases
@@ -109,20 +121,8 @@ alias lt='eza --tree --level=2 --long --icons --git'
 alias lta='lt -a'
 alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 
-# zoxide required
-alias cd="zd"
-zd() {
-  if [ $# -eq 0 ]; then
-    builtin cd ~ && return
-  elif [ -d "$1" ]; then
-    builtin cd "$1"
-  else
-    z "$@" && printf " \U000F17A9 " && pwd || echo "Error: Directory not found"
-  fi
-}
-
 # export PATH for local bin for uv tool installation
-export PATH="$HOME/.local/bin:$PATH"
+path=("$HOME/.local/bin" $path)
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
