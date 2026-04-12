@@ -4,6 +4,8 @@ This directory contains configuration for [Claude Code](https://claude.ai/code).
 
 Run `make sync-claude` from the repo root to install everything.
 
+`sync-claude` is conservative: if `~/.claude/CLAUDE.md`, `~/.claude/settings.json`, or the target symlinks already contain unmanaged local contents, it stops instead of overwriting them. Use `make sync-claude-force` when you want to replace local contents explicitly.
+
 ## Directory Layout
 
 ```
@@ -40,11 +42,13 @@ make sync-claude
 
 `sync-claude` concatenates `CLAUDE.base.md` + `CLAUDE.personal.md` → `~/.claude/CLAUDE.md`.
 Personal content appends after the base, so your rules take precedence.
+If `~/.claude/CLAUDE.md` already exists with different contents, `sync-claude` stops instead of overwriting it.
 
 ### claude_settings.personal.json — settings overrides
 
 Controls hooks, status line, MCP plugins, and other Claude Code settings.
 `sync-claude` deep-merges this on top of `claude_settings.json.template` using `jq`.
+If `~/.claude/settings.json` already exists with different contents, `sync-claude` stops instead of overwriting it.
 
 ```bash
 cp claude/claude_settings.personal.json.example claude/claude_settings.personal.json
@@ -93,6 +97,7 @@ See the [Claude Code settings reference](https://docs.anthropic.com/en/docs/clau
 
 These are symlinked as-is into `~/.claude/`. Add files here and re-run `make sync-claude`
 (or just restart Claude Code — it picks up symlinked directories automatically).
+If the destination already contains unmanaged symlinks or files, `sync-claude` stops and asks you to move them away or run `make sync-claude-force`.
 
 | Directory  | What goes here                          |
 |------------|-----------------------------------------|

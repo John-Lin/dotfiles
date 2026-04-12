@@ -52,11 +52,18 @@ make sync-claude        # Claude Code AI tools
 make sync-ccstatusline  # ccstatusline config
 make sync-opencode      # OpenCode subagents
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
+
+# Force install when a target already exists with unmanaged contents
+make sync-ghostty-linux-force
+make sync-claude-force
+make sync-opencode-force
 ```
 
-**Testing**: `make test` (runs syntax checks and linting)
+Most sync targets now fail fast when the destination already contains unmanaged files or symlinks. Use the corresponding `*-force` target only when you want to replace local contents explicitly.
 
-**Uninstall**: `make clean` (removes all symlinks)
+**Testing**: `make test` (runs syntax checks, linting, safety regression tests, and sync smoke tests)
+
+**Uninstall**: `make clean` (removes repo-managed symlinks and generated files while preserving unmanaged local files)
 
 ## 📁 Structure
 
@@ -77,7 +84,9 @@ dotfiles/
 ├── ghostty/                   # Ghostty terminal (macOS)
 │   └── .config/ghostty/config # → ~/.config/ghostty/config
 ├── ghostty-linux/             # Ghostty terminal (Linux)
-│   └── .config/ghostty/config # → ~/.config/ghostty/config
+│   └── .config/ghostty/       # → ~/.config/ghostty/
+│       ├── config             # Main Ghostty Linux config
+│       └── custom.conf        # Extra local keybindings/options managed separately
 ├── alacritty/                 # Alacritty terminal (manual setup)
 │   └── alacritty.toml         # → ~/alacritty.toml
 ├── claude/                    # Claude Code AI tools
@@ -198,6 +207,8 @@ dotfiles/
 
 ### OpenCode Subagents
 - `make sync-opencode` symlinks `opencode/agents/` to `~/.config/opencode/agents`
+- If `~/.config/opencode/agents` already contains unmanaged contents, `make sync-opencode` stops instead of replacing them
+- Use `make sync-opencode-force` to replace an existing target explicitly
 - Add/edit OpenCode subagents in `opencode/agents/`
 
 ### Skills (Reusable capabilities)
@@ -222,6 +233,7 @@ dotfiles/
 - `claude_settings.personal.json` — your personal overrides (gitignored)
 
 `make sync-claude` uses `jq` to deep-merge them. Personal settings take precedence over the template.
+If `~/.claude/CLAUDE.md`, `~/.claude/settings.json`, or the `agents/`, `commands/`, `skills/` links already contain unmanaged contents, `make sync-claude` stops instead of overwriting them. Use `make sync-claude-force` to replace local contents explicitly.
 
 To set up personal settings:
 
@@ -254,18 +266,25 @@ claude mcp add -s user sequential-thinking -- npx -y @modelcontextprotocol/serve
 
 ### Terminal
 - Ghostty: Edit `ghostty/.config/ghostty/config` or `ghostty-linux/.config/ghostty/config`
+- Ghostty Linux custom overrides: Edit `ghostty-linux/.config/ghostty/custom.conf`
 - Alacritty: Edit `alacritty/alacritty.toml`
 - Theme: Run `p10k configure`
+
+### Shell
+- Machine-specific secrets and overrides: Put them in `~/.zshrc.local` instead of tracked files
+- `zsh/.zshrc` automatically sources `~/.zshrc.local` if it exists
 
 ### AI
 - Claude settings: `cp claude/claude_settings.personal.json.example claude/claude_settings.personal.json` and edit, then `make sync-claude`
 - Personalize Claude instructions: `cp claude/.claude/CLAUDE.personal.md.example claude/.claude/CLAUDE.personal.md` and edit
 - `make sync-claude` merges `CLAUDE.base.md` + `CLAUDE.personal.md` → `~/.claude/CLAUDE.md`
+- `make sync-claude` is conservative and will not overwrite unmanaged Claude files; use `make sync-claude-force` to replace local contents explicitly
 - `make sync-ccstatusline` symlinks `ccstatusline/.config/ccstatusline/settings.json` → `~/.config/ccstatusline/settings.json`
 - Add agents: Create in `claude/.claude/agents/`
-- Add commands: Create in `claude/.claude/commands/sc/`
+- Add commands: Create in `claude/.claude/commands/`
 - Add skills: Create in `claude/.claude/skills/`
 - `make sync-opencode` symlinks `opencode/agents/` → `~/.config/opencode/agents`
+- `make sync-opencode` is conservative and will not overwrite unmanaged local contents; use `make sync-opencode-force` to replace them explicitly
 
 ### Window Management
 - Aerospace: Edit `aerospace/.config/aerospace/aerospace.toml`

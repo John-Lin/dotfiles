@@ -42,12 +42,6 @@ alias python='python3'
 # ctags
 alias ctags='/opt/homebrew/bin/ctags'
 
-# sops key file
-export SOPS_AGE_KEY_FILE="$HOME/.config/sops/age/keys.txt"
-
-# ntoken file path
-export NTOKEN_FILE="$HOME/.config/zms/.ntoken"
-
 # krew
 path=("${KREW_ROOT:-$HOME/.krew}/bin" $path)
 # tfswitch for terraform
@@ -127,5 +121,5 @@ path=("$HOME/.local/bin" $path)
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Source local-only configuration (not tracked in git)
+# Source local-only configuration for machine-specific secrets and overrides.
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local

@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y stow
+        sudo apt-get install -y stow jq
         # Install luacheck via luarocks (requires Lua setup first)
         luarocks install luacheck
 
@@ -39,6 +39,12 @@ jobs:
 
     - name: Run linter
       run: make lint
+
+    - name: Run sync smoke tests
+      run: make test-sync-smoke
+
+    - name: Run safety regression tests
+      run: make test-safety
 
     - name: Test Neovim stow functionality
       run: |
