@@ -29,6 +29,7 @@ assert_symlink_resolves_to() {
 main() {
 	local home_dir
 	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' EXIT
 
 	cd "$REPO_ROOT"
 
