@@ -258,11 +258,14 @@ clean-aerospace:
 	@echo "✅ Borders configuration removed"
 
 # Test commands
-test: check-syntax lint test-safety
+test: check-syntax lint test-safety test-sync-smoke
 	@echo "✅ All checks passed!"
 
 test-safety:
 	@bash "./test_makefile_safety.sh"
+
+test-sync-smoke:
+	@bash "./test_sync_smoke.sh"
 
 # Check syntax of configuration files
 check-syntax:
@@ -287,4 +290,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-claude-force sync-ccstatusline sync-opencode sync-opencode-force sync-aerospace test test-safety check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-claude-force sync-ccstatusline sync-opencode sync-opencode-force sync-aerospace test test-safety test-sync-smoke check-syntax lint
