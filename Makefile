@@ -3,6 +3,9 @@ all: sync
 
 REPO_ROOT := $(abspath $(CURDIR))
 
+# Auto-detect lycorp environment by file presence
+OPENCODE_ENV := $(if $(wildcard $(REPO_ROOT)/jsonnet/opencode_lycorp.libsonnet),lycorp,personal)
+
 define ensure_safe_symlink
 target="$(1)"; source="$(2)"; force_hint="$(3)"; \
 if [ -L "$$target" ]; then \
@@ -79,7 +82,7 @@ sync:
 	@echo "  make sync-tig           - Install Tig configuration"
 	@echo "  make sync-claude        - Install Claude Code configuration"
 	@echo "  make sync-ccstatusline  - Install ccstatusline configuration"
-	@echo "  make sync-opencode      - Install OpenCode agents configuration"
+	@echo "  make sync-opencode      - Install OpenCode configuration (agents + opencode.json)"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
@@ -176,20 +179,33 @@ sync-ccstatusline: require-stow
 	stow -t ~ ccstatusline
 	@echo "✅ ccstatusline configuration installed"
 
-# Install OpenCode agents configuration
+# Install OpenCode configuration (agents + opencode.json from jsonnet)
 sync-opencode:
-	@echo "🤖 Installing OpenCode agents configuration..."
+	@echo "🤖 Installing OpenCode configuration..."
 	@mkdir -p ~/.config/opencode
+	@command -v jsonnet >/dev/null 2>&1 || { echo "❌ jsonnet is not installed. Please install it first."; exit 1; }
+	@set -e; \
+	echo "  Building opencode.json (env=$(OPENCODE_ENV))..."; \
+	tmp_opencode="$$(mktemp /tmp/opencode-json.XXXXXX)"; \
+	cleanup() { rm -f "$$tmp_opencode"; }; \
+	trap cleanup EXIT; \
+	jsonnet --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
+	if [ -e "$${HOME}/.config/opencode/opencode.json" ] && ! cmp -s "$$tmp_opencode" "$${HOME}/.config/opencode/opencode.json"; then \
+		echo "❌ ~/.config/opencode/opencode.json already exists with different contents"; \
+		echo "   Move it away manually or run make sync-opencode-force"; \
+		exit 1; \
+	fi; \
+	mv "$$tmp_opencode" "$${HOME}/.config/opencode/opencode.json"
 	@$(call ensure_safe_symlink,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents,sync-opencode-force)
 	@ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
-	@echo "✅ OpenCode agents configuration installed"
+	@echo "✅ OpenCode configuration installed (env=$(OPENCODE_ENV))"
 
 sync-opencode-force:
-	@echo "🤖 Installing OpenCode agents configuration (force)..."
+	@echo "🤖 Installing OpenCode configuration (force)..."
 	@mkdir -p ~/.config/opencode
+	@rm -f ~/.config/opencode/opencode.json
 	@rm -rf ~/.config/opencode/agents
-	@ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
-	@echo "✅ OpenCode agents configuration installed"
+	@$(MAKE) sync-opencode
 
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
@@ -210,6 +226,7 @@ clean:
 	@echo "  - ~/.tigrc"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
+	@echo "  - ~/.config/opencode/opencode.json"
 	@echo "  - ~/.config/opencode/agents"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
@@ -272,9 +289,10 @@ clean-claude:
 	@echo "✅ Claude Code configuration removed"
 
 clean-opencode:
-	@echo "🧹 Removing OpenCode agents configuration..."
+	@echo "🧹 Removing OpenCode configuration..."
+	@rm -f "$${HOME}/.config/opencode/opencode.json"
 	@$(call remove_managed_path,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents)
-	@echo "✅ OpenCode agents configuration removed"
+	@echo "✅ OpenCode configuration removed"
 
 clean-aerospace:
 	@echo "🧹 Removing Aerospace configuration..."
@@ -300,6 +318,15 @@ check-syntax:
 		echo "  Checking $$file"; \
 		luac -p "$$file" || { echo "❌ Syntax error in $$file"; exit 1; }; \
 	done
+	@echo "Checking Jsonnet files..."
+	@if command -v jsonnet >/dev/null 2>&1; then \
+		for file in $$(find ./jsonnet -name "*.jsonnet" -o -name "*.libsonnet" 2>/dev/null | grep -v '_lycorp'); do \
+			echo "  Checking $$file"; \
+			jsonnet --tla-str env=personal "$$file" >/dev/null 2>&1 || jsonnet "$$file" >/dev/null 2>&1 || { echo "❌ Syntax error in $$file"; exit 1; }; \
+		done; \
+	else \
+		echo "  ⚠️  jsonnet not found, skipping Jsonnet checks"; \
+	fi
 	@echo "Checking JSON files..."
 	@for file in nvim/.config/nvim/lazy-lock.json claude/claude_settings.json.template; do \
 		if [ -f "$$file" ]; then \

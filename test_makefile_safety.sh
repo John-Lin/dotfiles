@@ -96,6 +96,32 @@ test_sync_opencode_preserves_existing_directory() {
 	assert_contains "$home_dir/.config/opencode/agents/local.txt" 'keep me'
 }
 
+test_sync_opencode_preserves_existing_config_json() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	mkdir -p "$home_dir/.config/opencode"
+	printf '{"custom":true}\n' >"$home_dir/.config/opencode/opencode.json"
+
+	assert_make_fails "$home_dir" sync-opencode
+	assert_file_exists "$home_dir/.config/opencode/opencode.json"
+	assert_contains "$home_dir/.config/opencode/opencode.json" '{"custom":true}'
+}
+
+test_sync_opencode_force_overwrites_existing_config_json() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	mkdir -p "$home_dir/.config/opencode"
+	printf '{"custom":true}\n' >"$home_dir/.config/opencode/opencode.json"
+
+	HOME="$home_dir" make sync-opencode-force >"$TEST_OUTPUT" 2>&1
+	assert_file_exists "$home_dir/.config/opencode/opencode.json"
+	assert_not_contains "$home_dir/.config/opencode/opencode.json" '{"custom":true}'
+}
+
 test_sync_opencode_force_replaces_existing_directory() {
 	local home_dir
 	home_dir=$(mktemp -d)
@@ -252,6 +278,8 @@ test_clean_ghostty_preserves_unmanaged_custom_conf_without_stow() {
 main() {
 	cd "$REPO_ROOT"
 	test_sync_opencode_preserves_existing_directory
+	test_sync_opencode_preserves_existing_config_json
+	test_sync_opencode_force_overwrites_existing_config_json
 	test_sync_opencode_force_replaces_existing_directory
 	test_sync_ghostty_linux_preserves_existing_custom_conf
 	test_sync_ghostty_linux_force_replaces_existing_custom_conf
