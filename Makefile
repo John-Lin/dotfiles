@@ -290,7 +290,16 @@ clean-claude:
 
 clean-opencode:
 	@echo "🧹 Removing OpenCode configuration..."
-	@rm -f "$${HOME}/.config/opencode/opencode.json"
+	@set -e; \
+	if command -v jsonnet >/dev/null 2>&1; then \
+		tmp_opencode="$$(mktemp /tmp/opencode-json.XXXXXX)"; \
+		cleanup() { rm -f "$$tmp_opencode"; }; \
+		trap cleanup EXIT; \
+		jsonnet --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
+		$(call remove_managed_file,$${HOME}/.config/opencode/opencode.json,$$tmp_opencode); \
+	else \
+		echo "  ⚠️  jsonnet not found, skipping opencode.json cleanup"; \
+	fi
 	@$(call remove_managed_path,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents)
 	@echo "✅ OpenCode configuration removed"
 
