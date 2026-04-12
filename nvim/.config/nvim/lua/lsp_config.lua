@@ -83,6 +83,15 @@ vim.lsp.config('terraformls', {
   capabilities = capabilities,
 })
 
+vim.lsp.config('jsonnet_ls', {
+  capabilities = capabilities,
+  settings = {
+    formatting = {
+      UseImplicitPlus = false,
+    },
+  },
+})
+
 -- Setup clangd for C/C++
 vim.lsp.config('clangd', {
   capabilities = capabilities,

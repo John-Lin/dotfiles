@@ -14,6 +14,7 @@ return {
         'markdown',
         'python',
         'javascript',
+        'jsonnet',
         'go',
         'gomod',
         'gosum',
@@ -36,6 +37,8 @@ return {
       if #to_install > 0 then
         treesitter.install(to_install)
       end
+
+      vim.treesitter.language.register('jsonnet', 'libsonnet')
 
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
