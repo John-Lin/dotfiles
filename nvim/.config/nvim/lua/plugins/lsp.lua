@@ -16,6 +16,7 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = {
           'helm_ls',
+          'jsonnet_ls',
           'lua_ls',
           'gopls',
           'basedpyright',
