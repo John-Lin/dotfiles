@@ -1,6 +1,39 @@
 # Default target
 all: sync
 
+REPO_ROOT := $(abspath $(CURDIR))
+
+define ensure_safe_symlink
+target="$(1)"; source="$(2)"; force_hint="$(3)"; \
+if [ -L "$$target" ]; then \
+	current="$$(readlink "$$target")"; \
+	if [ "$$current" != "$$source" ]; then \
+		echo "❌ $$target points to $$current"; \
+		echo "   Expected: $$source"; \
+		echo "   Remove it manually or run make $$force_hint"; \
+		exit 1; \
+	fi; \
+elif [ -e "$$target" ]; then \
+	echo "❌ $$target already exists and is not a symlink managed by this repo"; \
+	echo "   Move it away manually or run make $$force_hint"; \
+	exit 1; \
+fi
+endef
+
+define remove_managed_path
+target="$(1)"; source="$(2)"; \
+if [ -L "$$target" ]; then \
+	current="$$(readlink "$$target")"; \
+	if [ "$$current" = "$$source" ]; then \
+		rm -f "$$target"; \
+	else \
+		echo "⚠️  Skipping unmanaged symlink $$target -> $$current"; \
+	fi; \
+elif [ -e "$$target" ]; then \
+	echo "⚠️  Skipping unmanaged path $$target"; \
+fi
+endef
+
 # Shared prerequisite
 require-stow:
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
@@ -58,29 +91,54 @@ sync-tig: require-stow
 # Install Claude Code configuration
 sync-claude:
 	@echo "🤖 Installing Claude Code configuration..."
-	@mkdir -p ~/.claude
-	@rm -f ~/.claude/CLAUDE.md
-	@if [ -f $(PWD)/claude/.claude/CLAUDE.personal.md ]; then \
+	@set -e; \
+	mkdir -p ~/.claude; \
+	command -v jq >/dev/null 2>&1 || { echo "❌ jq is not installed. Please install it first."; exit 1; }; \
+	tmp_claude_md="$$(mktemp /tmp/claude-md.XXXXXX)"; \
+	tmp_settings="$$(mktemp /tmp/claude-settings.XXXXXX)"; \
+	cleanup() { rm -f "$$tmp_claude_md" "$$tmp_settings"; }; \
+	trap cleanup EXIT; \
+	if [ -f "$(REPO_ROOT)/claude/.claude/CLAUDE.personal.md" ]; then \
 		echo "  Merging base + personal → CLAUDE.md"; \
-		{ cat $(PWD)/claude/.claude/CLAUDE.base.md; echo ""; cat $(PWD)/claude/.claude/CLAUDE.personal.md; } > ~/.claude/CLAUDE.md; \
+		{ cat "$(REPO_ROOT)/claude/.claude/CLAUDE.base.md"; echo ""; cat "$(REPO_ROOT)/claude/.claude/CLAUDE.personal.md"; } > "$$tmp_claude_md"; \
 	else \
 		echo "  No CLAUDE.personal.md found, using base only"; \
 		echo "  💡 Copy CLAUDE.personal.md.example → CLAUDE.personal.md to customize"; \
-		cp $(PWD)/claude/.claude/CLAUDE.base.md ~/.claude/CLAUDE.md; \
-	fi
-	@rm -f ~/.claude/agents ~/.claude/commands ~/.claude/skills
-	@ln -sf $(PWD)/claude/.claude/agents ~/.claude/agents
-	@ln -sf $(PWD)/claude/.claude/commands ~/.claude/commands
-	@ln -sf $(PWD)/claude/.claude/skills ~/.claude/skills
-	@command -v jq >/dev/null 2>&1 || { echo "❌ jq is not installed. Please install it first."; exit 1; }
-	@echo "  Generating settings.json..."
-	@if [ -f $(PWD)/claude/claude_settings.personal.json ]; then \
+		cp "$(REPO_ROOT)/claude/.claude/CLAUDE.base.md" "$$tmp_claude_md"; \
+	fi; \
+	echo "  Generating settings.json..."; \
+	if [ -f "$(REPO_ROOT)/claude/claude_settings.personal.json" ]; then \
 		echo "  Merging template + personal settings.json"; \
-		jq -s '.[0] * .[1]' claude/claude_settings.json.template "$(PWD)/claude/claude_settings.personal.json" > "$${HOME}/.claude/settings.json"; \
+		jq -s '.[0] * .[1]' "$(REPO_ROOT)/claude/claude_settings.json.template" "$(REPO_ROOT)/claude/claude_settings.personal.json" > "$$tmp_settings"; \
 	else \
-		cp claude/claude_settings.json.template "$${HOME}/.claude/settings.json"; \
-	fi
+		cp "$(REPO_ROOT)/claude/claude_settings.json.template" "$$tmp_settings"; \
+	fi; \
+	if [ -e "$${HOME}/.claude/CLAUDE.md" ] && ! cmp -s "$$tmp_claude_md" "$${HOME}/.claude/CLAUDE.md"; then \
+		echo "❌ $${HOME}/.claude/CLAUDE.md already exists with different contents"; \
+		echo "   Move it away manually or run make sync-claude-force"; \
+		exit 1; \
+	fi; \
+	if [ -e "$${HOME}/.claude/settings.json" ] && ! cmp -s "$$tmp_settings" "$${HOME}/.claude/settings.json"; then \
+		echo "❌ $${HOME}/.claude/settings.json already exists with different contents"; \
+		echo "   Move it away manually or run make sync-claude-force"; \
+		exit 1; \
+	fi; \
+	$(call ensure_safe_symlink,$${HOME}/.claude/agents,$(REPO_ROOT)/claude/.claude/agents,sync-claude-force); \
+	$(call ensure_safe_symlink,$${HOME}/.claude/commands,$(REPO_ROOT)/claude/.claude/commands,sync-claude-force); \
+	$(call ensure_safe_symlink,$${HOME}/.claude/skills,$(REPO_ROOT)/claude/.claude/skills,sync-claude-force); \
+	mv "$$tmp_claude_md" "$${HOME}/.claude/CLAUDE.md"; \
+	mv "$$tmp_settings" "$${HOME}/.claude/settings.json"; \
+	ln -snf "$(REPO_ROOT)/claude/.claude/agents" "$${HOME}/.claude/agents"; \
+	ln -snf "$(REPO_ROOT)/claude/.claude/commands" "$${HOME}/.claude/commands"; \
+	ln -snf "$(REPO_ROOT)/claude/.claude/skills" "$${HOME}/.claude/skills"
 	@echo "✅ Claude Code configuration installed"
+
+sync-claude-force:
+	@echo "🤖 Installing Claude Code configuration (force)..."
+	@mkdir -p ~/.claude
+	@rm -rf ~/.claude/agents ~/.claude/commands ~/.claude/skills
+	@rm -f ~/.claude/CLAUDE.md ~/.claude/settings.json
+	@$(MAKE) sync-claude
 
 # Install ccstatusline configuration
 sync-ccstatusline: require-stow
@@ -98,8 +156,15 @@ sync-ccstatusline: require-stow
 sync-opencode:
 	@echo "🤖 Installing OpenCode agents configuration..."
 	@mkdir -p ~/.config/opencode
+	@$(call ensure_safe_symlink,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents,sync-opencode-force)
+	@ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
+	@echo "✅ OpenCode agents configuration installed"
+
+sync-opencode-force:
+	@echo "🤖 Installing OpenCode agents configuration (force)..."
+	@mkdir -p ~/.config/opencode
 	@rm -rf ~/.config/opencode/agents
-	@ln -sf $(PWD)/opencode/agents ~/.config/opencode/agents
+	@ln -snf "$(REPO_ROOT)/opencode/agents" "$${HOME}/.config/opencode/agents"
 	@echo "✅ OpenCode agents configuration installed"
 
 # Install Aerospace configuration (includes Borders)
@@ -134,15 +199,17 @@ clean:
 # Force clean without confirmation (used by clean target)
 clean-force:
 	@echo "🧹 Removing all configurations..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || rm -rf ~/.config/nvim/
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || rm -f ~/.tigrc
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { rm -f ~/.zshrc ~/.p10k.zsh; }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ nvim || { $(call remove_managed_path,$${HOME}/.config/nvim,$(REPO_ROOT)/nvim/.config/nvim); }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || { $(call remove_managed_path,$${HOME}/.tigrc,$(REPO_ROOT)/tig/.tigrc); }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ zsh || { $(call remove_managed_path,$${HOME}/.zshrc,$(REPO_ROOT)/zsh/.zshrc); $(call remove_managed_path,$${HOME}/.p10k.zsh,$(REPO_ROOT)/zsh/.p10k.zsh); }
 	@rm -f ~/.claude/CLAUDE.md ~/.claude/settings.json
-	@rm -f ~/.claude/agents ~/.claude/commands ~/.claude/skills
-	@rm -rf ~/.config/opencode/agents
-	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || rm -f ~/.config/ghostty/config
-	@[ -L ~/.config/ghostty/custom.conf ] && rm -f ~/.config/ghostty/custom.conf || true
-	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { rm -f ~/.config/aerospace/aerospace.toml; rm -f ~/.config/borders/bordersrc; }
+	@$(call remove_managed_path,$${HOME}/.claude/agents,$(REPO_ROOT)/claude/.claude/agents)
+	@$(call remove_managed_path,$${HOME}/.claude/commands,$(REPO_ROOT)/claude/.claude/commands)
+	@$(call remove_managed_path,$${HOME}/.claude/skills,$(REPO_ROOT)/claude/.claude/skills)
+	@$(call remove_managed_path,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents)
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ ghostty 2>/dev/null || stow -D -t ~ ghostty-linux 2>/dev/null; } || { $(call remove_managed_path,$${HOME}/.config/ghostty/config,$(REPO_ROOT)/ghostty/.config/ghostty/config); $(call remove_managed_path,$${HOME}/.config/ghostty/config,$(REPO_ROOT)/ghostty-linux/.config/ghostty/config); }
+	@$(call remove_managed_path,$${HOME}/.config/ghostty/custom.conf,$(REPO_ROOT)/ghostty-linux/.config/ghostty/custom.conf)
+	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { $(call remove_managed_path,$${HOME}/.config/aerospace/aerospace.toml,$(REPO_ROOT)/aerospace/.config/aerospace/aerospace.toml); $(call remove_managed_path,$${HOME}/.config/borders/bordersrc,$(REPO_ROOT)/borders/.config/borders/bordersrc); }
 	@echo "✅ All configurations removed"
 
 # Individual clean targets
@@ -191,8 +258,11 @@ clean-aerospace:
 	@echo "✅ Borders configuration removed"
 
 # Test commands
-test: check-syntax lint
+test: check-syntax lint test-safety
 	@echo "✅ All checks passed!"
+
+test-safety:
+	@bash "./test_makefile_safety.sh"
 
 # Check syntax of configuration files
 check-syntax:
@@ -217,4 +287,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-ccstatusline sync-opencode sync-aerospace test check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-neovim sync-zsh sync-tig sync-claude sync-claude-force sync-ccstatusline sync-opencode sync-opencode-force sync-aerospace test test-safety check-syntax lint
