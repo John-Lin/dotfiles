@@ -18,6 +18,9 @@ claude/.claude/history.jsonl
 *.local
 zsh/.zshrc.local
 
+# LY Corp specific Jsonnet configs (machine-specific)
+jsonnet/*_lycorp*
+
 # Personal Claude configuration (user-specific)
 claude/.claude/CLAUDE.personal.md
 claude/claude_settings.personal.json
