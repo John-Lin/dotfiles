@@ -18,6 +18,9 @@ claude/.claude/history.jsonl
 *.local
 zsh/.zshrc.local
 
+# Work-specific Jsonnet configs (machine-specific)
+jsonnet/*_work*
+
 # Personal Claude configuration (user-specific)
 claude/.claude/CLAUDE.personal.md
 claude/claude_settings.personal.json
