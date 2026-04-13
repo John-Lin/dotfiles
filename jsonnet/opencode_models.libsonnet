@@ -11,16 +11,18 @@ local reasoningVariants = {
 
   'claude-opus-4.6':: {
     name: 'Claude Opus 4.6',
-    limit: { context: 200000, input: 136000, output: 64000 },
-    cost: { input: 5.0, output: 25.0 },
-  },
-  'claude-opus-4.5':: {
-    name: 'Claude Opus 4.5',
+    limit: { context: 1000000, input: 872000, output: 128000 },
     cost: { input: 5.0, output: 25.0 },
   },
   'claude-sonnet-4.6':: {
     name: 'Claude Sonnet 4.6',
+    limit: { context: 1000000, input: 936000, output: 64000 },
     cost: { input: 3.0, output: 15.0 },
+  },
+  'claude-haiku-4.5':: {
+    name: 'Claude Haiku 4.5',
+    limit: { context: 200000, input: 136000, output: 64000 },
+    cost: { input: 1.0, output: 5.0 },
   },
   'gpt-5.4':: {
     name: 'GPT-5.4',
@@ -37,6 +39,7 @@ local reasoningVariants = {
   },
   'gpt-5.2-pro':: {
     name: 'GPT 5.2 Pro',
+    cost: { input: 21.0, output: 168.0 },
   },
   'gpt-5.3-codex':: {
     name: 'GPT 5.3 Codex',
