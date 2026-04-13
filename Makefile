@@ -3,8 +3,9 @@ all: sync
 
 REPO_ROOT := $(abspath $(CURDIR))
 
-# Auto-detect work environment by file presence
-OPENCODE_ENV := $(if $(wildcard $(REPO_ROOT)/jsonnet/opencode_work.libsonnet),work,personal)
+# Auto-detect work environment via OPENCODE_WORK_CONFIG env var (path to external config dir)
+OPENCODE_ENV := $(if $(OPENCODE_WORK_CONFIG),work,personal)
+OPENCODE_JPATH := $(if $(OPENCODE_WORK_CONFIG),-J $(OPENCODE_WORK_CONFIG) -J $(REPO_ROOT)/jsonnet,)
 
 define ensure_safe_symlink
 target="$(1)"; source="$(2)"; force_hint="$(3)"; \
@@ -189,7 +190,7 @@ sync-opencode:
 	tmp_opencode="$$(mktemp /tmp/opencode-json.XXXXXX)"; \
 	cleanup() { rm -f "$$tmp_opencode"; }; \
 	trap cleanup EXIT; \
-	jsonnet --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
+	jsonnet $(OPENCODE_JPATH) --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
 	if [ -e "$${HOME}/.config/opencode/opencode.json" ] && ! cmp -s "$$tmp_opencode" "$${HOME}/.config/opencode/opencode.json"; then \
 		echo "❌ ~/.config/opencode/opencode.json already exists with different contents"; \
 		echo "   Move it away manually or run make sync-opencode-force"; \
@@ -295,7 +296,7 @@ clean-opencode:
 		tmp_opencode="$$(mktemp /tmp/opencode-json.XXXXXX)"; \
 		cleanup() { rm -f "$$tmp_opencode"; }; \
 		trap cleanup EXIT; \
-		jsonnet --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
+		jsonnet $(OPENCODE_JPATH) --tla-str env=$(OPENCODE_ENV) "$(REPO_ROOT)/jsonnet/opencode.jsonnet" > "$$tmp_opencode"; \
 		$(call remove_managed_file,$${HOME}/.config/opencode/opencode.json,$$tmp_opencode); \
 	else \
 		echo "  ⚠️  jsonnet not found, skipping opencode.json cleanup"; \
