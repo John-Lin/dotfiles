@@ -45,6 +45,18 @@ make clean
 - `make test` runs syntax checks, linting, safety regression tests, and sync smoke tests.
 - `make clean` removes repo-managed symlinks and generated files while preserving unmanaged local files.
 
+## Neovim Plugin Sync
+
+When the automated lazy.nvim lockfile PR is merged, pull the repo and then sync your local plugin installs to the updated lockfile:
+
+```bash
+git pull
+nvim --headless "+Lazy! restore" +qa
+```
+
+Inside Neovim you can do the same thing with `:Lazy` and then press `R`.
+Use restore here, not update: `restore` matches your local plugins to `lazy-lock.json`, while `update` moves plugins forward and rewrites the lockfile.
+
 ## Repo Layout
 
 - `nvim/` - Neovim configuration

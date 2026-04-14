@@ -1,0 +1,50 @@
+name: Update Lazy Lock
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: lazy-lock-update
+  cancel-in-progress: false
+
+jobs:
+  update-lazy-lock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+
+      - name: Update lazy.nvim lockfile
+        env:
+          XDG_CONFIG_HOME: ${{ github.workspace }}/nvim/.config
+          XDG_DATA_HOME: ${{ runner.temp }}/xdg-data
+          XDG_STATE_HOME: ${{ runner.temp }}/xdg-state
+          XDG_CACHE_HOME: ${{ runner.temp }}/xdg-cache
+        run: nvim --headless "+Lazy! update" +qa
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: |
+            nvim/.config/nvim/lazy-lock.json
+          branch: automation/lazy-lock-update
+          commit-message: "chore(nvim): update lazy lockfile"
+          delete-branch: true
+          title: "chore(nvim): update lazy lockfile"
+          body: |
+            Automated lazy.nvim lockfile update.
+
+            - Runs `:Lazy! update` in headless Neovim
+            - Commits only `nvim/.config/nvim/lazy-lock.json`
