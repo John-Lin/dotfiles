@@ -6,11 +6,11 @@ Renders `~/.config/opencode/opencode.json` from Jsonnet source files.
 
 | File | Description | Git tracked |
 |------|-------------|-------------|
-| `opencode.jsonnet` | Entry point | Yes |
+| `opencode.jsonnet` | Entry point that merges the public base config with an optional private work overlay | Yes |
 | `opencode_models.libsonnet` | Shared model definitions (reasoning variants, GPT/Claude models) | Yes |
-| `opencode_personal.libsonnet` | Personal MCP servers and providers | Yes |
+| `opencode_personal.libsonnet` | Public personal providers and MCP servers | Yes |
 
-Additional `opencode_*.libsonnet` files can be added for environment-specific config (gitignored).
+Work-only config is kept outside this repo. When `env=work`, Jsonnet expects a private `opencode_work.libsonnet` to be available through the Jsonnet library path.
 
 ## Supported Models
 
@@ -33,23 +33,29 @@ Prerequisites: `jsonnet` (install via `brew install jsonnet`)
 jsonnet jsonnet/opencode.jsonnet > ~/.config/opencode/opencode.json
 ```
 
-### With environment-specific config
+### With private work overlay
+
+The private config directory must contain `opencode_work.libsonnet`.
 
 ```sh
-jsonnet --tla-str env=work jsonnet/opencode.jsonnet > ~/.config/opencode/opencode.json
+jsonnet -J /path/to/private-opencode-config -J jsonnet \
+  --tla-str env=work jsonnet/opencode.jsonnet > ~/.config/opencode/opencode.json
 ```
 
 ### Preview without writing
 
 ```sh
 jsonnet jsonnet/opencode.jsonnet
+jsonnet -J /path/to/private-opencode-config -J jsonnet --tla-str env=work jsonnet/opencode.jsonnet
 ```
 
 ## Via Makefile
 
-`make sync-opencode` auto-detects the environment based on which libsonnet files are present.
+`make sync-opencode` installs the personal config by default. If `OPENCODE_WORK_CONFIG` is set, it switches to `env=work` and adds that directory to the Jsonnet library path.
 
 ```sh
-make sync-opencode        # install (fails if opencode.json already differs)
-make sync-opencode-force  # overwrite existing config
+make sync-opencode
+OPENCODE_WORK_CONFIG=/path/to/private-opencode-config make sync-opencode
+make sync-opencode-force
+OPENCODE_WORK_CONFIG=/path/to/private-opencode-config make sync-opencode-force
 ```

@@ -3,11 +3,14 @@
 //
 // Usage:
 //   Personal only:  jsonnet opencode.jsonnet
-//   With work:      jsonnet --tla-str env=work opencode.jsonnet
+//   With work:      jsonnet -J /path/to/private-opencode-config -J jsonnet --tla-str env=work opencode.jsonnet
+//   Via Makefile:   make sync-opencode
+//                   OPENCODE_WORK_CONFIG=/path/to/private-opencode-config make sync-opencode
 function(env='personal')
   local isWork = env == 'work';
 
   local personal = import 'opencode_personal.libsonnet';
+  // This import is only evaluated when work settings are merged.
   local work = import 'opencode_work.libsonnet';
 
   {
