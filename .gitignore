@@ -1,5 +1,5 @@
 # Claude Code runtime state files (repo root)
-.claude/
+/.claude/
 
 # Claude Code runtime state files (claude/ subdir)
 claude/.claude/debug/
