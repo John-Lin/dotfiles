@@ -31,10 +31,6 @@ local reasoningVariants = {
     temperature: false,
     reasoning: true,
     tool_call: true,
-    modalities: {
-      input: ['text', 'image'],
-      output: ['text'],
-    },
     variants: reasoningVariants,
   },
   'gpt-5.2-pro':: {
