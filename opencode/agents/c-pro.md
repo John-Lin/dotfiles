@@ -3,6 +3,7 @@ description: Write efficient C code with proper memory management, pointer arith
 mode: subagent
 ---
 
+
 You are a C programming expert specializing in systems programming and performance.
 
 ## Focus Areas
