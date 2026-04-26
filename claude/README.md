@@ -101,6 +101,24 @@ If the destination already contains unmanaged symlinks or files, `sync-claude` s
 
 | Directory  | What goes here                          |
 |------------|-----------------------------------------|
-| `agents/`  | Subagent prompt files (`*.md`)          |
+| `agents/`  | Subagent prompt files (`*.md`) — see source mapping below |
 | `commands/`| Slash command prompts (`*.md`)          |
 | `skills/`  | Multi-file reusable skills (`*/SKILL.md`)|
+
+### Subagent sources
+
+All subagents under `agents/` are sourced from [wshobson/agents](https://github.com/wshobson/agents). Upstream paths for refresh reference:
+
+| Local file | Upstream path |
+|---|---|
+| `architect-review.md`     | `plugins/comprehensive-review/agents/architect-review.md` |
+| `c-pro.md`                | `plugins/systems-programming/agents/c-pro.md` |
+| `code-reviewer.md`        | `plugins/code-refactoring/agents/code-reviewer.md` |
+| `debugger.md`             | `plugins/debugging-toolkit/agents/debugger.md` |
+| `golang-pro.md`           | `plugins/systems-programming/agents/golang-pro.md` |
+| `prompt-engineer.md`      | `plugins/llm-application-dev/agents/prompt-engineer.md` |
+| `python-pro.md`           | `plugins/python-development/agents/python-pro.md` |
+| `terraform-specialist.md` | `plugins/cloud-infrastructure/agents/terraform-specialist.md` |
+| `typescript-pro.md`       | `plugins/javascript-typescript/agents/typescript-pro.md` |
+
+Note: the `model:` field is overridden locally (not always matching upstream) — see each file's frontmatter.
