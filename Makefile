@@ -210,11 +210,12 @@ sync-opencode-force:
 	@$(MAKE) sync-opencode
 
 # Install pi configuration (uses stow; AGENTS.md symlinks to ~/.claude/CLAUDE.md)
-sync-pi: require-stow
+sync-pi:
 	@echo "🤖 Installing pi configuration..."
-	stow -t ~ pi
+	@mkdir -p ~/.pi/agent
+	@ln -snf ~/.claude/CLAUDE.md ~/.pi/agent/AGENTS.md
 	@echo "✅ pi configuration installed"
-	@echo "  AGENTS.md -> ~/.claude/CLAUDE.md"
+	@echo "  ~/.pi/agent/AGENTS.md -> ~/.claude/CLAUDE.md"
 
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
@@ -316,7 +317,7 @@ clean-opencode:
 
 clean-pi:
 	@echo "🧹 Removing pi configuration..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ pi || echo "  ⚠️  stow not found, skipping pi cleanup"
+	@rm -f ~/.pi/agent/AGENTS.md
 	@echo "✅ pi configuration removed"
 
 clean-aerospace:
