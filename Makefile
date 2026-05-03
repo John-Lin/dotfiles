@@ -84,6 +84,7 @@ sync:
 	@echo "  make sync-claude        - Install Claude Code configuration"
 	@echo "  make sync-ccstatusline  - Install ccstatusline configuration"
 	@echo "  make sync-opencode      - Install OpenCode configuration (agents + opencode.json)"
+	@echo "  make sync-pi            - Install pi configuration (AGENTS.md + settings.json)"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
@@ -208,6 +209,13 @@ sync-opencode-force:
 	@rm -rf ~/.config/opencode/agents
 	@$(MAKE) sync-opencode
 
+# Install pi configuration (uses stow; AGENTS.md symlinks to ~/.claude/CLAUDE.md)
+sync-pi: require-stow
+	@echo "🤖 Installing pi configuration..."
+	stow -t ~ pi
+	@echo "✅ pi configuration installed"
+	@echo "  AGENTS.md -> ~/.claude/CLAUDE.md"
+
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
 	@echo "🚀 Installing Aerospace configuration..."
@@ -227,6 +235,7 @@ clean:
 	@echo "  - ~/.tigrc"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo "  - ~/.claude/"
+	@echo "  - ~/.pi/agent/AGENTS.md"
 	@echo "  - ~/.config/opencode/opencode.json"
 	@echo "  - ~/.config/opencode/agents"
 	@echo ""
@@ -246,6 +255,7 @@ clean-force:
 	@$(MAKE) clean-zsh
 	@$(MAKE) clean-claude
 	@$(MAKE) clean-opencode
+	@$(MAKE) clean-pi
 	@$(MAKE) clean-ghostty
 	@$(MAKE) clean-aerospace
 	@echo "✅ All configurations removed"
@@ -304,6 +314,11 @@ clean-opencode:
 	@$(call remove_managed_path,$${HOME}/.config/opencode/agents,$(REPO_ROOT)/opencode/agents)
 	@echo "✅ OpenCode configuration removed"
 
+clean-pi:
+	@echo "🧹 Removing pi configuration..."
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ pi || echo "  ⚠️  stow not found, skipping pi cleanup"
+	@echo "✅ pi configuration removed"
+
 clean-aerospace:
 	@echo "🧹 Removing Aerospace configuration..."
 	@command -v stow >/dev/null 2>&1 && { stow -D -t ~ aerospace; stow -D -t ~ borders; } || { $(call remove_managed_path,$${HOME}/.config/aerospace/aerospace.toml,$(REPO_ROOT)/aerospace/.config/aerospace/aerospace.toml); $(call remove_managed_path,$${HOME}/.config/borders/bordersrc,$(REPO_ROOT)/borders/.config/borders/bordersrc); }
@@ -352,4 +367,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-claude sync-claude-force sync-ccstatusline sync-opencode sync-opencode-force sync-aerospace test test-safety test-sync-smoke check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-claude clean-opencode clean-pi clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-claude sync-claude-force sync-ccstatusline sync-opencode sync-opencode-force sync-pi sync-aerospace test test-safety test-sync-smoke check-syntax lint
