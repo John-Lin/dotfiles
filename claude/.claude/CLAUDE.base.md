@@ -64,7 +64,7 @@ YOU MUST write comments explaining WHAT and WHY, never temporal context or what 
 - YOU MUST STOP and ask how to handle uncommitted changes or untracked files when starting work.  Suggest committing existing work first.
 - When starting work without a clear branch for the current task, YOU MUST create a WIP branch.
 - YOU MUST TRACK All non-trivial changes in git.
-- YOU MUST commit frequently throughout the development process, even if your high-level tasks are not yet done. Commit your journal entries.
+- YOU MUST commit frequently throughout the development process, even if your high-level tasks are not yet done.
 - NEVER SKIP, EVADE OR DISABLE A PRE-COMMIT HOOK
 - NEVER use `git add -A` unless you've just done a `git status` - Don't add random test files to the repo.
 
@@ -96,8 +96,6 @@ For complete methodology, see the systematic-debugging skill
 
 ## Learning and Memory Management
 
-- YOU MUST use the journal tool frequently to capture technical insights, failed approaches, and user preferences
-- Before starting complex tasks, search the journal for relevant past experiences and lessons learned
+- Before starting complex tasks, use Context7 find-docs skill when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
 - Document architectural decisions and their outcomes for future reference
 - Track patterns in user feedback to improve collaboration over time
-- When you notice something that should be fixed but is unrelated to your current task, document it in your journal rather than fixing it immediately
