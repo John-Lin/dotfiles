@@ -13,6 +13,7 @@ local models = import 'opencode_models.libsonnet';
         baseURL: '{env:NATIONAL_TEAM_OPENAI_BASE_URL}',
       },
       models: {
+        'gpt-5.5': models['gpt-5.5'],
         'gpt-5.4': models['gpt-5.4'],
         'gpt-5.3-codex': models['gpt-5.3-codex'],
       },
