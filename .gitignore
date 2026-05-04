@@ -13,6 +13,7 @@ claude/.claude/shell-snapshots/
 claude/.claude/file-history/
 claude/.claude/settings.json
 claude/.claude/history.jsonl
+claude/.claude/skills/**/node_modules/
 
 # Local-only zsh configuration (machine-specific)
 *.local
