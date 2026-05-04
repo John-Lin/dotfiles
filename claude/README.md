@@ -122,3 +122,19 @@ All subagents under `agents/` are sourced from [wshobson/agents](https://github.
 | `typescript-pro.md`       | `plugins/javascript-typescript/agents/typescript-pro.md` |
 
 Note: the `model:` field is overridden locally (not always matching upstream) — see each file's frontmatter.
+
+### Imported skill sources
+
+Some skills under `skills/` are imported from [mitsuhiko/agent-stuff](https://github.com/mitsuhiko/agent-stuff) for reuse here.
+Use this table as the refresh/source-of-truth mapping.
+The current import baseline is upstream commit `b861028c706edf3e3f983cde09dd8cc8549ec948`.
+
+| Local skill | Upstream path | Notes |
+|---|---|---|
+| `commit` | `skills/commit` | Imported as-is. |
+| `native-web-search` | `skills/native-web-search` | Imported as-is. |
+| `pi-share` | `skills/pi-share` | Usage examples are adjusted locally to run from the skill directory in this dotfiles layout. |
+| `summarize` | `skills/summarize` | Imported as-is. |
+| `update-changelog` | `skills/update-changelog` | Imported as-is. |
+| `uv` | `skills/uv` | Imported as-is. |
+| `web-browser` | `skills/web-browser` | After first install or any upstream refresh, run `cd claude/.claude/skills/web-browser/scripts && npm ci` to install the local `ws` dependency. `node_modules/` is intentionally gitignored. |
