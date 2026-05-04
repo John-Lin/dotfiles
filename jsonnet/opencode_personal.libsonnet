@@ -33,11 +33,5 @@ local models = import 'opencode_models.libsonnet';
       headers: { CONTEXT7_API_KEY: '{env:CTX7_API_KEY}' },
       enabled: false,
     },
-    'private-journal': {
-      type: 'local',
-      command: ['npx', '-y', 'github:John-Lin/private-journal-mcp'],
-      environment: {},
-      enabled: true,
-    },
   },
 }
