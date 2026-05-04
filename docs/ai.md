@@ -51,6 +51,7 @@ Personal settings take precedence over the template.
 ## Skills
 
 - `things-mac` - Things 3 integration on macOS
+- `native-web-search` - Quick web research with source URLs
 - `uv` - UV package management workflow
 - `test-driven-development` - TDD workflow
 - `gh-cli` - GitHub CLI workflow reference
