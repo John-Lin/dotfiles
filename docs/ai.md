@@ -51,7 +51,7 @@ Personal settings take precedence over the template.
 ## Skills
 
 - `things-mac` - Things 3 integration on macOS
-- `uv-package-manager` - UV package management workflow
+- `uv` - UV package management workflow
 - `test-driven-development` - TDD workflow
 - `gh-cli` - GitHub CLI workflow reference
 - `find-docs` - Context7-powered documentation lookup

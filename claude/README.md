@@ -136,5 +136,5 @@ The current import baseline is upstream commit `b861028c706edf3e3f983cde09dd8cc8
 | `pi-share` | `skills/pi-share` | Usage examples are adjusted locally to run from the skill directory in this dotfiles layout. |
 | `summarize` | `skills/summarize` | Imported as-is. |
 | `update-changelog` | `skills/update-changelog` | Imported as-is. |
-| `uv` | `skills/uv` | Imported as-is. Separate from the local `uv-package-manager` skill. |
+| `uv` | `skills/uv` | Imported as-is. |
 | `web-browser` | `skills/web-browser` | After first install or any upstream refresh, run `cd claude/.claude/skills/web-browser/scripts && npm ci` to install the local `ws` dependency. `node_modules/` is intentionally gitignored. |
