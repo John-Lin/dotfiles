@@ -10,7 +10,7 @@ local models = import 'opencode_models.libsonnet';
       npm: '@ai-sdk/openai',
       options: {
         apiKey: '{env:AZURE_OPENAI_API_KEY}',
-        baseURL: '{env:NATIONAL_TEAM_OPENAI_BASE_URL}',
+        baseURL: '{env:AZURE_OPENAI_BASE_URL}',
       },
       models: {
         'gpt-5.5': models['gpt-5.5'],
