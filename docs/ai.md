@@ -17,7 +17,8 @@ Detailed Claude setup and personal overrides are documented in `claude/README.md
 
 ## OpenCode
 
-OpenCode subagents live in `opencode/agents/`.
+OpenCode agents live in `opencode/agents/`.
+The generated `~/.config/opencode/opencode.json` comes from the Jsonnet source under `jsonnet/`.
 
 Install:
 
@@ -25,8 +26,10 @@ Install:
 make sync-opencode
 ```
 
-If `~/.config/opencode/agents` already contains unmanaged contents, the sync stops.
-Use `make sync-opencode-force` to replace it explicitly.
+If `~/.config/opencode/opencode.json` or `~/.config/opencode/agents` already contains unmanaged contents, the sync stops.
+Use `make sync-opencode-force` to replace them explicitly.
+
+See `jsonnet/README.md` for the config source, supported models, and work-overlay flow.
 
 ## Claude Settings
 
@@ -37,33 +40,54 @@ Use `make sync-opencode-force` to replace it explicitly.
 
 Personal settings take precedence over the template.
 
+## pi
+
+Install:
+
+```bash
+make sync-pi
+```
+
+This links `~/.pi/agent/AGENTS.md` to `~/.claude/CLAUDE.md`, so pi reuses the same generated instruction set.
+
 ## AI Agents
 
+Tracked shared agents currently include:
+
 - `architect-review` - architecture review
+- `c-pro` - C/C++ specialist
 - `code-reviewer` - code quality review
 - `debugger` - debugging specialist
 - `golang-pro` - Go specialist
-- `python-pro` - Python specialist
 - `prompt-engineer` - prompt optimization
+- `python-pro` - Python specialist
 - `terraform-specialist` - Terraform/OpenTofu specialist
-- `c-pro` - C/C++ specialist
+- `typescript-pro` - TypeScript specialist
 
 ## Skills
 
-- `things-mac` - Things 3 integration on macOS
-- `native-web-search` - Quick web research with source URLs
-- `uv` - UV package management workflow
-- `test-driven-development` - TDD workflow
-- `gh-cli` - GitHub CLI workflow reference
+Tracked shared skills currently include:
+
+- `architecture-diagram` - standalone architecture diagrams as HTML/SVG
+- `commit` - git commit workflow guidance
 - `find-docs` - Context7-powered documentation lookup
+- `gh-cli` - GitHub CLI workflow reference
+- `native-web-search` - quick web research with source URLs
+- `obsidian-bases` - Obsidian Bases files and views
+- `obsidian-cli` - Obsidian vault CLI workflows
+- `obsidian-markdown` - Obsidian-flavored Markdown editing
+- `pi-share` - pi share transcript parsing
+- `qmd` - markdown knowledge-base search
+- `summarize` - URL/file to Markdown conversion and summarization
+- `test-driven-development` - TDD workflow
+- `things-mac` - Things 3 integration on macOS
+- `update-changelog` - changelog update workflow guidance
+- `uv` - UV package management workflow
 
 ## Slash Commands
 
-- `/sc:analyze` - deep code analysis
-- `/sc:document` - generate docs
-- `/sc:explain` - code explanation
-- `/sc:troubleshoot` - debug issues
-- `/sc:index` - project indexing
+Shared slash-command support is available via `claude/.claude/commands/`, but this repo currently does not track any shared command files there.
+See `claude/README.md` for the directory layout and sync behavior.
 
 ## MCP Servers
 

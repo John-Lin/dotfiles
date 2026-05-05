@@ -68,10 +68,15 @@ main() {
 	assert_file_contains "$REPO_ROOT/claude/README.md" "skills/native-web-search"
 	assert_file_not_contains "$REPO_ROOT/claude/README.md" "skills/web-browser"
 	assert_file_not_contains "$REPO_ROOT/claude/README.md" "uv-package-manager"
-	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `native-web-search` - Quick web research with source URLs'
+	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `native-web-search` - quick web research with source URLs'
 	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `uv` - UV package management workflow'
+	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `typescript-pro` - TypeScript specialist'
+	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "/sc:analyze"
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "web-browser"
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "uv-package-manager"
+	assert_file_contains "$REPO_ROOT/README.md" 'make sync-pi            # pi instructions symlink'
+	assert_file_not_contains "$REPO_ROOT/README.md" 'Neovim 0.8+'
+	assert_file_contains "$REPO_ROOT/jsonnet/README.md" '| `gpt-5.5` | GPT-5.5 | 5.00 | 30.00 |'
 
 	HOME="$home_dir" make sync-neovim
 	assert_exists "$home_dir/.config/nvim/init.lua"

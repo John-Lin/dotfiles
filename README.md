@@ -31,7 +31,8 @@ make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
 make sync-ccstatusline  # ccstatusline config
-make sync-opencode      # OpenCode subagents
+make sync-opencode      # OpenCode agents + generated config
+make sync-pi            # pi instructions symlink
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force
@@ -66,7 +67,8 @@ Use restore here, not update: `restore` matches your local plugins to `lazy-lock
 - `ghostty-linux/` - Ghostty config for Linux, including `custom.conf`
 - `claude/` - Claude Code config and local override templates
 - `ccstatusline/` - Claude status line config
-- `opencode/` - OpenCode subagents
+- `opencode/` - OpenCode agents
+- `jsonnet/` - Jsonnet source for generated OpenCode config
 - `aerospace/`, `borders/` - macOS window management
 - `omarchy/` - Linux desktop and Hyprland-related setup
 
@@ -84,7 +86,8 @@ Use restore here, not update: `restore` matches your local plugins to `lazy-lock
 - Personal Claude overrides stay in gitignored files:
   - `claude/.claude/CLAUDE.personal.md`
   - `claude/claude_settings.personal.json`
-- OpenCode subagents live in `opencode/agents/`
+- OpenCode agents live in `opencode/agents/`, with `jsonnet/` rendering `opencode.json`
+- `make sync-pi` links pi to the generated Claude instructions
 
 Detailed setup:
 - `claude/README.md`
@@ -96,6 +99,7 @@ Detailed setup:
 - `docs/shell.md` - aliases, terminal setup, local shell overrides
 - `docs/ai.md` - AI agents, OpenCode, Claude settings, MCP setup
 - `docs/desktop.md` - Aerospace, Borders, Omarchy, and Linux desktop notes
+- `jsonnet/README.md` - generated OpenCode config and model definitions
 - `omarchy/fix-brcmfmac/README.md` - Broadcom Wi-Fi workaround
 
 ## Requirements
@@ -106,11 +110,12 @@ Essential:
 - Make
 - GNU Stow
 - `jq`
-- Neovim 0.8+
+- Neovim (recent version; current config uses modern built-in LSP APIs)
 - Node.js
 
 Optional:
 - Python 3, Go
+- `jsonnet` (for `make sync-opencode`)
 - ripgrep, bat, eza, zoxide, fzf
 - bun
 - alacritty
