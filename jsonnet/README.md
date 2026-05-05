@@ -20,6 +20,7 @@ Work-only config is kept outside this repo. When `env=work`, Jsonnet expects a p
 | `claude-sonnet-4.6` | Claude Sonnet 4.6 | 3.00 | 15.00 |
 | `claude-haiku-4.5` | Claude Haiku 4.5 | 1.00 | 5.00 |
 | `gpt-5.4` | GPT-5.4 | 2.50 | 15.00 |
+| `gpt-5.5` | GPT-5.5 | 5.00 | 30.00 |
 | `gpt-5.2-pro` | GPT 5.2 Pro | 21.00 | 168.00 |
 | `gpt-5.3-codex` | GPT 5.3 Codex | 1.75 | 14.00 |
 
