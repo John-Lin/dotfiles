@@ -32,7 +32,7 @@ make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-claude        # Claude Code AI tools
 make sync-ccstatusline  # ccstatusline config
 make sync-opencode      # OpenCode agents + generated config
-make sync-pi            # pi instructions symlink
+make sync-pi            # pi AGENTS.md symlink + packages injection
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force

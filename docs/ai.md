@@ -48,7 +48,7 @@ Install:
 make sync-pi
 ```
 
-This links `~/.pi/agent/AGENTS.md` to `~/.claude/CLAUDE.md`, so pi reuses the same generated instruction set.
+This symlinks `~/.pi/agent/AGENTS.md` to `~/.claude/CLAUDE.md` and injects shared packages into `~/.pi/agent/settings.json`, keeping personal settings (provider, model, etc.) untouched.
 
 ## AI Agents
 
@@ -74,6 +74,7 @@ Tracked shared skills currently include:
 - `obsidian-bases` - Obsidian Bases files and views
 - `obsidian-cli` - Obsidian vault CLI workflows
 - `obsidian-markdown` - Obsidian-flavored Markdown editing
+- `omarchy` - Linux desktop/window manager customization
 - `qmd` - markdown knowledge-base search
 - `test-driven-development` - TDD workflow
 

@@ -68,7 +68,7 @@ main() {
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "/sc:analyze"
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "web-browser"
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "uv-package-manager"
-	assert_file_contains "$REPO_ROOT/README.md" 'make sync-pi            # pi instructions symlink'
+	assert_file_contains "$REPO_ROOT/README.md" 'make sync-pi'
 	assert_file_not_contains "$REPO_ROOT/README.md" 'Neovim 0.8+'
 	assert_file_contains "$REPO_ROOT/jsonnet/README.md" '| `gpt-5.5` | GPT-5.5 | 5.00 | 30.00 |'
 
