@@ -60,16 +60,10 @@ main() {
 
 	cd "$REPO_ROOT"
 
-	assert_exists "$REPO_ROOT/claude/.claude/skills/native-web-search/SKILL.md"
 	assert_not_exists "$REPO_ROOT/claude/.claude/skills/web-browser"
-	assert_exists "$REPO_ROOT/claude/.claude/skills/uv/SKILL.md"
 	assert_not_exists "$REPO_ROOT/claude/.claude/skills/uv-package-manager/SKILL.md"
-	assert_file_contains "$REPO_ROOT/claude/README.md" "mitsuhiko/agent-stuff"
-	assert_file_contains "$REPO_ROOT/claude/README.md" "skills/native-web-search"
 	assert_file_not_contains "$REPO_ROOT/claude/README.md" "skills/web-browser"
 	assert_file_not_contains "$REPO_ROOT/claude/README.md" "uv-package-manager"
-	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `native-web-search` - quick web research with source URLs'
-	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `uv` - UV package management workflow'
 	assert_file_contains "$REPO_ROOT/docs/ai.md" '- `typescript-pro` - TypeScript specialist'
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "/sc:analyze"
 	assert_file_not_contains "$REPO_ROOT/docs/ai.md" "web-browser"
@@ -101,9 +95,7 @@ main() {
 	assert_symlink_resolves_to "$home_dir/.claude/agents" "$REPO_ROOT/claude/.claude/agents"
 	assert_symlink_resolves_to "$home_dir/.claude/commands" "$REPO_ROOT/claude/.claude/commands"
 	assert_symlink_resolves_to "$home_dir/.claude/skills" "$REPO_ROOT/claude/.claude/skills"
-	assert_exists "$home_dir/.claude/skills/native-web-search/SKILL.md"
 	assert_not_exists "$home_dir/.claude/skills/web-browser"
-	assert_exists "$home_dir/.claude/skills/uv/SKILL.md"
 	assert_not_exists "$home_dir/.claude/skills/uv-package-manager/SKILL.md"
 }
 

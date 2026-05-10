@@ -69,20 +69,13 @@ Tracked shared agents currently include:
 Tracked shared skills currently include:
 
 - `architecture-diagram` - standalone architecture diagrams as HTML/SVG
-- `commit` - git commit workflow guidance
 - `find-docs` - Context7-powered documentation lookup
 - `gh-cli` - GitHub CLI workflow reference
-- `native-web-search` - quick web research with source URLs
 - `obsidian-bases` - Obsidian Bases files and views
 - `obsidian-cli` - Obsidian vault CLI workflows
 - `obsidian-markdown` - Obsidian-flavored Markdown editing
-- `pi-share` - pi share transcript parsing
 - `qmd` - markdown knowledge-base search
-- `summarize` - URL/file to Markdown conversion and summarization
 - `test-driven-development` - TDD workflow
-- `things-mac` - Things 3 integration on macOS
-- `update-changelog` - changelog update workflow guidance
-- `uv` - UV package management workflow
 
 ## Slash Commands
 
