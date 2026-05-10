@@ -1,0 +1,17 @@
+[
+  {
+    "source": "git:github.com/tmustier/pi-extensions",
+    "extensions": [
+      "session-recap/index.ts",
+      "usage-extension/index.ts",
+      "pi-ralph-wiggum/index.ts"
+    ],
+    "skills": [
+      "pi-ralph-wiggum/SKILL.md",
+      "extending-pi/SKILL.md"
+    ]
+  },
+  {
+    "source": "git:github.com/John-Lin/pi-extension"
+  }
+]

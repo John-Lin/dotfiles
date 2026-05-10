@@ -209,13 +209,23 @@ sync-opencode-force:
 	@rm -rf ~/.config/opencode/agents
 	@$(MAKE) sync-opencode
 
-# Install pi configuration (uses stow; AGENTS.md symlinks to ~/.claude/CLAUDE.md)
+# Install pi configuration (AGENTS.md symlinks to ~/.claude/CLAUDE.md; packages injected into settings.json)
 sync-pi:
 	@echo "🤖 Installing pi configuration..."
 	@mkdir -p ~/.pi/agent
+	@command -v jq >/dev/null 2>&1 || { echo "❌ jq is not installed. Please install it first."; exit 1; }
 	@ln -snf ~/.claude/CLAUDE.md ~/.pi/agent/AGENTS.md
+	@if [ -f ~/.pi/agent/settings.json ]; then \
+		echo "  Injecting packages into ~/.pi/agent/settings.json..."; \
+		jq '.packages = $$pkgs[0]' --slurpfile pkgs "$(REPO_ROOT)/pi/packages.json" ~/.pi/agent/settings.json > ~/.pi/agent/settings.json.tmp && \
+		mv ~/.pi/agent/settings.json.tmp ~/.pi/agent/settings.json; \
+	else \
+		echo "  Creating ~/.pi/agent/settings.json with packages..."; \
+		jq -n '{packages: $$pkgs[0]}' --slurpfile pkgs "$(REPO_ROOT)/pi/packages.json" > ~/.pi/agent/settings.json; \
+	fi
 	@echo "✅ pi configuration installed"
 	@echo "  ~/.pi/agent/AGENTS.md -> ~/.claude/CLAUDE.md"
+	@echo "  ~/.pi/agent/settings.json (packages injected)"
 
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
@@ -318,6 +328,7 @@ clean-opencode:
 clean-pi:
 	@echo "🧹 Removing pi configuration..."
 	@rm -f ~/.pi/agent/AGENTS.md
+	@echo "  (settings.json left untouched — it is your personal file)"
 	@echo "✅ pi configuration removed"
 
 clean-aerospace:
