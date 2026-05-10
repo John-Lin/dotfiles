@@ -1,6 +1,9 @@
 # Default target
 all: sync
 
+# Recipes use bash-only features (process substitution, [[ ]], read -n).
+SHELL := /bin/bash
+
 REPO_ROOT := $(abspath $(CURDIR))
 
 # Auto-detect work environment via OPENCODE_WORK_CONFIG env var (path to external config dir)
