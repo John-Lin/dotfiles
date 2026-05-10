@@ -15,14 +15,13 @@ claude/
 │   ├── CLAUDE.personal.md          # Your personal instructions (gitignored)
 │   ├── CLAUDE.personal.md.example  # Template for the above
 │   ├── agents/                     # Specialized subagents → ~/.claude/agents/
-│   ├── commands/                   # Custom slash commands → ~/.claude/commands/
 │   └── skills/                     # Reusable skills → ~/.claude/skills/
 ├── claude_settings.json.template          # Base settings (tracked)
 ├── claude_settings.personal.json          # Your personal settings (gitignored)
 └── claude_settings.personal.json.example # Template for the above
 ```
 
-`sync-claude` symlinks `agents/`, `commands/`, and `skills/` directly into `~/.claude/`.
+`sync-claude` symlinks `agents/` and `skills/` directly into `~/.claude/`.
 `CLAUDE.md` and `settings.json` are generated files — do not edit them directly.
 
 ## Personal Configuration
@@ -93,7 +92,7 @@ Common things to put here:
 
 See the [Claude Code settings reference](https://docs.anthropic.com/en/docs/claude-code/settings) for all available keys.
 
-## agents / commands / skills
+## agents / skills
 
 These are symlinked as-is into `~/.claude/`. Add files here and re-run `make sync-claude`
 (or just restart Claude Code — it picks up symlinked directories automatically).
@@ -102,7 +101,6 @@ If the destination already contains unmanaged symlinks or files, `sync-claude` s
 | Directory  | What goes here                          |
 |------------|-----------------------------------------|
 | `agents/`  | Subagent prompt files (`*.md`) — see source mapping below |
-| `commands/`| Slash command prompts (`*.md`)          |
 | `skills/`  | Multi-file reusable skills (`*/SKILL.md`)|
 
 ### Subagent sources

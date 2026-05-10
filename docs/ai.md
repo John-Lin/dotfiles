@@ -78,11 +78,6 @@ Tracked shared skills currently include:
 - `qmd` - markdown knowledge-base search
 - `test-driven-development` - TDD workflow
 
-## Slash Commands
-
-Shared slash-command support is available via `claude/.claude/commands/`, but this repo currently does not track any shared command files there.
-See `claude/README.md` for the directory layout and sync behavior.
-
 ## MCP Servers
 
 Optional setup:

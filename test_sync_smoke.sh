@@ -93,7 +93,6 @@ main() {
 	assert_exists "$home_dir/.claude/CLAUDE.md"
 	assert_exists "$home_dir/.claude/settings.json"
 	assert_symlink_resolves_to "$home_dir/.claude/agents" "$REPO_ROOT/claude/.claude/agents"
-	assert_symlink_resolves_to "$home_dir/.claude/commands" "$REPO_ROOT/claude/.claude/commands"
 	assert_symlink_resolves_to "$home_dir/.claude/skills" "$REPO_ROOT/claude/.claude/skills"
 	assert_not_exists "$home_dir/.claude/skills/web-browser"
 	assert_not_exists "$home_dir/.claude/skills/uv-package-manager/SKILL.md"

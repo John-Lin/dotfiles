@@ -156,19 +156,17 @@ sync-claude:
 		exit 1; \
 	fi; \
 	$(call ensure_safe_symlink,$${HOME}/.claude/agents,$(REPO_ROOT)/claude/.claude/agents,sync-claude-force); \
-	$(call ensure_safe_symlink,$${HOME}/.claude/commands,$(REPO_ROOT)/claude/.claude/commands,sync-claude-force); \
 	$(call ensure_safe_symlink,$${HOME}/.claude/skills,$(REPO_ROOT)/claude/.claude/skills,sync-claude-force); \
 	mv "$$tmp_claude_md" "$${HOME}/.claude/CLAUDE.md"; \
 	mv "$$tmp_settings" "$${HOME}/.claude/settings.json"; \
 	ln -snf "$(REPO_ROOT)/claude/.claude/agents" "$${HOME}/.claude/agents"; \
-	ln -snf "$(REPO_ROOT)/claude/.claude/commands" "$${HOME}/.claude/commands"; \
 	ln -snf "$(REPO_ROOT)/claude/.claude/skills" "$${HOME}/.claude/skills"
 	@echo "✅ Claude Code configuration installed"
 
 sync-claude-force:
 	@echo "🤖 Installing Claude Code configuration (force)..."
 	@mkdir -p ~/.claude
-	@rm -rf ~/.claude/agents ~/.claude/commands ~/.claude/skills
+	@rm -rf ~/.claude/agents ~/.claude/skills
 	@rm -f ~/.claude/CLAUDE.md ~/.claude/settings.json
 	@$(MAKE) sync-claude
 
@@ -328,7 +326,6 @@ clean-claude:
 	$(call remove_managed_file,$${HOME}/.claude/CLAUDE.md,$$tmp_claude_md); \
 	$(call remove_managed_file,$${HOME}/.claude/settings.json,$$tmp_settings)
 	@$(call remove_managed_path,$${HOME}/.claude/agents,$(REPO_ROOT)/claude/.claude/agents)
-	@$(call remove_managed_path,$${HOME}/.claude/commands,$(REPO_ROOT)/claude/.claude/commands)
 	@$(call remove_managed_path,$${HOME}/.claude/skills,$(REPO_ROOT)/claude/.claude/skills)
 	@echo "✅ Claude Code configuration removed"
 
