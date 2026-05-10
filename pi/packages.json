@@ -13,5 +13,24 @@
   },
   {
     "source": "git:github.com/John-Lin/pi-extension"
-  }
+  },
+  {
+    "source": "git:github.com/mitsuhiko/agent-stuff",
+    "extensions": [
+      "session-breakdown.ts",
+      "whimsical.ts",
+      "review.ts"
+    ],
+    "skills": [
+      "skills/commit/SKILL.md",
+      "skills/native-web-search/SKILL.md",
+      "skills/uv/SKILL.md",
+      "skills/update-changelog/SKILL.md",
+      "skills/pi-share/SKILL.md",
+      "skills/summarize/SKILL.md"
+    ],
+    "themes": [],
+    "prompts": []
+  },
+  "npm:pi-subagents"
 ]
