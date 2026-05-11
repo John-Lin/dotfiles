@@ -17,9 +17,9 @@
   {
     "source": "git:github.com/mitsuhiko/agent-stuff",
     "extensions": [
+      "review.ts",
       "session-breakdown.ts",
-      "whimsical.ts",
-      "review.ts"
+      "whimsical.ts"
     ],
     "skills": [
       "skills/commit/SKILL.md",
