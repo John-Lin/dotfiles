@@ -16,6 +16,7 @@ function(env='personal')
   {
     '$schema': 'https://opencode.ai/config.json',
     theme: 'system',
+    share: 'disabled',
     plugin: if isWork then ['@devtheops/opencode-plugin-otel'] else [],
     enabled_providers: personal.enabled_providers
                        + (if isWork then work.enabled_providers else []),

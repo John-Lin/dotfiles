@@ -2,7 +2,7 @@
 local models = import 'opencode_models.libsonnet';
 
 {
-  enabled_providers: ['openai', 'github-copilot', 'national-team-openai'],
+  enabled_providers: ['github-copilot', 'national-team-openai'],
 
   provider: {
     'national-team-openai': {
@@ -15,7 +15,6 @@ local models = import 'opencode_models.libsonnet';
       models: {
         'gpt-5.5': models['gpt-5.5'],
         'gpt-5.4': models['gpt-5.4'],
-        'gpt-5.3-codex': models['gpt-5.3-codex'],
       },
     },
   },

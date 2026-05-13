@@ -45,21 +45,4 @@ local reasoningVariants = {
     tool_call: true,
     variants: reasoningVariants,
   },
-  'gpt-5.2-pro':: {
-    name: 'GPT 5.2 Pro',
-    limit: { context: 400000, input: 272000, output: 128000 },
-    cost: { input: 21.0, output: 168.0 },
-    temperature: false,
-    reasoning: true,
-    tool_call: true,
-  },
-  'gpt-5.3-codex':: {
-    name: 'GPT 5.3 Codex',
-    limit: { context: 400000, input: 272000, output: 128000 },
-    cost: { input: 1.75, output: 14 },
-    temperature: false,
-    reasoning: true,
-    tool_call: true,
-    variants: reasoningVariants,
-  },
 }

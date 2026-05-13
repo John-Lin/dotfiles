@@ -85,8 +85,9 @@ main() {
 	HOME="$home_dir" make sync-ccstatusline
 	assert_symlink_resolves_to "$home_dir/.config/ccstatusline/settings.json" "$REPO_ROOT/ccstatusline/.config/ccstatusline/settings.json"
 
-	HOME="$home_dir" make sync-opencode
+	OPENCODE_WORK_CONFIG= HOME="$home_dir" make sync-opencode
 	assert_exists "$home_dir/.config/opencode/opencode.json"
+	assert_file_contains "$home_dir/.config/opencode/opencode.json" '"share": "disabled"'
 	assert_symlink_resolves_to "$home_dir/.config/opencode/agents" "$REPO_ROOT/opencode/agents"
 
 	HOME="$home_dir" make sync-claude
