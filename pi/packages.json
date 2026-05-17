@@ -18,6 +18,7 @@
     "source": "git:github.com/mitsuhiko/agent-stuff",
     "extensions": [
       "review.ts",
+      "goal.ts",
       "session-breakdown.ts",
       "whimsical.ts"
     ],
