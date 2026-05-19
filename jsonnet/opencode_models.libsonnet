@@ -1,12 +1,19 @@
 // Shared model fragments for OpenCode providers
+local openaiReasoningOptions = {
+  forceReasoning: true,
+  include: ['reasoning.encrypted_content'],
+  reasoningSummary: 'auto',
+};
+local reasoningVariant(effort) = openaiReasoningOptions { reasoningEffort: effort };
 local reasoningVariants = {
-  low: { reasoningEffort: 'low', reasoningSummary: 'auto' },
-  medium: { reasoningEffort: 'medium', reasoningSummary: 'auto' },
-  high: { reasoningEffort: 'high', reasoningSummary: 'auto' },
-  xhigh: { reasoningEffort: 'xhigh', reasoningSummary: 'auto' },
+  low: reasoningVariant('low'),
+  medium: reasoningVariant('medium'),
+  high: reasoningVariant('high'),
+  xhigh: reasoningVariant('xhigh'),
 };
 
 {
+  openaiReasoningOptions:: openaiReasoningOptions,
   reasoningVariants:: reasoningVariants,
 
   'claude-opus-4.6':: {
@@ -34,6 +41,7 @@ local reasoningVariants = {
     temperature: false,
     reasoning: true,
     tool_call: true,
+    options: openaiReasoningOptions { reasoningEffort: 'high' },
     variants: reasoningVariants,
   },
   'gpt-5.5':: {
@@ -43,6 +51,7 @@ local reasoningVariants = {
     temperature: false,
     reasoning: true,
     tool_call: true,
+    options: openaiReasoningOptions { reasoningEffort: 'high' },
     variants: reasoningVariants,
   },
 }
