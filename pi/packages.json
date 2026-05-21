@@ -3,7 +3,7 @@
     "source": "git:github.com/tmustier/pi-extensions",
     "extensions": [
       "session-recap/index.ts",
-      "usage-extension/index.ts",
+      "usage-extension/index.ts"
     ],
     "skills": [
       "extending-pi/SKILL.md"
