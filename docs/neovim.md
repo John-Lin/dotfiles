@@ -25,12 +25,9 @@ Tracked plugins include:
 - `Mason` + `nvim-lspconfig` - LSP installation and wiring
 - `nvim-cmp` - auto-completion
 - `nvim-autopairs` - bracket/quote pairing
-- `claudecode.nvim` - Claude AI assistance
-- `opencode.nvim` - OpenCode AI assistance
 - `copilot.vim` - GitHub Copilot integration
 - `nvim-treesitter` + textobjects - syntax highlighting, parsing, and text objects
 - `none-ls.nvim` - formatting and linting integration
-- `snacks.nvim` - OpenCode picker/input helpers and terminal utilities
 - `which-key.nvim` - keymap discovery
 - `Comment.nvim` - commenting helpers
 - `trim.nvim` - whitespace trimming helpers
@@ -72,23 +69,6 @@ Tracked plugins include:
 - `<Leader>gr` - show references
 - `<Leader>D` - type definition
 
-### Claude AI (`<Leader>a` prefix)
-
-- `ac` - toggle Claude
-- `af` - focus Claude
-- `ar` - resume Claude
-- `aC` - continue Claude
-- `as` - send selection in visual mode, or add the current tree file
-- `aa/ad` - accept/deny diff
-
-### OpenCode AI
-
-- `<C-a>` - ask OpenCode about the current selection/context
-- `<C-x>` - open the OpenCode action picker
-- `<C-.>` - toggle OpenCode
-- `go` / `goo` - send a range or line to OpenCode
-- `<S-C-u>` / `<S-C-d>` - scroll the OpenCode session buffer
-- `+` / `-` - keep increment/decrement available after remapping `<C-a>` / `<C-x>`
 
 ## Customization
 
