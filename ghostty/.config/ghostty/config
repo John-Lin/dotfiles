@@ -25,7 +25,7 @@ window-save-state = always
 window-colorspace = "display-p3"
 
 # Background opacity and blur
-background-opacity = 0.9
+background-opacity = 0.95
 background-blur = true
 
 # Misc
