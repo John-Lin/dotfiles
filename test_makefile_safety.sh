@@ -35,16 +35,6 @@ assert_contains() {
 	fi
 }
 
-assert_not_contains() {
-	local file="$1"
-	local unexpected="$2"
-
-	if grep -Fq "$unexpected" "$file"; then
-		printf 'Did not expect %s to contain: %s\n' "$file" "$unexpected" >&2
-		exit 1
-	fi
-}
-
 assert_symlink_target() {
 	local path="$1"
 	local expected="$2"
@@ -66,17 +56,6 @@ assert_make_fails() {
 
 	if HOME="$home_dir" make "$@" >"$TEST_OUTPUT" 2>&1; then
 		printf 'Expected make %s to fail\n' "$*" >&2
-		cat "$TEST_OUTPUT" >&2
-		exit 1
-	fi
-}
-
-assert_make_fails_without_stow() {
-	local home_dir="$1"
-	shift
-
-	if PATH="/usr/bin:/bin" HOME="$home_dir" make "$@" >"$TEST_OUTPUT" 2>&1; then
-		printf 'Expected make %s to fail without stow\n' "$*" >&2
 		cat "$TEST_OUTPUT" >&2
 		exit 1
 	fi

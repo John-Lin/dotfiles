@@ -89,7 +89,6 @@ Essential:
 - Git
 - Make
 - GNU Stow
-- `jq`
 - Neovim (recent version; current config uses modern built-in LSP APIs)
 - Node.js
 

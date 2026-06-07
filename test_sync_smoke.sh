@@ -26,29 +26,12 @@ assert_symlink_resolves_to() {
 	fi
 }
 
-assert_file_contains() {
-	local path="$1"
-	local needle="$2"
-
-	if ! grep -Fq -- "$needle" "$path"; then
-		printf 'Expected %s to contain: %s\n' "$path" "$needle" >&2
-		exit 1
-	fi
-}
-
 assert_file_not_contains() {
 	local path="$1"
 	local needle="$2"
 
 	if grep -Fq -- "$needle" "$path"; then
 		printf 'Expected %s to not contain: %s\n' "$path" "$needle" >&2
-		exit 1
-	fi
-}
-
-assert_not_exists() {
-	if [ -e "$1" ]; then
-		printf 'Expected path to not exist: %s\n' "$1" >&2
 		exit 1
 	fi
 }
