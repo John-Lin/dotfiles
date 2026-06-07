@@ -15,16 +15,5 @@
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest"
-  },
-  "extraKnownMarketplaces": {
-    "cq": {
-      "source": {
-        "source": "github",
-        "repo": "mozilla-ai/cq"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "cq@cq": true
   }
 }
