@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y stow jq jsonnet
+        sudo apt-get install -y stow
         # Install luacheck via luarocks (requires Lua setup first)
         luarocks install luacheck
 
