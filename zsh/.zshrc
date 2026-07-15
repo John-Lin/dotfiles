@@ -115,8 +115,8 @@ alias lt='eza --tree --level=2 --long --icons --git'
 alias lta='lt -a'
 alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 
-# export PATH for local bin for uv tool installation
-path=("$HOME/.local/bin" $path)
+# ~/.local/bin is added to PATH in ~/.zshenv so it applies to every shell
+# (interactive, login, and non-interactive), not just this interactive config.
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
