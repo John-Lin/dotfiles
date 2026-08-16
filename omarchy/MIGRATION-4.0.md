@@ -307,14 +307,20 @@ Two limitations worth knowing:
 
 ## Repo scope
 
-`omarchy/hypr/*.conf` in this repo is now **reference material only** -- the
-record of what the Omarchy 3 setup was, kept so it can be translated to Lua.
-It is not synced to `~/.config/hypr/` and no Makefile target touches it.
+The old configs live in `omarchy/omarchy3/` and are **reference material only**
+-- the record of what the Omarchy 3 setup was, kept so it can be compared
+against. Nothing installs them.
 
-The four remaining files (`input.conf`, `bindings.conf`, `hypridle.conf`,
+The four files there (`input.conf`, `bindings.conf`, `hypridle.conf`,
 `hyprlock.conf`) are deliberately kept even though the migration is done, so
 there is something to compare against if a 4.x release turns out to have
-regressed something. **Delete them once 4.x has proven stable in daily use.**
+regressed something. **Delete `omarchy/omarchy3/` once 4.x has proven stable in
+daily use.**
 
 `monitors.conf.benq` and `monitors.conf.dell` were dropped -- those external
 displays are no longer in use, so there was nothing worth translating.
+
+There is no `make` target for any of this, and there never was: `omarchy/` was
+always copied by hand. Configuring a machine means following this document, not
+running `make`. The one adjacent target, `sync-ghostty-linux`, installs
+`ghostty-linux/.config/ghostty/custom.conf` and is unrelated to Omarchy.
