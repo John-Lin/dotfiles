@@ -5,6 +5,11 @@ Follow this on the next machine that gets upgraded.
 
 ## What actually changed
 
+Two structural changes drive everything else. Omarchy internals moved from a git
+checkout into pacman packages, which is why `/etc` suddenly grows `.pacnew`
+files and why stale pre-package files now sit there unowned. And the Hyprland
+config tree went from `.conf` to Lua:
+
 Omarchy 4.0 replaced the Hyprland `.conf` config tree with a Lua one.
 `~/.config/hypr/hyprland.lua` is the new entry point; it loads Omarchy's
 defaults via `default/hypr/bootstrap.lua`, then `require`s the user modules
@@ -106,6 +111,15 @@ instead of copying old ones.
    daily use -- they are the only record of what the old behaviour was. The
    `*.bak*` clutter that `omarchy refresh` leaves in `~/.config/hypr/` can go
    at any time.
+6. Sweep everything outside `~/.config/hypr/` before calling it done. In rough
+   order of how much it can hurt: `/etc` pacnews (a broken greeter locks you
+   out), unowned leftovers in `/etc/udev/rules.d/`, then the quieter drifts --
+   `xdg-terminals.list`, terminal configs, `uwsm/env`. Each has its own section
+   below.
+7. Check the retired-package list actually ran. The upgrader removes packages in
+   one batch and only falls back to per-group removal *on failure*, so a name
+   missing from the main list survives silently. Compare the batch in
+   `pacman.log` against `retired_packages` in the upgrader.
 
 ## Porting principle: only carry over the real deltas
 
@@ -266,6 +280,51 @@ they appear. Removing an override from `config` does not restore the Omarchy
 default if a later include rebinds the same key -- `custom.conf` still sets
 `shift+enter=text:\n` here, so that is what actually takes effect.
 
+### Your terminal choice is dropped, not migrated
+
+`~/.config/xdg-terminals.list` is what `omarchy default terminal` writes, so it
+records a personal choice rather than an Omarchy default. The upgrader retires
+it like any other config and writes no replacement, which silently discards that
+choice. On this machine it held `com.mitchellh.ghostty.desktop`.
+
+With it gone, the system list
+`/usr/share/xdg-terminal-exec/hyprland-xdg-terminals.list` takes over and names
+`foot.desktop`. Everything that opens a terminal through `xdg-terminal-exec`
+follows it.
+
+The upstream default moved **Alacritty -> Foot**, not Ghostty -> Foot: Omarchy
+3's shipped `config/xdg-terminals.list` said `Alacritty.desktop`, and
+[#5831](https://github.com/basecamp/omarchy/pull/5831) swapped `alacritty` for
+`foot` in `install/omarchy-base.packages`. dhh's stated reason was "Foot is
+lean, fast and seemingly giving up nothing on Alacritty." Ghostty was always a
+local choice here, and it remains a first-class supported option in 4.0 -- just
+never the default.
+
+Nothing is damaged: Ghostty stays installed and `~/.config/ghostty/` is
+untouched. Re-assert the choice with the real command rather than by restoring
+the backup, since it writes the file in the format the tooling expects:
+
+```bash
+omarchy default terminal ghostty   # or: menu > Setup > Defaults > Terminal
+```
+
+Decided on this machine 2026-08-16: stay on Foot. It is the lighter default and
+worth running for real before overriding it. Nothing about Ghostty was removed
+to make that choice -- the package, `~/.config/ghostty/`, and this repo's
+`ghostty/` and `ghostty-linux/` trees are all untouched, so switching back is
+the one command above.
+
+#### Proving which terminal you are actually in
+
+`$TERM` cannot tell them apart, because Omarchy's `foot.ini` sets
+`term=xterm-256color`. Ask the compositor and the process table instead:
+
+```bash
+omarchy default terminal                       # what new terminals will be
+hyprctl activewindow -j | jq -r '.class, .pid' # what this window is
+ps -o comm=,args= -p "$(hyprctl activewindow -j | jq -r .pid)"
+```
+
 ### Leftover `uwsm/env` line
 
 The upgrader rewrites legacy Omarchy-managed lines from `~/.config/uwsm/env`
@@ -276,11 +335,195 @@ through here. 4.0 puts the Omarchy commands on `PATH` via the package, so any
 surviving line of this kind is redundant -- read that file after upgrading and
 clear what the upgrader missed.
 
+### Stale udev rules from the Omarchy 3 era
+
+Two rules survived with no owner (`pacman -Qo` finds no package), and both
+failed on every boot and every AC event:
+
+```
+(udev-worker): ADP1: Process '.../omarchy-powerprofiles-set' failed with exit code 1.
+(udev-worker): ADP1: Process '.../omarchy-wifi-powersave off' failed with exit code 1.
+```
+
+4.0 replaced the mechanism behind each, so they are redundant as well as broken:
+
+| Job | Omarchy 3 | Omarchy 4 |
+|---|---|---|
+| Power profile on AC/battery | `99-power-profile.rules` calling `omarchy-powerprofiles-set` with no arguments | `omarchy-powerprofiles-init` from `default/hypr/autostart.lua`, plus the shell's battery service. `omarchy powerprofiles set` now takes `[autodetect\|ac\|battery] [profile]`, which is why the old argument-less call fails. |
+| Wi-Fi power save | `99-wifi-powersave.rules` calling `omarchy-wifi-powersave` | `/etc/NetworkManager/conf.d/omarchy-wifi-powersave.conf` pinning `wifi.powersave = 2` |
+
+`omarchy-wifi-powersave` does not exist in 4.0 at all, so that rule could only
+ever fail. Both also hardcoded `~/.local/share/omarchy/bin/`, the path 4.0
+turned into a symlink.
+
+Removed on 2026-08-16, which left `/etc/udev/rules.d/` empty:
+
+```bash
+rm -f /etc/udev/rules.d/99-power-profile.rules \
+      /etc/udev/rules.d/99-wifi-powersave.rules
+udevadm control --reload
+```
+
+Verify by re-firing the events rather than waiting for a real unplug:
+
+```bash
+udevadm trigger --subsystem-match=power_supply
+journalctl --since '1 min ago' | grep -i 'udev-worker.*failed'
+```
+
+Their contents, in case a 4.x regression makes them worth reconstructing:
+
+```
+# 99-power-profile.rules  (one line each for Mains and USB)
+SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="/usr/bin/systemd-run --no-block --collect --unit=omarchy-power-profile --property=After=power-profiles-daemon.service <home>/.local/share/omarchy/bin/omarchy-powerprofiles-set"
+
+# 99-wifi-powersave.rules  (online==0 -> on, online==1 -> off)
+SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ATTR{online}=="0", RUN+="/usr/bin/systemd-run --no-block --collect --unit=omarchy-wifi-powersave-on <home>/.local/share/omarchy/bin/omarchy-wifi-powersave on"
+```
+
+### The `walker` package survives the upgrade
+
+`retired_packages` in `omarchy-upgrade-to-quattro` lists `omarchy-walker` and
+`walker-bin`, but not plain `walker`. Plain `walker` appears only in
+`fallback_groups`, which the script reaches *only when the batch removal fails*.
+The batch succeeded here, so `omarchy-walker` and all twelve `elephant-*`
+providers were removed and `walker` itself stayed behind -- explicitly
+installed, required by nothing.
+
+Everything else about walker was cleaned up, which is what makes this a gap in
+the removal list rather than a decision: `~/.config/walker` (backed up),
+`~/.config/elephant`, `~/.config/autostart/walker.desktop`,
+`~/.config/systemd/user/app-walker@autostart.service.d`, and
+`/etc/pacman.d/hooks/walker-restart.hook` are all gone. The 4.0 tree references
+the package nowhere. With `elephant` removed the binary has no providers left,
+so it cannot act as a launcher even if run.
+
+`walker`, `elephant*` and `omarchy-walker` are still published in the `omarchy`
+pacman repo. That repo also serves Omarchy 3 machines on the same channels, so
+their presence says nothing about 4.0 needing them.
+
+Left installed for now, on the expectation that a 4.0.x release fixes the
+removal list. No upstream issue tracked this as of 2026-08-16. If it never
+lands, removal is clean -- nothing else comes with it:
+
+```bash
+pacman -Rs --print walker      # walker-2.17.0-1, and nothing else
+sudo pacman -Rns walker
+rm -rf ~/.config/walker.omarchy-upgrade-to-quattro.*.bak
+```
+
 ### Confirmed as needing nothing
 
 `envs.conf`, `xdph.conf`, `hyprsunset.conf`, `looknfeel.conf` and
 `autostart.conf` were all stock. Input-method settings live in
 `/etc/environment`, outside `~/.config`, so the upgrade never touched them.
+
+The upgrade also removes packages you chose yourself, which looks alarming in
+`pacman.log` until you check where the functionality went. All of these were
+verified fine on this machine:
+
+| Removed | Why it is fine |
+|---|---|
+| `fcitx5-configtool` | The binary now ships inside `fcitx5` itself; `/usr/bin/fcitx5-configtool` still exists |
+| `claude-code` | Moved from a pacman package to mise, per 4.0's npm -> mise switch. `mise list` shows it |
+| `1password-beta` | Replaced by the `1password` stable package; the autostart entry's `/opt/1Password/1password` still resolves |
+| `gnome-calculator`, `satty` | Replaced by Omacalc and Tensaku |
+
+Two packages *look* like they were missed by the retired list but were not:
+`opencode` and `ttf-jetbrains-mono-nerd` resolve to `opencode-bin` and
+`ttf-jetbrains-mono-nerd-basic` through `provides`. The latter is exactly the
+lighter font 4.0 wants. Check with `pacman -Qi <name> | grep '^Name'` before
+concluding anything from a `pacman -Qq` match.
+
+Also verified clean after the upgrade: no orphans (`pacman -Qdtq`), no failed
+systemd units (system or user), empty `hyprctl configerrors`, `quickshell`
+running against `/usr/share/omarchy/shell`, and `omarchy version channel` still
+`stable`.
+
+One thing to keep an eye on rather than fix: SDDM logs `gkr-pam: couldn't unlock
+the login keyring` under autologin. That is inherent to having no password at
+login, not something 4.0 introduced -- but 4.0 pins Chromium-based browsers to
+the gnome-libsecret store, so if browser logins or `gh` auth start evaporating,
+look here first.
+
+### Space the upgrade leaves behind
+
+```
+~/.local/share/omarchy.omarchy-upgrade-to-quattro.*.bak    336 MB
+~/.config/{waybar,swayosd,mako,walker,...}.*.bak           8 entries
+~/.config/hypr/*.bak*                                      18 files
+```
+
+The 336 MB one is the Omarchy 3 git working tree. 4.0 gets everything from
+packages, so nothing reads it. The `hypr/*.bak*` files are `omarchy refresh`
+clutter and can go at any time; the four `.conf` files kept deliberately are in
+`omarchy/omarchy3/`, not here.
+
+## `/etc` is a new maintenance surface in 4.0
+
+Omarchy 3 kept its system files outside pacman's control. 4.0 ships them from
+`omarchy-settings`, so `/etc` now behaves like any other packaged config: where
+the pre-package file differed from the packaged one, pacman wrote a `.pacnew`
+and left the old version live. Eight appeared during this upgrade.
+
+**Never run `pacdiff` or any batch pacnew merger on an Omarchy machine.**
+`/etc/pacman.conf.pacnew` and `/etc/pacman.d/mirrorlist.pacnew` are the stock
+Arch templates. Applying the mirrorlist one replaces
+`https://stable-mirror.omarchy.org/` with 579 lines of commented-out Arch
+mirrors and takes the machine off its Omarchy channel entirely. Go file by file:
+
+```bash
+find /etc -name '*.pacnew'
+diff -u /etc/some/file /etc/some/file.pacnew
+```
+
+### The one that mattered: SDDM's greeter compositor
+
+`/etc/sddm.conf.d/10-wayland.conf` was still pointing at the Omarchy 3 file:
+
+```
+CompositorCommand=start-hyprland -- --config /usr/share/sddm/hyprland.conf
+```
+
+`/usr/share/sddm/hyprland.conf` is a leftover that **no package owns**. 4.0
+ships `/usr/share/sddm/hyprland.lua` from `omarchy-settings`, and its packaged
+`10-wayland.conf` points there. The login screen kept working only because the
+orphaned `.conf` was still on disk -- anything that cleaned it up would have
+left the greeter with no compositor config and no way in.
+
+Fixed by applying the pacnew. The diff was that single line, with nothing
+personal to preserve:
+
+```bash
+cp -a /etc/sddm.conf.d/10-wayland.conf /etc/sddm.conf.d/10-wayland.conf.omarchy3.bak
+mv /etc/sddm.conf.d/10-wayland.conf.pacnew /etc/sddm.conf.d/10-wayland.conf
+```
+
+`pacman -Qkk omarchy-settings` stops reporting the file once it matches the
+package -- that confirms the edit, but only the next boot confirms the greeter.
+
+### The rest of the pacnews
+
+| File | Difference | Action |
+|---|---|---|
+| `sddm.conf.d/10-wayland.conf` | `.conf` -> `.lua` greeter config | **applied** |
+| `sysctl.d/90-omarchy-file-watchers.conf` | added comments only | ignore |
+| `systemd/resolved.conf.d/10-disable-multicast.conf` | identical content | delete the pacnew |
+| `docker/daemon.json` | identical content | delete the pacnew |
+| `conf.d/wireless-regdom` | ours sets `TW`, pacnew is the blank template | keep ours |
+| `pacman.conf`, `pacman.d/mirrorlist` | stock Arch templates | **never apply** |
+| `locale.gen`, tpm2-tss profiles x2 | ordinary Arch pacnews | handle as usual |
+
+Two unowned Omarchy 3 files remain in `/etc/sddm.conf.d/` --
+`99-omarchy-login.conf` (`RememberLastUser`) and `autologin.conf`. 4.0 does not
+ship either, but `autologin.conf` is doing real work: SDDM logs confirm it
+selects `/usr/local/share/wayland-sessions/omarchy.desktop`, which
+`omarchy-settings` does ship. Leave them.
+
+Privilege escalation note: 4.0 moved to pkexec/polkit and this machine has no
+passwordless sudo, so system edits made from an agent need
+`pkexec /bin/bash -c '...'`, which raises one themed polkit prompt for the whole
+batch.
 
 ## Tracking personal changes vs. Omarchy defaults
 
