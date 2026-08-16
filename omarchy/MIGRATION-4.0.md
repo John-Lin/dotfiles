@@ -102,8 +102,10 @@ instead of copying old ones.
 4. After each file: `hyprctl reload && hyprctl configerrors`, then verify the
    setting actually took effect with `hyprctl getoption <name>`. An empty
    `configerrors` does **not** mean your setting applied.
-5. Once everything is verified, delete the orphaned `.conf` files and the
-   `*.bak*` clutter in `~/.config/hypr/`.
+5. Leave the orphaned `.conf` files in place until 4.x has proven stable in
+   daily use -- they are the only record of what the old behaviour was. The
+   `*.bak*` clutter that `omarchy refresh` leaves in `~/.config/hypr/` can go
+   at any time.
 
 ## Porting principle: only carry over the real deltas
 
@@ -301,9 +303,29 @@ Two limitations worth knowing:
 
 - The baseline moves with each `omarchy update`, so a diff only ever shows the
   delta *right now*. It cannot tell you whether a line changed because you
-  edited it or because Omarchy changed its default. Use git history for that.
+  edited it or because Omarchy changed its default -- only that it differs
+  today.
 - It only covers files Omarchy actually ships in `config/`. Retired files such
   as `hypridle.conf` have no baseline to compare against at all.
+
+This is worth running across the whole tree, not just `hypr/`. Omarchy ships
+41 config files; 11 of them differed from the defaults on this machine,
+including `foot.ini`, `kitty.conf`, `tmux.conf` and `opencode.json`, which are
+easy to forget about:
+
+```bash
+cd /usr/share/omarchy/config && \
+  for f in $(find . \( -type f -o -type l \) | sed 's|^\./||'); do
+    u="$HOME/.config/$f"
+    [ -e "$u" ] || { echo "MISSING  $f"; continue; }
+    cmp -s "$f" "$u" || echo "DIFFERS  $f"
+  done
+```
+
+Read `DIFFERS` in both directions: a `-` line in the diff is a 4.0 default you
+are *missing*, not just a value you overrode. That is how the absent ghostty
+options above were found. Note that `shell.json` reports as differing purely
+because the shell rewrites its key order, so compare that one by content.
 
 ## Repo scope
 
