@@ -60,7 +60,7 @@ Use restore here, not update: `restore` matches your local plugins to `lazy-lock
 - `ghostty/` - Ghostty config for macOS
 - `ghostty-linux/` - Ghostty config for Linux, including `custom.conf`
 - `aerospace/`, `borders/` - macOS window management
-- `omarchy/` - Linux desktop and Hyprland-related setup
+- `omarchy/` - Linux desktop and Hyprland-related setup (documentation-driven, not `make`)
 
 ## Platform Notes
 
@@ -80,6 +80,7 @@ Claude Code, OpenCode, ccstatusline, and pi config now live in a separate repo:
 - `docs/neovim.md` - plugins, language support, key bindings, Neovim customization
 - `docs/shell.md` - aliases, terminal setup, local shell overrides
 - `docs/desktop.md` - Aerospace, Borders, Omarchy, and Linux desktop notes
+- `omarchy/MIGRATION-4.0.md` - configuring an Omarchy 4.x machine
 - `omarchy/fix-brcmfmac/README.md` - Broadcom Wi-Fi workaround
 
 ## Requirements
