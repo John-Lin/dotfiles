@@ -20,11 +20,15 @@ These configs are macOS-specific and include `osascript`-based workflows.
 Linux desktop-related config lives in `omarchy/`.
 
 Key areas:
-- `omarchy/hypr/` - Hyprland configuration
+- `omarchy/hypr/` - Hyprland configuration (Omarchy 3 `.conf` format, reference only)
+- `omarchy/MIGRATION-4.0.md` - porting these configs to Omarchy 4's Lua config
 - `omarchy/pre-install.sh` - setup script
 - `omarchy/fix-brcmfmac/` - Broadcom Wi-Fi workaround
 
 Notes:
+- Omarchy 4.0 replaced the Hyprland `.conf` tree with Lua. `omarchy/hypr/*.conf`
+  is kept as the record of the old setup, not as something to install. Follow
+  `omarchy/MIGRATION-4.0.md` when setting up a 4.x machine.
 - Monitor setup: copy the appropriate `monitors.conf.*` to `monitors.conf`
 - Wi-Fi fix: see `omarchy/fix-brcmfmac/README.md`
 
