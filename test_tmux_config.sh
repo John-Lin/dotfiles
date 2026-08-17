@@ -88,10 +88,22 @@ main() {
 	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-sensible' 'tmux plugins'
 	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-prefix-highlight' 'tmux plugins'
 
+	local prefix_bindings
+	prefix_bindings=$(tmux_test list-keys -T prefix)
+
 	local sync_binding
-	sync_binding=$(tmux_test list-keys -T prefix | grep -E '[[:space:]]C-s[[:space:]]')
+	sync_binding=$(grep -E '[[:space:]]C-s[[:space:]]' <<<"$prefix_bindings")
 	assert_contains "$sync_binding" 'fg=colour148' 'synchronize-panes binding'
 	assert_not_contains "$sync_binding" 'pane-border-format' 'synchronize-panes binding'
+
+	local new_session_binding
+	new_session_binding=$(grep -E '[[:space:]]N[[:space:]]' <<<"$prefix_bindings" || true)
+	assert_contains "$new_session_binding" 'command-prompt' 'new-session binding'
+	assert_contains "$new_session_binding" 'new-session -s' 'new-session binding'
+
+	local choose_session_binding
+	choose_session_binding=$(grep -E '[[:space:]]S[[:space:]]' <<<"$prefix_bindings" || true)
+	assert_contains "$choose_session_binding" 'choose-tree -Zs' 'session picker binding'
 
 	if tmux_test list-keys -T edit-mode-vi >/dev/null 2>&1; then
 		printf 'Expected edit-mode-vi table to be absent\n' >&2
