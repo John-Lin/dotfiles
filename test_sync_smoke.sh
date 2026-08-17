@@ -26,6 +26,16 @@ assert_symlink_resolves_to() {
 	fi
 }
 
+assert_file_contains() {
+	local path="$1"
+	local needle="$2"
+
+	if ! grep -Fq -- "$needle" "$path"; then
+		printf 'Expected %s to contain: %s\n' "$path" "$needle" >&2
+		exit 1
+	fi
+}
+
 assert_file_not_contains() {
 	local path="$1"
 	local needle="$2"
@@ -44,6 +54,8 @@ main() {
 	cd "$REPO_ROOT"
 
 	assert_file_not_contains "$REPO_ROOT/README.md" 'Neovim 0.8+'
+	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'sudo apt-get install -y stow tmux'
+	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'make test-tmux-config'
 
 	HOME="$home_dir" make sync-neovim
 	assert_exists "$home_dir/.config/nvim/init.lua"
@@ -54,6 +66,11 @@ main() {
 
 	HOME="$home_dir" make sync-tig
 	assert_symlink_resolves_to "$home_dir/.tigrc" "$REPO_ROOT/tig/.tigrc"
+
+	HOME="$home_dir" make sync-tmux
+	assert_symlink_resolves_to "$home_dir/.config/tmux" "$REPO_ROOT/tmux/.config/tmux"
+	assert_file_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-Space'
+	assert_file_not_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-a'
 }
 
 main "$@"

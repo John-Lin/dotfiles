@@ -16,6 +16,7 @@ make sync
 make sync-zsh
 make sync-neovim
 make sync-ghostty
+make sync-tmux
 ```
 
 Most sync targets fail fast if the destination already contains unmanaged files or symlinks.
@@ -29,6 +30,7 @@ make sync-zsh           # Zsh shell configuration
 make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
+make sync-tmux          # tmux configuration
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force
@@ -37,8 +39,18 @@ make test
 make clean
 ```
 
-- `make test` runs syntax checks, linting, safety regression tests, and sync smoke tests.
+- `make test` runs syntax checks, linting, safety regression tests, sync smoke tests, and isolated tmux runtime checks.
 - `make clean` removes repo-managed symlinks and generated files while preserving unmanaged local files.
+
+## tmux Setup
+
+Install the tmux config with:
+
+```bash
+make sync-tmux
+```
+
+The configuration uses native tmux and Ghostty features and has no plugin-manager dependency. Ghostty remains the outer terminal and sets `TERM=xterm-ghostty`, while applications inside tmux use `TERM=tmux-256color`, following the [Ghostty terminfo documentation](https://ghostty.org/docs/help/terminfo) and [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ). Ghostty's terminfo already advertises its capabilities to tmux, so no terminal override is needed.
 
 ## Neovim Plugin Sync
 
@@ -57,6 +69,7 @@ Use restore here, not update: `restore` matches your local plugins to `lazy-lock
 - `nvim/` - Neovim configuration
 - `zsh/` - Zsh shell configuration
 - `tig/` - Tig configuration
+- `tmux/` - tmux configuration
 - `ghostty/` - Ghostty config for macOS
 - `ghostty-linux/` - Ghostty config for Linux, including `custom.conf`
 - `aerospace/`, `borders/` - macOS window management
@@ -90,6 +103,7 @@ Essential:
 - Git
 - Make
 - GNU Stow
+- tmux
 - Neovim (recent version; current config uses modern built-in LSP APIs)
 - Node.js
 
@@ -97,7 +111,7 @@ Optional:
 - Python 3, Go
 - ripgrep, bat, eza, zoxide, fzf
 - bun
-- alacritty
+- Ghostty
 
 ## License
 

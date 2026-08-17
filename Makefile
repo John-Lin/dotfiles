@@ -24,15 +24,17 @@ fi
 endef
 
 define remove_managed_path
-target="$(1)"; source="$(2)"; \
+target="$(1)"; source="$(2)"; quiet_non_symlink="$(3)"; \
 if [ -L "$$target" ]; then \
 	current="$$(readlink "$$target")"; \
-	if [ "$$current" = "$$source" ]; then \
+	resolved_target="$$(realpath "$$target" 2>/dev/null || true)"; \
+	resolved_source="$$(realpath "$$source" 2>/dev/null || true)"; \
+	if [ -n "$$resolved_source" ] && [ "$$resolved_target" = "$$resolved_source" ]; then \
 		rm -f "$$target"; \
 	else \
 		echo "⚠️  Skipping unmanaged symlink $$target -> $$current"; \
 	fi; \
-elif [ -e "$$target" ]; then \
+elif [ -e "$$target" ] && [ "$$quiet_non_symlink" != "quiet" ]; then \
 	echo "⚠️  Skipping unmanaged path $$target"; \
 fi
 endef
@@ -49,6 +51,7 @@ sync:
 	@echo "  make sync-neovim        - Install Neovim configuration"
 	@echo "  make sync-zsh           - Install Zsh configuration"
 	@echo "  make sync-tig           - Install Tig configuration"
+	@echo "  make sync-tmux          - Install tmux configuration"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
@@ -95,6 +98,17 @@ sync-tig: require-stow
 	stow -t ~ tig
 	@echo "✅ Tig configuration installed"
 
+# Install tmux configuration
+sync-tmux: require-stow
+	@if [ -e ~/.tmux.conf ] || [ -L ~/.tmux.conf ]; then \
+		echo "❌ ~/.tmux.conf takes precedence over ~/.config/tmux/tmux.conf"; \
+		echo "   Move or remove it before installing this configuration"; \
+		exit 1; \
+	fi
+	@echo "🧩 Installing tmux configuration..."
+	stow -t ~ tmux
+	@echo "✅ tmux configuration installed"
+
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
 	@echo "🚀 Installing Aerospace configuration..."
@@ -112,6 +126,7 @@ clean:
 	@echo "  - ~/.config/aerospace/aerospace.toml"
 	@echo "  - ~/.config/borders/bordersrc"
 	@echo "  - ~/.tigrc"
+	@echo "  - ~/.config/tmux/"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
@@ -127,6 +142,7 @@ clean-force:
 	@echo "🧹 Removing all configurations..."
 	@$(MAKE) clean-neovim
 	@$(MAKE) clean-tig
+	@$(MAKE) clean-tmux
 	@$(MAKE) clean-zsh
 	@$(MAKE) clean-ghostty
 	@$(MAKE) clean-aerospace
@@ -143,6 +159,11 @@ clean-tig:
 	@echo "🧹 Removing Tig configuration..."
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || { $(call remove_managed_path,$${HOME}/.tigrc,$(REPO_ROOT)/tig/.tigrc); }
 	@echo "✅ Tig configuration removed"
+
+clean-tmux:
+	@echo "🧹 Removing tmux configuration..."
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tmux || { $(call remove_managed_path,$${HOME}/.config,$(REPO_ROOT)/tmux/.config,quiet); $(call remove_managed_path,$${HOME}/.config/tmux,$(REPO_ROOT)/tmux/.config/tmux); $(call remove_managed_path,$${HOME}/.config/tmux/tmux.conf,$(REPO_ROOT)/tmux/.config/tmux/tmux.conf); }
+	@echo "✅ tmux configuration removed"
 
 clean-neovim:
 	@echo "🧹 Removing Neovim configuration..."
@@ -161,7 +182,7 @@ clean-aerospace:
 	@echo "✅ Borders configuration removed"
 
 # Test commands
-test: check-syntax lint test-safety test-sync-smoke
+test: check-syntax lint test-safety test-sync-smoke test-tmux-config
 	@echo "✅ All checks passed!"
 
 test-safety:
@@ -169,6 +190,9 @@ test-safety:
 
 test-sync-smoke:
 	@bash "./test_sync_smoke.sh"
+
+test-tmux-config:
+	@bash "./test_tmux_config.sh"
 
 # Check syntax of configuration files
 check-syntax:
@@ -193,4 +217,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-aerospace test test-safety test-sync-smoke check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux sync-aerospace test test-safety test-sync-smoke test-tmux-config check-syntax lint
