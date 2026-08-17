@@ -6,10 +6,13 @@ REPO_ROOT=$(pwd)
 CONFIG="$REPO_ROOT/tmux/.config/tmux/tmux.conf"
 SOCKET="dotfiles-tmux-test-$$"
 SUBAGENT_SOCKET="/tmp/dotfiles-test-$$-tmux-subagents.sock"
+TEST_HOME=$(mktemp -d)
+TEST_XDG_DATA_HOME="$TEST_HOME/xdg-data"
 
 cleanup() {
-	env -u TMUX tmux -L "$SOCKET" kill-server 2>/dev/null || true
-	env -u TMUX tmux -S "$SUBAGENT_SOCKET" kill-server 2>/dev/null || true
+	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -L "$SOCKET" kill-server 2>/dev/null || true
+	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -S "$SUBAGENT_SOCKET" kill-server 2>/dev/null || true
+	rm -rf "$TEST_HOME"
 	rm -f "$SUBAGENT_SOCKET"
 }
 
@@ -49,17 +52,17 @@ assert_not_contains() {
 }
 
 tmux_test() {
-	env -u TMUX tmux -L "$SOCKET" "$@"
+	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -L "$SOCKET" "$@"
 }
 
 subagent_tmux_test() {
-	env -u TMUX tmux -S "$SUBAGENT_SOCKET" "$@"
+	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -S "$SUBAGENT_SOCKET" "$@"
 }
 
 main() {
 	cd "$REPO_ROOT"
 
-	tmux_test -f /dev/null new-session -d
+	tmux_test -f "$CONFIG" new-session -d
 	tmux_test source-file "$CONFIG"
 
 	assert_equal 'C-Space' "$(tmux_test show-options -gv prefix)" 'tmux prefix'
@@ -76,7 +79,7 @@ main() {
 	assert_not_contains "$terminal_overrides" 'rmcup@' 'terminal overrides'
 	assert_not_contains "$terminal_overrides" ':Tc' 'terminal overrides'
 
-	assert_equal "$HOME/.local/share/tmux/plugins/" \
+	assert_equal "$TEST_XDG_DATA_HOME/tmux/plugins/" \
 		"$(tmux_test show-environment -g TMUX_PLUGIN_MANAGER_PATH | cut -d= -f2-)" \
 		'TPM plugin path'
 
@@ -107,6 +110,7 @@ main() {
 	new_session_binding=$(grep -E '[[:space:]]N[[:space:]]' <<<"$prefix_bindings" || true)
 	assert_contains "$new_session_binding" 'command-prompt' 'new-session binding'
 	assert_contains "$new_session_binding" 'new-session -s' 'new-session binding'
+	assert_contains "$new_session_binding" "%%%" 'quote-safe new-session binding'
 
 	local choose_session_binding
 	choose_session_binding=$(grep -E '[[:space:]]S[[:space:]]' <<<"$prefix_bindings" || true)
@@ -117,8 +121,7 @@ main() {
 		exit 1
 	fi
 
-	subagent_tmux_test -f /dev/null new-session -d
-	subagent_tmux_test source-file "$CONFIG"
+	subagent_tmux_test -f "$CONFIG" new-session -d
 
 	assert_equal 'C-b' "$(subagent_tmux_test show-options -gv prefix)" 'subagent tmux prefix'
 	assert_equal '0' "$(subagent_tmux_test show-options -gv base-index)" 'subagent window base index'

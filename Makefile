@@ -24,15 +24,17 @@ fi
 endef
 
 define remove_managed_path
-target="$(1)"; source="$(2)"; \
+target="$(1)"; source="$(2)"; quiet_non_symlink="$(3)"; \
 if [ -L "$$target" ]; then \
 	current="$$(readlink "$$target")"; \
-	if [ "$$current" = "$$source" ]; then \
+	resolved_target="$$(realpath "$$target" 2>/dev/null || true)"; \
+	resolved_source="$$(realpath "$$source" 2>/dev/null || true)"; \
+	if [ -n "$$resolved_source" ] && [ "$$resolved_target" = "$$resolved_source" ]; then \
 		rm -f "$$target"; \
 	else \
 		echo "⚠️  Skipping unmanaged symlink $$target -> $$current"; \
 	fi; \
-elif [ -e "$$target" ]; then \
+elif [ -e "$$target" ] && [ "$$quiet_non_symlink" != "quiet" ]; then \
 	echo "⚠️  Skipping unmanaged path $$target"; \
 fi
 endef
@@ -160,7 +162,7 @@ clean-tig:
 
 clean-tmux:
 	@echo "🧹 Removing tmux configuration..."
-	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tmux || { $(call remove_managed_path,$${HOME}/.config/tmux,$(REPO_ROOT)/tmux/.config/tmux); $(call remove_managed_path,$${HOME}/.config/tmux/tmux.conf,$(REPO_ROOT)/tmux/.config/tmux/tmux.conf); }
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tmux || { $(call remove_managed_path,$${HOME}/.config,$(REPO_ROOT)/tmux/.config,quiet); $(call remove_managed_path,$${HOME}/.config/tmux,$(REPO_ROOT)/tmux/.config/tmux); $(call remove_managed_path,$${HOME}/.config/tmux/tmux.conf,$(REPO_ROOT)/tmux/.config/tmux/tmux.conf); }
 	@echo "✅ tmux configuration removed"
 
 clean-neovim:

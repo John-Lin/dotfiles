@@ -39,15 +39,17 @@ make test
 make clean
 ```
 
-- `make test` runs syntax checks, linting, safety regression tests, and sync smoke tests.
+- `make test` runs syntax checks, linting, safety regression tests, sync smoke tests, and isolated tmux runtime checks.
 - `make clean` removes repo-managed symlinks and generated files while preserving unmanaged local files.
 
 ## tmux Plugin Setup
 
-The tmux config is tracked in this repository, while TPM and its plugins live under the XDG data directory:
+The tmux config is tracked in this repository, while TPM and its plugins live under `${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins`:
 
 ```bash
-git clone https://github.com/tmux-plugins/tpm ~/.local/share/tmux/plugins/tpm
+TMUX_PLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins"
+mkdir -p "$TMUX_PLUGIN_DIR"
+git clone https://github.com/tmux-plugins/tpm "$TMUX_PLUGIN_DIR/tpm"
 make sync-tmux
 ```
 

@@ -25,6 +25,13 @@ assert_dir_exists() {
 	fi
 }
 
+assert_path_absent() {
+	if [ -e "$1" ] || [ -L "$1" ]; then
+		printf 'Expected path to be absent: %s\n' "$1" >&2
+		exit 1
+	fi
+}
+
 assert_contains() {
 	local file="$1"
 	local expected="$2"
@@ -46,6 +53,21 @@ assert_symlink_target() {
 
 	if [ "$(readlink "$path")" != "$expected" ]; then
 		printf 'Expected %s to point to %s\n' "$path" "$expected" >&2
+		exit 1
+	fi
+}
+
+assert_symlink_resolves_to() {
+	local path="$1"
+	local expected="$2"
+
+	if [ ! -L "$path" ]; then
+		printf 'Expected symlink: %s\n' "$path" >&2
+		exit 1
+	fi
+
+	if [ "$(realpath "$path")" != "$expected" ]; then
+		printf 'Expected %s to resolve to %s\n' "$path" "$expected" >&2
 		exit 1
 	fi
 }
@@ -155,6 +177,31 @@ test_clean_tmux_preserves_unmanaged_config_without_stow() {
 	assert_contains "$home_dir/.config/tmux/tmux.conf" 'keep me'
 }
 
+test_clean_tmux_removes_relative_stow_link_without_stow() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	mkdir -p "$home_dir/.config"
+	HOME="$home_dir" stow -t "$home_dir" tmux
+	assert_file_exists "$home_dir/.config/tmux/tmux.conf"
+
+	PATH="/usr/bin:/bin" HOME="$home_dir" make clean-tmux >"$TEST_OUTPUT" 2>&1
+	assert_path_absent "$home_dir/.config/tmux"
+}
+
+test_clean_tmux_removes_folded_config_link_without_stow() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	HOME="$home_dir" stow -t "$home_dir" tmux
+	assert_symlink_resolves_to "$home_dir/.config" "$REPO_ROOT/tmux/.config"
+
+	PATH="/usr/bin:/bin" HOME="$home_dir" make clean-tmux >"$TEST_OUTPUT" 2>&1
+	assert_path_absent "$home_dir/.config"
+}
+
 main() {
 	cd "$REPO_ROOT"
 	test_sync_ghostty_linux_preserves_existing_custom_conf
@@ -164,6 +211,8 @@ main() {
 	test_clean_ghostty_preserves_unmanaged_custom_conf_without_stow
 	test_sync_tmux_rejects_legacy_config
 	test_clean_tmux_preserves_unmanaged_config_without_stow
+	test_clean_tmux_removes_relative_stow_link_without_stow
+	test_clean_tmux_removes_folded_config_link_without_stow
 }
 
 main "$@"
