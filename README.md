@@ -31,7 +31,6 @@ make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-tmux          # tmux configuration
-make install-tmux-plugins # TPM and declared tmux plugins
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force
@@ -43,16 +42,15 @@ make clean
 - `make test` runs syntax checks, linting, safety regression tests, sync smoke tests, and isolated tmux runtime checks.
 - `make clean` removes repo-managed symlinks and generated files while preserving unmanaged local files.
 
-## tmux Plugin Setup
+## tmux Setup
 
-The tmux config is tracked in this repository, while TPM and its plugins live under `${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins`:
+Install the tmux config with:
 
 ```bash
 make sync-tmux
-make install-tmux-plugins
 ```
 
-`sync-tmux` checks for tmux and TPM but only warns when they are missing, so the config can still be linked in a clean environment. The explicit `install-tmux-plugins` target clones TPM and installs the plugins declared in `tmux.conf`; it performs network access and therefore is not run automatically. After TPM is installed, `Ctrl-Space I` remains available for installing newly declared plugins from inside tmux.
+The configuration uses native tmux and Ghostty features and has no plugin-manager dependency.
 
 ## Neovim Plugin Sync
 

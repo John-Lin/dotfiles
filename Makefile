@@ -5,10 +5,6 @@ all: sync
 SHELL := /bin/bash
 
 REPO_ROOT := $(abspath $(CURDIR))
-TMUX_DATA_HOME = $(if $(strip $(XDG_DATA_HOME)),$(XDG_DATA_HOME),$(HOME)/.local/share)
-TMUX_PLUGIN_DIR = $(TMUX_DATA_HOME)/tmux/plugins
-TPM_DIR = $(TMUX_PLUGIN_DIR)/tpm
-TPM_REPOSITORY ?= https://github.com/tmux-plugins/tpm
 
 define ensure_safe_symlink
 target="$(1)"; source="$(2)"; force_hint="$(3)"; \
@@ -43,15 +39,9 @@ elif [ -e "$$target" ] && [ "$$quiet_non_symlink" != "quiet" ]; then \
 fi
 endef
 
-# Shared prerequisites
+# Shared prerequisite
 require-stow:
 	@command -v stow >/dev/null 2>&1 || { echo "❌ stow is not installed. Please install it first."; exit 1; }
-
-require-git:
-	@command -v git >/dev/null 2>&1 || { echo "❌ git is not installed. Please install it first."; exit 1; }
-
-require-tmux:
-	@command -v tmux >/dev/null 2>&1 || { echo "❌ tmux is not installed. Please install it first."; exit 1; }
 
 # Install all dotfiles (removed automatic installation)
 sync:
@@ -118,43 +108,6 @@ sync-tmux: require-stow
 	@echo "🧩 Installing tmux configuration..."
 	stow -t ~ tmux
 	@echo "✅ tmux configuration installed"
-	@$(MAKE) --no-print-directory check-tmux-deps
-
-check-tmux-deps:
-	@if command -v tmux >/dev/null 2>&1; then \
-		echo "✅ tmux is installed"; \
-	else \
-		echo "⚠️  tmux is not installed; the configuration was linked but cannot be used yet"; \
-	fi
-	@if [ -x "$(TPM_DIR)/tpm" ]; then \
-		echo "✅ TPM is installed at $(TPM_DIR)"; \
-	else \
-		echo "⚠️  TPM is not installed at $(TPM_DIR)"; \
-		echo "   Run: make install-tmux-plugins"; \
-	fi
-
-install-tmux-plugins: require-git require-tmux
-	@if [ ! -f "$(HOME)/.config/tmux/tmux.conf" ]; then \
-		echo "❌ ~/.config/tmux/tmux.conf is not installed"; \
-		echo "   Run: make sync-tmux"; \
-		exit 1; \
-	fi
-	@mkdir -p "$(TMUX_PLUGIN_DIR)"
-	@if [ ! -e "$(TPM_DIR)" ]; then \
-		echo "📦 Installing TPM into $(TPM_DIR)..."; \
-		git clone --depth 1 "$(TPM_REPOSITORY)" "$(TPM_DIR)"; \
-	elif [ ! -x "$(TPM_DIR)/tpm" ]; then \
-		echo "❌ $(TPM_DIR) exists but is not a valid TPM installation"; \
-		exit 1; \
-	else \
-		echo "✅ TPM is already installed at $(TPM_DIR)"; \
-	fi
-	@if [ ! -x "$(TPM_DIR)/bin/install_plugins" ]; then \
-		echo "❌ TPM plugin installer is unavailable: $(TPM_DIR)/bin/install_plugins"; \
-		exit 1; \
-	fi
-	@"$(TPM_DIR)/bin/install_plugins"
-	@echo "✅ tmux plugins installed"
 
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
@@ -264,4 +217,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow require-git require-tmux clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux check-tmux-deps install-tmux-plugins sync-aerospace test test-safety test-sync-smoke test-tmux-config check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux sync-aerospace test test-safety test-sync-smoke test-tmux-config check-syntax lint

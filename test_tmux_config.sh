@@ -79,9 +79,9 @@ main() {
 	assert_not_contains "$terminal_overrides" 'rmcup@' 'terminal overrides'
 	assert_not_contains "$terminal_overrides" ':Tc' 'terminal overrides'
 
-	assert_equal "$TEST_XDG_DATA_HOME/tmux/plugins/" \
-		"$(tmux_test show-environment -g TMUX_PLUGIN_MANAGER_PATH | cut -d= -f2-)" \
-		'TPM plugin path'
+	assert_not_contains "$(<"$CONFIG")" 'TMUX_PLUGIN_MANAGER_PATH' 'tmux config'
+	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/' 'tmux config'
+	assert_not_contains "$(<"$CONFIG")" 'tmux-open' 'tmux config'
 
 	local status_left
 	status_left=$(tmux_test show-options -gv status-left)
@@ -94,12 +94,9 @@ main() {
 	assert_contains "$copy_bindings" 'copy-selection-and-cancel' 'copy-mode bindings'
 	assert_not_contains "$copy_bindings" 'pbcopy' 'copy-mode bindings'
 
-	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-yank' 'tmux plugins'
-	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-sensible' 'tmux plugins'
-	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-prefix-highlight' 'tmux plugins'
-
 	local prefix_bindings
 	prefix_bindings=$(tmux_test list-keys -T prefix)
+	assert_not_contains "$prefix_bindings" '/tpm/' 'prefix bindings'
 
 	local sync_binding
 	sync_binding=$(grep -E '[[:space:]]C-s[[:space:]]' <<<"$prefix_bindings")
@@ -131,10 +128,6 @@ main() {
 		"$(subagent_tmux_test list-panes -F '#{window_index}.#{pane_index}')" \
 		'subagent initial target'
 
-	if subagent_tmux_test show-environment -g TMUX_PLUGIN_MANAGER_PATH >/dev/null 2>&1; then
-		printf 'Expected subagent tmux to skip TPM configuration\n' >&2
-		exit 1
-	fi
 }
 
 main "$@"
