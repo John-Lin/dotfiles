@@ -67,8 +67,8 @@ main() {
 
 	HOME="$home_dir" make sync-tmux
 	assert_symlink_resolves_to "$home_dir/.config/tmux" "$REPO_ROOT/tmux/.config/tmux"
-	assert_file_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-a'
-	assert_file_not_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-f'
+	assert_file_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-Space'
+	assert_file_not_contains "$home_dir/.config/tmux/tmux.conf" 'set -g prefix C-a'
 }
 
 main "$@"
