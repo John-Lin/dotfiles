@@ -42,6 +42,17 @@ make clean
 - `make test` runs syntax checks, linting, safety regression tests, and sync smoke tests.
 - `make clean` removes repo-managed symlinks and generated files while preserving unmanaged local files.
 
+## tmux Plugin Setup
+
+The tmux config is tracked in this repository, while TPM and its plugins live under the XDG data directory:
+
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.local/share/tmux/plugins/tpm
+make sync-tmux
+```
+
+Start tmux, then press `Ctrl-Space I` to install the plugins declared in `tmux.conf`.
+
 ## Neovim Plugin Sync
 
 When the automated lazy.nvim lockfile PR is merged, pull the repo and then sync your local plugin installs to the updated lockfile:
@@ -93,6 +104,7 @@ Essential:
 - Git
 - Make
 - GNU Stow
+- tmux
 - Neovim (recent version; current config uses modern built-in LSP APIs)
 - Node.js
 
@@ -100,7 +112,7 @@ Optional:
 - Python 3, Go
 - ripgrep, bat, eza, zoxide, fzf
 - bun
-- alacritty
+- Ghostty
 
 ## License
 

@@ -180,7 +180,7 @@ clean-aerospace:
 	@echo "✅ Borders configuration removed"
 
 # Test commands
-test: check-syntax lint test-safety test-sync-smoke
+test: check-syntax lint test-safety test-sync-smoke test-tmux-config
 	@echo "✅ All checks passed!"
 
 test-safety:
@@ -188,6 +188,9 @@ test-safety:
 
 test-sync-smoke:
 	@bash "./test_sync_smoke.sh"
+
+test-tmux-config:
+	@bash "./test_tmux_config.sh"
 
 # Check syntax of configuration files
 check-syntax:
@@ -212,4 +215,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux sync-aerospace test test-safety test-sync-smoke check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux sync-aerospace test test-safety test-sync-smoke test-tmux-config check-syntax lint
