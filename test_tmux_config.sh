@@ -58,6 +58,10 @@ main() {
 	assert_equal 'C-Space' "$(tmux_test show-options -gv prefix)" 'tmux prefix'
 	assert_equal 'tmux-256color' "$(tmux_test show-options -gv default-terminal)" 'default terminal'
 	assert_equal 'external' "$(tmux_test show-options -gv set-clipboard)" 'clipboard integration'
+	assert_equal '10' "$(tmux_test show-options -sv escape-time)" 'escape time'
+	assert_equal '100000' "$(tmux_test show-options -gv history-limit)" 'history limit'
+	assert_equal 'off' "$(tmux_test show-options -wgv aggressive-resize)" 'aggressive resize'
+	assert_equal 'off' "$(tmux_test show-options -gv set-titles)" 'terminal title updates'
 
 	local terminal_overrides
 	terminal_overrides=$(tmux_test show-options -gqv terminal-overrides)
@@ -76,7 +80,13 @@ main() {
 
 	local copy_bindings
 	copy_bindings=$(tmux_test list-keys -T copy-mode-vi)
-	assert_contains "$copy_bindings" 'copy-pipe-and-cancel' 'copy-mode bindings'
+	assert_contains "$copy_bindings" 'y' 'copy-mode bindings'
+	assert_contains "$copy_bindings" 'copy-selection-and-cancel' 'copy-mode bindings'
+	assert_not_contains "$copy_bindings" 'pbcopy' 'copy-mode bindings'
+
+	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-yank' 'tmux plugins'
+	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-sensible' 'tmux plugins'
+	assert_not_contains "$(<"$CONFIG")" 'tmux-plugins/tmux-prefix-highlight' 'tmux plugins'
 
 	local sync_binding
 	sync_binding=$(tmux_test list-keys -T prefix | grep -E '[[:space:]]C-s[[:space:]]')
