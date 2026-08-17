@@ -8,10 +8,14 @@ SOCKET="dotfiles-tmux-test-$$"
 SUBAGENT_SOCKET="/tmp/dotfiles-test-$$-tmux-subagents.sock"
 TEST_HOME=$(mktemp -d)
 TEST_XDG_DATA_HOME="$TEST_HOME/xdg-data"
+CONTROL_CLIENT_PID=''
 
 cleanup() {
 	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -L "$SOCKET" kill-server 2>/dev/null || true
 	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -S "$SUBAGENT_SOCKET" kill-server 2>/dev/null || true
+	if [ -n "$CONTROL_CLIENT_PID" ]; then
+		kill "$CONTROL_CLIENT_PID" 2>/dev/null || true
+	fi
 	rm -rf "$TEST_HOME"
 	rm -f "$SUBAGENT_SOCKET"
 }
@@ -59,6 +63,29 @@ subagent_tmux_test() {
 	HOME="$TEST_HOME" XDG_DATA_HOME="$TEST_XDG_DATA_HOME" env -u TMUX tmux -S "$SUBAGENT_SOCKET" "$@"
 }
 
+assert_session_created_via_binding() {
+	local client="$1"
+	local session_name="$2"
+	local sessions
+	local attempt
+
+	tmux_test send-keys -K -t "$client" C-Space
+	tmux_test send-keys -K -t "$client" N
+	tmux_test send-keys -Kl -t "$client" "$session_name"
+	tmux_test send-keys -K -t "$client" Enter
+
+	for ((attempt = 0; attempt < 50; attempt++)); do
+		sessions=$(tmux_test list-sessions -F '#{session_name}')
+		if grep -Fxq -- "$session_name" <<<"$sessions"; then
+			return 0
+		fi
+		sleep 0.02
+	done
+
+	printf 'Expected session binding to preserve name %q, got:\n%s\n' "$session_name" "$sessions" >&2
+	return 1
+}
+
 main() {
 	cd "$REPO_ROOT"
 
@@ -66,6 +93,7 @@ main() {
 	tmux_test source-file "$CONFIG"
 
 	assert_equal 'C-Space' "$(tmux_test show-options -gv prefix)" 'tmux prefix'
+	assert_contains "$(<"$CONFIG")" 'set -g default-terminal "tmux-256color"' 'tmux config'
 	assert_equal 'tmux-256color' "$(tmux_test show-options -gv default-terminal)" 'default terminal'
 	assert_equal 'external' "$(tmux_test show-options -gv set-clipboard)" 'clipboard integration'
 	assert_equal '10' "$(tmux_test show-options -sv escape-time)" 'escape time'
@@ -108,6 +136,27 @@ main() {
 	assert_contains "$new_session_binding" 'command-prompt' 'new-session binding'
 	assert_contains "$new_session_binding" 'new-session -s' 'new-session binding'
 	assert_contains "$new_session_binding" "%%%" 'quote-safe new-session binding'
+
+	local control_input="$TEST_HOME/control-input"
+	local control_output="$TEST_HOME/control-output"
+	local control_client=''
+	local attempt
+	mkfifo "$control_input"
+	exec 9<>"$control_input"
+	tmux_test -C attach-session <&9 >"$control_output" 2>&1 &
+	CONTROL_CLIENT_PID=$!
+	for ((attempt = 0; attempt < 50; attempt++)); do
+		control_client=$(tmux_test list-clients -F '#{client_name}' 2>/dev/null | head -1 || true)
+		[ -n "$control_client" ] && break
+		sleep 0.02
+	done
+	if [ -z "$control_client" ]; then
+		printf 'Expected tmux control client to attach\n' >&2
+		exit 1
+	fi
+	assert_session_created_via_binding "$control_client" "session with spaces"
+	assert_session_created_via_binding "$control_client" "session'quote"
+	assert_session_created_via_binding "$control_client" 'session"quote'
 
 	local choose_session_binding
 	choose_session_binding=$(grep -E '[[:space:]]S[[:space:]]' <<<"$prefix_bindings" || true)

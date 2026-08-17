@@ -50,7 +50,7 @@ Install the tmux config with:
 make sync-tmux
 ```
 
-The configuration uses native tmux and Ghostty features and has no plugin-manager dependency.
+The configuration uses native tmux and Ghostty features and has no plugin-manager dependency. Ghostty remains the outer terminal and sets `TERM=xterm-ghostty`, while applications inside tmux use `TERM=tmux-256color`, following the [Ghostty terminfo documentation](https://ghostty.org/docs/help/terminfo) and [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ). Ghostty's terminfo already advertises its capabilities to tmux, so no terminal override is needed.
 
 ## Neovim Plugin Sync
 
