@@ -16,6 +16,7 @@ make sync
 make sync-zsh
 make sync-neovim
 make sync-ghostty
+make sync-tmux
 ```
 
 Most sync targets fail fast if the destination already contains unmanaged files or symlinks.
@@ -29,6 +30,7 @@ make sync-zsh           # Zsh shell configuration
 make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
+make sync-tmux          # tmux configuration
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force
@@ -57,6 +59,7 @@ Use restore here, not update: `restore` matches your local plugins to `lazy-lock
 - `nvim/` - Neovim configuration
 - `zsh/` - Zsh shell configuration
 - `tig/` - Tig configuration
+- `tmux/` - tmux configuration
 - `ghostty/` - Ghostty config for macOS
 - `ghostty-linux/` - Ghostty config for Linux, including `custom.conf`
 - `aerospace/`, `borders/` - macOS window management

@@ -130,6 +130,31 @@ test_clean_ghostty_preserves_unmanaged_custom_conf_without_stow() {
 	assert_contains "$home_dir/.config/ghostty/custom.conf" 'keep me'
 }
 
+test_sync_tmux_rejects_legacy_config() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	printf 'keep me\n' >"$home_dir/.tmux.conf"
+
+	assert_make_fails "$home_dir" sync-tmux
+	assert_file_exists "$home_dir/.tmux.conf"
+	assert_contains "$home_dir/.tmux.conf" 'keep me'
+}
+
+test_clean_tmux_preserves_unmanaged_config_without_stow() {
+	local home_dir
+	home_dir=$(mktemp -d)
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	mkdir -p "$home_dir/.config/tmux"
+	printf 'keep me\n' >"$home_dir/.config/tmux/tmux.conf"
+
+	PATH="/usr/bin:/bin" HOME="$home_dir" make clean-tmux >"$TEST_OUTPUT" 2>&1
+	assert_file_exists "$home_dir/.config/tmux/tmux.conf"
+	assert_contains "$home_dir/.config/tmux/tmux.conf" 'keep me'
+}
+
 main() {
 	cd "$REPO_ROOT"
 	test_sync_ghostty_linux_preserves_existing_custom_conf
@@ -137,6 +162,8 @@ main() {
 	test_clean_neovim_preserves_unmanaged_directory_without_stow
 	test_clean_zsh_preserves_unmanaged_files_without_stow
 	test_clean_ghostty_preserves_unmanaged_custom_conf_without_stow
+	test_sync_tmux_rejects_legacy_config
+	test_clean_tmux_preserves_unmanaged_config_without_stow
 }
 
 main "$@"

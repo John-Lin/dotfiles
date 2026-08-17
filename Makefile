@@ -49,6 +49,7 @@ sync:
 	@echo "  make sync-neovim        - Install Neovim configuration"
 	@echo "  make sync-zsh           - Install Zsh configuration"
 	@echo "  make sync-tig           - Install Tig configuration"
+	@echo "  make sync-tmux          - Install tmux configuration"
 	@echo "  make sync-aerospace     - Install Aerospace configuration"
 
 # Install Ghostty configuration
@@ -95,6 +96,17 @@ sync-tig: require-stow
 	stow -t ~ tig
 	@echo "✅ Tig configuration installed"
 
+# Install tmux configuration
+sync-tmux: require-stow
+	@if [ -e ~/.tmux.conf ] || [ -L ~/.tmux.conf ]; then \
+		echo "❌ ~/.tmux.conf takes precedence over ~/.config/tmux/tmux.conf"; \
+		echo "   Move or remove it before installing this configuration"; \
+		exit 1; \
+	fi
+	@echo "🧩 Installing tmux configuration..."
+	stow -t ~ tmux
+	@echo "✅ tmux configuration installed"
+
 # Install Aerospace configuration (includes Borders)
 sync-aerospace: require-stow
 	@echo "🚀 Installing Aerospace configuration..."
@@ -112,6 +124,7 @@ clean:
 	@echo "  - ~/.config/aerospace/aerospace.toml"
 	@echo "  - ~/.config/borders/bordersrc"
 	@echo "  - ~/.tigrc"
+	@echo "  - ~/.config/tmux/"
 	@echo "  - ~/.zshrc, ~/.p10k.zsh"
 	@echo ""
 	@read -p "Are you sure? [y/N] " -n 1 -r; \
@@ -127,6 +140,7 @@ clean-force:
 	@echo "🧹 Removing all configurations..."
 	@$(MAKE) clean-neovim
 	@$(MAKE) clean-tig
+	@$(MAKE) clean-tmux
 	@$(MAKE) clean-zsh
 	@$(MAKE) clean-ghostty
 	@$(MAKE) clean-aerospace
@@ -143,6 +157,11 @@ clean-tig:
 	@echo "🧹 Removing Tig configuration..."
 	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tig || { $(call remove_managed_path,$${HOME}/.tigrc,$(REPO_ROOT)/tig/.tigrc); }
 	@echo "✅ Tig configuration removed"
+
+clean-tmux:
+	@echo "🧹 Removing tmux configuration..."
+	@command -v stow >/dev/null 2>&1 && stow -D -t ~ tmux || { $(call remove_managed_path,$${HOME}/.config/tmux,$(REPO_ROOT)/tmux/.config/tmux); $(call remove_managed_path,$${HOME}/.config/tmux/tmux.conf,$(REPO_ROOT)/tmux/.config/tmux/tmux.conf); }
+	@echo "✅ tmux configuration removed"
 
 clean-neovim:
 	@echo "🧹 Removing Neovim configuration..."
@@ -193,4 +212,4 @@ lint:
 	@command -v luacheck >/dev/null 2>&1 && luacheck nvim/.config/nvim/lua/ nvim/.config/nvim/init.lua || echo "⚠️  luacheck not found, skipping Lua linting"
 	@echo "✅ Linting completed"
 
-.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-aerospace test test-safety test-sync-smoke check-syntax lint
+.PHONY: all require-stow clean clean-force clean-ghostty clean-neovim clean-zsh clean-tig clean-tmux clean-aerospace sync sync-ghostty sync-ghostty-linux sync-ghostty-linux-force sync-neovim sync-zsh sync-tig sync-tmux sync-aerospace test test-safety test-sync-smoke check-syntax lint
