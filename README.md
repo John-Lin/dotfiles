@@ -31,6 +31,7 @@ make sync-tig           # Tig Git interface
 make sync-ghostty       # Ghostty terminal (macOS)
 make sync-ghostty-linux # Ghostty terminal (Linux)
 make sync-tmux          # tmux configuration
+make install-tmux-plugins # TPM and declared tmux plugins
 make sync-aerospace     # Aerospace window manager + Borders (macOS)
 
 make sync-ghostty-linux-force
@@ -47,13 +48,11 @@ make clean
 The tmux config is tracked in this repository, while TPM and its plugins live under `${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins`:
 
 ```bash
-TMUX_PLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins"
-mkdir -p "$TMUX_PLUGIN_DIR"
-git clone https://github.com/tmux-plugins/tpm "$TMUX_PLUGIN_DIR/tpm"
 make sync-tmux
+make install-tmux-plugins
 ```
 
-Start tmux, then press `Ctrl-Space I` to install the plugins declared in `tmux.conf`.
+`sync-tmux` checks for tmux and TPM but only warns when they are missing, so the config can still be linked in a clean environment. The explicit `install-tmux-plugins` target clones TPM and installs the plugins declared in `tmux.conf`; it performs network access and therefore is not run automatically. After TPM is installed, `Ctrl-Space I` remains available for installing newly declared plugins from inside tmux.
 
 ## Neovim Plugin Sync
 

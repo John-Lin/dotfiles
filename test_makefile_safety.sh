@@ -164,6 +164,56 @@ test_sync_tmux_rejects_legacy_config() {
 	assert_contains "$home_dir/.tmux.conf" 'keep me'
 }
 
+test_sync_tmux_warns_when_tpm_is_missing() {
+	local home_dir xdg_data_home
+	home_dir=$(mktemp -d)
+	xdg_data_home="$home_dir/xdg-data"
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"' RETURN
+
+	HOME="$home_dir" XDG_DATA_HOME="$xdg_data_home" make sync-tmux >"$TEST_OUTPUT" 2>&1
+
+	assert_contains "$TEST_OUTPUT" 'TPM is not installed'
+	assert_contains "$TEST_OUTPUT" "$xdg_data_home/tmux/plugins/tpm"
+	assert_contains "$TEST_OUTPUT" 'make install-tmux-plugins'
+	assert_file_exists "$home_dir/.config/tmux/tmux.conf"
+}
+
+test_install_tmux_plugins_bootstraps_tpm() {
+	local home_dir xdg_data_home fake_tpm_repo plugin_dir
+	home_dir=$(mktemp -d)
+	xdg_data_home="$home_dir/xdg-data"
+	fake_tpm_repo=$(mktemp -d)
+	plugin_dir="$xdg_data_home/tmux/plugins"
+	trap '[ -n "${home_dir-}" ] && rm -rf "$home_dir"; [ -n "${fake_tpm_repo-}" ] && rm -rf "$fake_tpm_repo"' RETURN
+
+	mkdir -p "$fake_tpm_repo/bin"
+	cat >"$fake_tpm_repo/tpm" <<'EOF'
+#!/bin/bash
+exit 0
+EOF
+	cat >"$fake_tpm_repo/bin/install_plugins" <<'EOF'
+#!/bin/bash
+set -euo pipefail
+config="${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
+plugin_dir="${XDG_DATA_HOME:-$HOME/.local/share}/tmux/plugins/tmux-open"
+test -f "$config"
+mkdir -p "$plugin_dir"
+printf 'installed\n' >"$plugin_dir/.installed-by-test"
+EOF
+	chmod +x "$fake_tpm_repo/tpm" "$fake_tpm_repo/bin/install_plugins"
+	git -C "$fake_tpm_repo" init -q
+	git -C "$fake_tpm_repo" add tpm bin/install_plugins
+	git -C "$fake_tpm_repo" -c user.name='Dotfiles Test' -c user.email='test@example.com' commit -qm 'test fixture'
+
+	HOME="$home_dir" XDG_DATA_HOME="$xdg_data_home" make sync-tmux >"$TEST_OUTPUT" 2>&1
+	HOME="$home_dir" XDG_DATA_HOME="$xdg_data_home" make \
+		TPM_REPOSITORY="$fake_tpm_repo" install-tmux-plugins >"$TEST_OUTPUT" 2>&1
+
+	assert_file_exists "$plugin_dir/tpm/tpm"
+	assert_file_exists "$plugin_dir/tmux-open/.installed-by-test"
+	assert_contains "$TEST_OUTPUT" 'tmux plugins installed'
+}
+
 test_clean_tmux_preserves_unmanaged_config_without_stow() {
 	local home_dir
 	home_dir=$(mktemp -d)
@@ -210,6 +260,8 @@ main() {
 	test_clean_zsh_preserves_unmanaged_files_without_stow
 	test_clean_ghostty_preserves_unmanaged_custom_conf_without_stow
 	test_sync_tmux_rejects_legacy_config
+	test_sync_tmux_warns_when_tpm_is_missing
+	test_install_tmux_plugins_bootstraps_tpm
 	test_clean_tmux_preserves_unmanaged_config_without_stow
 	test_clean_tmux_removes_relative_stow_link_without_stow
 	test_clean_tmux_removes_folded_config_link_without_stow
