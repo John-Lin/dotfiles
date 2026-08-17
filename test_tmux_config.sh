@@ -5,9 +5,12 @@ set -euo pipefail
 REPO_ROOT=$(pwd)
 CONFIG="$REPO_ROOT/tmux/.config/tmux/tmux.conf"
 SOCKET="dotfiles-tmux-test-$$"
+SUBAGENT_SOCKET="/tmp/dotfiles-test-$$-tmux-subagents.sock"
 
 cleanup() {
 	env -u TMUX tmux -L "$SOCKET" kill-server 2>/dev/null || true
+	env -u TMUX tmux -S "$SUBAGENT_SOCKET" kill-server 2>/dev/null || true
+	rm -f "$SUBAGENT_SOCKET"
 }
 
 trap cleanup EXIT
@@ -47,6 +50,10 @@ assert_not_contains() {
 
 tmux_test() {
 	env -u TMUX tmux -L "$SOCKET" "$@"
+}
+
+subagent_tmux_test() {
+	env -u TMUX tmux -S "$SUBAGENT_SOCKET" "$@"
 }
 
 main() {
@@ -107,6 +114,22 @@ main() {
 
 	if tmux_test list-keys -T edit-mode-vi >/dev/null 2>&1; then
 		printf 'Expected edit-mode-vi table to be absent\n' >&2
+		exit 1
+	fi
+
+	subagent_tmux_test -f /dev/null new-session -d
+	subagent_tmux_test source-file "$CONFIG"
+
+	assert_equal 'C-b' "$(subagent_tmux_test show-options -gv prefix)" 'subagent tmux prefix'
+	assert_equal '0' "$(subagent_tmux_test show-options -gv base-index)" 'subagent window base index'
+	assert_equal '0' "$(subagent_tmux_test show-options -wgv pane-base-index)" 'subagent pane base index'
+	assert_equal 'off' "$(subagent_tmux_test show-options -gv status)" 'subagent status bar'
+	assert_equal '0.0' \
+		"$(subagent_tmux_test list-panes -F '#{window_index}.#{pane_index}')" \
+		'subagent initial target'
+
+	if subagent_tmux_test show-environment -g TMUX_PLUGIN_MANAGER_PATH >/dev/null 2>&1; then
+		printf 'Expected subagent tmux to skip TPM configuration\n' >&2
 		exit 1
 	fi
 }
