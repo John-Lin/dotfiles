@@ -56,6 +56,11 @@ main() {
 	assert_file_not_contains "$REPO_ROOT/README.md" 'Neovim 0.8+'
 	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'sudo apt-get install -y stow tmux'
 	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'make test-tmux-config'
+	assert_file_contains "$REPO_ROOT/ghostty/.config/ghostty/config" 'ssh-env,no-ssh-terminfo'
+	assert_file_contains "$REPO_ROOT/ghostty-linux/.config/ghostty/config" 'ssh-env,no-ssh-terminfo'
+	assert_file_contains "$REPO_ROOT/zsh/.zshrc" 'shell-integration/zsh/ghostty-integration'
+	assert_file_contains "$REPO_ROOT/docs/shell.md" 'TERM=xterm-256color'
+	assert_file_not_contains "$REPO_ROOT/docs/shell.md" 'infocmp -x xterm-ghostty'
 
 	HOME="$home_dir" make sync-neovim
 	assert_exists "$home_dir/.config/nvim/init.lua"

@@ -59,8 +59,10 @@ If `custom.conf` already exists with unmanaged contents, the sync stops unless y
 - Config file: `alacritty/alacritty.toml`
 - This is manual setup, not stow-managed by the Makefile flow
 
-## Remote Ghostty Setup
+## Remote Ghostty SSH
 
-```bash
-infocmp -x xterm-ghostty | ssh YOUR-SERVER -- tic -x -
-```
+Both Ghostty configs enable `ssh-env` and explicitly disable `ssh-terminfo`. For interactive `ssh` commands, Ghostty's shell integration uses `TERM=xterm-256color` instead of installing the `xterm-ghostty` terminfo entry. It also requests forwarding for `COLORTERM`, `TERM_PROGRAM`, and `TERM_PROGRAM_VERSION`; the remote SSH server may discard those optional variables unless its `AcceptEnv` configuration permits them.
+
+Ghostty injects shell integration only into the shell it launches directly. The tracked `.zshrc` sources the official integration when `GHOSTTY_RESOURCES_DIR` is present so the SSH wrapper also remains available inside tmux-created zsh shells.
+
+The wrapper applies to interactive `ssh` entered in that shell. Tools that launch SSH themselves, such as Git, `scp`, `rsync`, `mosh`, and non-interactive scripts, do not inherit shell functions. See the [Ghostty SSH documentation](https://ghostty.org/docs/features/ssh) for those cases.

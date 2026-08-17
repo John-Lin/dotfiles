@@ -13,9 +13,10 @@ cursor-style = "block"
 cursor-style-blink = false
 cursor-color = ff2600
 
-# Shell integration
+# Shell integration. Interactive SSH sessions use the portable xterm-256color
+# fallback instead of installing Ghostty's terminfo on remote hosts.
 shell-integration = zsh
-shell-integration-features = no-cursor,sudo,no-title
+shell-integration-features = no-cursor,sudo,no-title,ssh-env,no-ssh-terminfo
 
 # Window
 window-padding-x = 14
