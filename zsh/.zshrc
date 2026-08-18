@@ -1,3 +1,9 @@
+# Ghostty only injects shell integration into the shell it launches directly.
+# Source it again so interactive zsh shells created by tmux retain SSH integration.
+if [[ -n "${GHOSTTY_RESOURCES_DIR:-}" ]]; then
+  source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
+fi
+
 # https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#how-do-i-initialize-direnv-when-using-instant-prompt
 (( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
