@@ -1,7 +1,15 @@
 # Omarchy 3 -> 4.0 config migration
 
-Notes from migrating an in-place upgrade (Omarchy 4.0.0-1, 2026-08-16).
-Follow this on the next machine that gets upgraded.
+Notes from migrating an in-place upgrade (Omarchy 4.0.0-1, first done 2026-08-16,
+repeated on a second machine 2026-08-17). Follow this on the next machine that
+gets upgraded.
+
+The mechanics of 4.0 apply everywhere; the numbers and per-setting decisions do
+not. Concrete values in here — backup sizes, `.bak` file counts, monitor scales,
+idle timings, which keybindings were worth keeping — are what one machine had,
+recorded so there is something to compare against. Re-derive them per machine
+instead of transcribing them. The second machine differed on nearly all of
+them and still followed every procedure below unchanged.
 
 ## What actually changed
 
@@ -27,10 +35,17 @@ This is the part that makes the breakage silent. In
 - `always_copy_config_files` unconditionally installs the new quattro entry
   points (`hypr/hyprland.lua`, `input.lua`, `bindings.lua`, `monitors.lua`,
   `looknfeel.lua`, `autostart.lua`, `.luarc.json`), backing up any same-named
-  file first.
-- Files are only deleted if their sha256 matches an entry in the upgrader's
-  `retire` hash table. **That table contains no `hypr/*.conf` entries at all**,
-  so the old Hyprland `.conf` files are never removed.
+  file first. The same list also installs `omarchy/shell.json`,
+  `omarchy/extensions/omarchy-menu.jsonc` and
+  `omarchy/hooks/pre-refresh-pacman.d/add-custom-repo.sample` — `shell.json`
+  matters because that is where the idle timings now live, so the upgrade
+  overwrites them.
+- The upgrader keeps one sha256 table of known default file contents, tagged
+  with an action per row: `retire` (delete the file) or `refresh` (replace it
+  with the 4.0 version). **The table has no `retire` rows for `hypr/*.conf` at
+  all**, so the old Hyprland `.conf` files are never removed. It does carry
+  `refresh` rows for `hypr/hyprsunset.conf` and `hypr/xdph.conf` — see the
+  mapping table below.
 - **There is no `.conf` -> `.lua` converter.** The upgrader does not read the
   old settings; it just drops in a fresh, fully commented-out template.
 
@@ -46,6 +61,15 @@ hyprctl devices                      # per-keyboard rules/layout/options
 hyprctl configerrors                 # empty is expected even when settings are lost
 ```
 
+`hyprctl getoption` is the only trustworthy reader for a live value. `hyprctl
+descriptions` looks like a better one — it prints every option with an official
+description, its Hyprland compile-time `default`, and a `current` — but that
+`current` field does not reflect the loaded config. It reported `repeat_delay`
+600 and `kb_options` empty on a machine where `getoption` returned 250 and
+`ctrl:swapcaps`, and it casts floats to int (`scroll_factor` 0.4 prints as 0).
+Use it for the `description` and `default` columns, which are static metadata,
+and never for what is live.
+
 ## File-by-file mapping
 
 | Omarchy 3 | Omarchy 4.0 | Status |
@@ -59,8 +83,22 @@ hyprctl configerrors                 # empty is expected even when settings are 
 | `hypr/envs.conf` | `hl.env(...)` in any Lua module | Nothing to migrate |
 | `hypr/hypridle.conf` | `omarchy/shell.json` -> `idle` | **Obsolete**, `hypridle` package removed |
 | `hypr/hyprlock.conf` | Quickshell lock (`omarchy-shell lock`) | **Obsolete**, `hyprlock` package removed |
-| `hypr/hyprsunset.conf` | unchanged (still `.conf`) | Keep |
-| `hypr/xdph.conf` | unchanged (still `.conf`) | Keep |
+| `hypr/hyprsunset.conf` | still `.conf`, but content refreshed | Nothing to migrate; see below |
+| `hypr/xdph.conf` | still `.conf` | Keep; see below |
+
+Neither of the two surviving `.conf` files is simply left alone. Both have
+`refresh` rows in the upgrader's hash table (four for `hyprsunset.conf`, two for
+`xdph.conf`), so an untouched one is replaced with the 4.0 version and the old
+copy is kept as `*.omarchy-upgrade-to-quattro.*.bak`. `hyprsunset.conf` was
+refreshed on both machines — the new version drops the old `.conf` autostart hint
+in favour of `o.launch_on_start("hyprsunset")` in `autostart.lua`.
+
+A customized one keeps whatever you had, because its sha256 matches no row.
+That is worth knowing before reading the config sweep at the end of this
+document: `xdph.conf` shows up as `DIFFERS` there purely because its two lines
+are in the opposite order from the shipped file. Same settings, non-matching
+hash, so the refresh skipped it. Reordering it to match would let a future
+`refresh` row apply cleanly.
 
 `~/.local/share/omarchy` is now a symlink to `/usr/share/omarchy`. Any config
 that hardcodes the old path still resolves, but should be rewritten to the
@@ -349,12 +387,20 @@ failed on every boot and every AC event:
 
 | Job | Omarchy 3 | Omarchy 4 |
 |---|---|---|
-| Power profile on AC/battery | `99-power-profile.rules` calling `omarchy-powerprofiles-set` with no arguments | `omarchy-powerprofiles-init` from `default/hypr/autostart.lua`, plus the shell's battery service. `omarchy powerprofiles set` now takes `[autodetect\|ac\|battery] [profile]`, which is why the old argument-less call fails. |
+| Power profile on AC/battery | `99-power-profile.rules` calling `omarchy-powerprofiles-set` with no arguments | `omarchy-powerprofiles-init` from `default/hypr/autostart.lua`, plus the shell's battery service |
 | Wi-Fi power save | `99-wifi-powersave.rules` calling `omarchy-wifi-powersave` | `/etc/NetworkManager/conf.d/omarchy-wifi-powersave.conf` pinning `wifi.powersave = 2` |
 
 `omarchy-wifi-powersave` does not exist in 4.0 at all, so that rule could only
 ever fail. Both also hardcoded `~/.local/share/omarchy/bin/`, the path 4.0
 turned into a symlink.
+
+The power-profile rule fails for a less obvious reason, and it is not the
+argument list: `omarchy-powerprofiles-set` opens with
+`action="${1:-autodetect}"`, so calling it with no arguments is still valid in
+4.0. What fails is the `systemd-run` wrapper in the rule itself — it exits 1 and
+the unit is never created, so `journalctl -u omarchy-power-profile` has no
+entries to explain anything. Do not go looking for a fixable argument bug; the
+rule is redundant either way.
 
 Removed on 2026-08-16, which left `/etc/udev/rules.d/` empty:
 
@@ -364,11 +410,22 @@ rm -f /etc/udev/rules.d/99-power-profile.rules \
 udevadm control --reload
 ```
 
-Verify by re-firing the events rather than waiting for a real unplug:
+Verify by re-firing the events rather than waiting for a real unplug. The
+trigger needs root — without it every `uevent` write is denied, and the grep
+then finds nothing because no event fired, which reads exactly like success:
 
 ```bash
-udevadm trigger --subsystem-match=power_supply
+sudo udevadm trigger --subsystem-match=power_supply   # or via pkexec
 journalctl --since '1 min ago' | grep -i 'udev-worker.*failed'
+```
+
+Then confirm the 4.0 replacements are actually doing the removed rules' jobs,
+rather than assuming the mechanism swap worked:
+
+```bash
+iw dev <wlan-if> get power_save   # expect: off (from the NetworkManager pin)
+powerprofilesctl get              # expect: performance while on AC
+cat /sys/class/power_supply/ADP1/online
 ```
 
 Their contents, in case a 4.x regression makes them worth reconstructing:
@@ -384,11 +441,15 @@ SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ATTR{online}=="0", RUN+="/usr/bi
 ### The `walker` package survives the upgrade
 
 `retired_packages` in `omarchy-upgrade-to-quattro` lists `omarchy-walker` and
-`walker-bin`, but not plain `walker`. Plain `walker` appears only in
-`fallback_groups`, which the script reaches *only when the batch removal fails*.
-The batch succeeded here, so `omarchy-walker` and all twelve `elephant-*`
-providers were removed and `walker` itself stayed behind -- explicitly
-installed, required by nothing.
+`walker-bin`, but not plain `walker`. Plain `walker` appears only inside a
+`fallback_groups` entry -- the single space-separated string
+`"omarchy-walker walker elephant-all elephant ..."` -- and the script reaches
+`fallback_groups` *only when the batch removal fails*. Grepping the upgrader for
+`walker` is misleading here, because that same string also appears in a comment
+near `retired_packages`; check which array actually contains the match. The
+batch succeeded here, so `omarchy-walker` and all twelve `elephant-*` providers
+were removed and `walker` itself stayed behind -- explicitly installed, required
+by nothing.
 
 Everything else about walker was cleaned up, which is what makes this a gap in
 the removal list rather than a decision: `~/.config/walker` (backed up),
@@ -415,8 +476,18 @@ rm -rf ~/.config/walker.omarchy-upgrade-to-quattro.*.bak
 ### Confirmed as needing nothing
 
 `envs.conf`, `xdph.conf`, `hyprsunset.conf`, `looknfeel.conf` and
-`autostart.conf` were all stock. Input-method settings live in
-`/etc/environment`, outside `~/.config`, so the upgrade never touched them.
+`autostart.conf` held nothing personal, so none of them needed porting. Stock is
+not the same as untouched, though: `hyprsunset.conf` being stock is exactly what
+qualified it for the upgrader's `refresh` action, which replaced it.
+
+Input-method settings live in `/etc/environment`, outside `~/.config`, so the
+upgrade never touched them. One pre-existing wart shows up in the boot log
+rather than the upgrade: that file is symlinked as
+`/usr/lib/environment.d/99-environment.conf`, so it gets read by both `pam_env`
+and systemd's `environment.d` generator. `pam_env` tolerates an `export ` prefix
+and systemd does not, so any `export FOO=bar` line logs `invalid variable name`
+twice per boot while still taking effect via `pam_env`. Dropping the `export `
+prefix satisfies both parsers.
 
 The upgrade also removes packages you chose yourself, which looks alarming in
 `pacman.log` until you check where the functionality went. All of these were
