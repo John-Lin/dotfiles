@@ -11,6 +11,13 @@ assert_exists() {
 	fi
 }
 
+assert_not_exists() {
+	if [ -e "$1" ] || [ -L "$1" ]; then
+		printf 'Expected path to be absent: %s\n' "$1" >&2
+		exit 1
+	fi
+}
+
 assert_symlink_resolves_to() {
 	local path="$1"
 	local expected="$2"
@@ -61,6 +68,7 @@ main() {
 	assert_file_contains "$REPO_ROOT/zsh/.zshrc" 'shell-integration/zsh/ghostty-integration'
 	assert_file_contains "$REPO_ROOT/docs/shell.md" 'TERM=xterm-256color'
 	assert_file_not_contains "$REPO_ROOT/docs/shell.md" 'infocmp -x xterm-ghostty'
+	assert_not_exists "$REPO_ROOT/xterm-ghostty.terminfo"
 
 	HOME="$home_dir" make sync-neovim
 	assert_exists "$home_dir/.config/nvim/init.lua"
