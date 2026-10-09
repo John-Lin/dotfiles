@@ -52,6 +52,10 @@ make sync-tmux
 
 The configuration uses native tmux and Ghostty features and has no plugin-manager dependency. Ghostty remains the outer terminal and sets `TERM=xterm-ghostty`, while applications inside tmux use `TERM=tmux-256color`, following the [Ghostty terminfo documentation](https://ghostty.org/docs/help/terminfo) and [tmux FAQ](https://github.com/tmux/tmux/wiki/FAQ). Ghostty's terminfo already advertises its capabilities to tmux, so no terminal override is needed.
 
+tmux 3.5 or newer is required for CSI-u extended-key reporting, which is enabled for both regular and Pi subagent servers. Ghostty uses its native keyboard protocol instead of mapping modified Enter keys to raw linefeeds. See [Run Pi in tmux](https://pi.dev/docs/latest/tmux).
+
+After installing the configuration, reload Ghostty and start a new tmux server to apply the keyboard settings. Save your work before closing existing sessions.
+
 ## Neovim Plugin Sync
 
 When the automated lazy.nvim lockfile PR is merged, pull the repo and then sync your local plugin installs to the updated lockfile:
@@ -103,7 +107,7 @@ Essential:
 - Git
 - Make
 - GNU Stow
-- tmux
+- tmux 3.5 or newer
 - Neovim (recent version; current config uses modern built-in LSP APIs)
 - Node.js
 
