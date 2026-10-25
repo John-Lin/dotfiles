@@ -101,14 +101,25 @@ automatically-unhide-macos-hidden-apps = true
     end tell'
     '''
     cmd-shift-b = 'exec-and-forget open -n -a Microsoft\ Edge'
-    # Bring the existing Rex window to the current workspace and focus it.
+    # Start Rex if needed, then bring its window to the current workspace.
     cmd-e = '''exec-and-forget
-        WORKSPACE=$(aerospace list-workspaces --focused) &&
-        WINDOW_ID=$(aerospace list-windows --all --format '%{app-bundle-id} %{window-id}' |
-            awk '$1 == "com.superlogical.rex" { print $2; exit }') &&
-        [ -n "$WINDOW_ID" ] &&
-        aerospace move-node-to-workspace --window-id "$WINDOW_ID" "$WORKSPACE" &&
-        aerospace focus --window-id "$WINDOW_ID"
+        set -euo pipefail
+        WORKSPACE=$(aerospace list-workspaces --focused)
+        for attempt in $(seq 1 50); do
+            WINDOW_ID=$(aerospace list-windows --all --format '%{app-bundle-id} %{window-id}' |
+                awk '$1 == "com.superlogical.rex" { print $2; exit }')
+            if [ -n "$WINDOW_ID" ]; then
+                aerospace move-node-to-workspace --window-id "$WINDOW_ID" "$WORKSPACE"
+                aerospace focus --window-id "$WINDOW_ID"
+                exit 0
+            fi
+            if [ "$attempt" -eq 1 ]; then
+                open -b com.superlogical.rex
+            fi
+            sleep 0.1
+        done
+        printf 'Rex window was not detected after startup.\n' >&2
+        exit 1
     '''
 
     cmd-shift-f = 'exec-and-forget open ~'
