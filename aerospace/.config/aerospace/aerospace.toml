@@ -161,8 +161,7 @@ automatically-unhide-macos-hidden-apps = true
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     # alt-slash = 'layout tiles horizontal vertical'
     # alt-comma = 'layout accordion horizontal vertical'
-    cmd-t = 'layout accordion tiles'
-    # cmd-t = 'layout floating tiling'
+    cmd-shift-t = 'layout accordion tiles'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     cmd-left = 'focus left'
@@ -243,6 +242,11 @@ automatically-unhide-macos-hidden-apps = true
 # if.app-id = 'com.apple.finder'
 # check-further-callbacks = true
 # run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.openai.chat'
+check-further-callbacks = true
+run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.cisco.secureclient.gui'
