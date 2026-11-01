@@ -60,6 +60,20 @@ main() {
 
 	cd "$REPO_ROOT"
 
+	# Keep Discord floating on workspace 9 when its windows are detected.
+	if ! awk '
+		BEGIN { RS = "" }
+		/\[\[on-window-detected\]\]/ && /if.app-id = '\''com.hnc.Discord'\''/ {
+			if (index($0, "run = ['\''layout floating'\'', '\''move-node-to-workspace 9'\'']")) {
+				found = 1
+			}
+		}
+		END { exit !found }
+	' "$REPO_ROOT/aerospace/.config/aerospace/aerospace.toml"; then
+		printf 'Expected Discord to float on AeroSpace workspace 9\n' >&2
+		exit 1
+	fi
+
 	assert_file_not_contains "$REPO_ROOT/README.md" 'Neovim 0.8+'
 	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'sudo apt-get install -y stow tmux'
 	assert_file_contains "$REPO_ROOT/.github/workflows/ci.yml" 'make test-tmux-config'
