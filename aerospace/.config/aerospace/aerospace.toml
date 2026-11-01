@@ -266,6 +266,11 @@ run = ['layout floating']
 
 # Messaging apps should be floating
 [[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+check-further-callbacks = true
+run = ['layout floating', 'move-node-to-workspace 9']
+
+[[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
 check-further-callbacks = true
 run = ['layout floating']
